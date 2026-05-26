@@ -11,8 +11,6 @@ import Carrito from '../pages/Carrito'
 
 import DashboardAdmin from '../pages/DashboardAdmin'
 
-import AgregarPlanta from '../pages/AgregarPlanta'
-
 import AdminPlantas from '../pages/AdminPlantas'
 
 import EditarPlanta from '../pages/EditarPlanta'
@@ -71,17 +69,6 @@ function AppRouter() {
             <AdminRoute>
 
               <DashboardAdmin />
-
-            </AdminRoute>
-          }
-        />
-
-        <Route
-          path="/agregar-planta"
-          element={
-            <AdminRoute>
-
-              <AgregarPlanta />
 
             </AdminRoute>
           }
