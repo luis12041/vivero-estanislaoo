@@ -62,6 +62,23 @@ app.use(
 
 )
 
+/* =========================
+IMPORTANTE STRIPE WEBHOOK
+========================= */
+
+app.use(
+
+  '/webhook',
+
+  express.raw({
+
+    type:
+      'application/json'
+
+  })
+
+)
+
 app.use(express.json())
 
 /* =========================
@@ -249,13 +266,6 @@ WEBHOOK
 app.post(
 
   '/webhook',
-
-  express.raw({
-
-    type:
-      'application/json'
-
-  }),
 
   async (req, res) => {
 
