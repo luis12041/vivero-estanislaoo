@@ -165,7 +165,7 @@ function Carrito() {
       const response =
         await fetch(
 
-          'https://vivero-estanislaoo-production.up.railway.app/crear-pago',
+          'https://vivero-estanislaoo.onrender.com/crear-pago',
 
           {
 
