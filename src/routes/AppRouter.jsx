@@ -1,436 +1,124 @@
 import {
-  Box,
-  TextField,
-  Typography,
-  Button,
-  Stack,
-  Paper,
-  IconButton,
-  InputAdornment,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions
-} from '@mui/material'
-
-import {
-  useState
-} from 'react'
-
-import {
-  signInWithEmailAndPassword,
-  sendPasswordResetEmail
-} from 'firebase/auth'
-
-import {
-  Visibility,
-  VisibilityOff
-} from '@mui/icons-material'
-
-import {
-  auth
-} from '../firebase/config'
-
-import {
-  useNavigate,
-  Link
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate
 } from 'react-router-dom'
 
-function Login() {
+import Home from '../pages/Home'
 
-  const navigate = useNavigate()
+import Catalogo from '../pages/Catalogo'
 
-  const [correo, setCorreo] = useState('')
+import Carrito from '../pages/Carrito'
 
-  const [password, setPassword] = useState('')
+import DashboardAdmin from '../pages/DashboardAdmin'
 
-  const [mostrarPassword, setMostrarPassword] = useState(false)
+import AgregarPlanta from '../pages/AgregarPlanta'
 
-  const [loading, setLoading] = useState(false)
+import AdminPlantas from '../pages/AdminPlantas'
 
-  const [openReset, setOpenReset] = useState(false)
+import EditarPlanta from '../pages/EditarPlanta'
 
-  const [correoReset, setCorreoReset] = useState('')
+import DetallePlanta from '../pages/DetallePlanta'
 
-  async function iniciarSesion() {
+import Login from '../pages/Login'
 
-    try {
+import AdminRoute from './AdminRoute'
 
-      setLoading(true)
+import MisPedidos from '../pages/MisPedidos'
 
-      await signInWithEmailAndPassword(
-        auth,
-        correo,
-        password
-      )
-
-      alert('Bienvenido 😎🌱')
-
-      navigate('/home')
-
-    } catch (error) {
-
-      console.log(error)
-
-      alert('Correo o contraseña incorrectos')
-
-    } finally {
-
-      setLoading(false)
-
-    }
-
-  }
-
-  async function recuperarPassword() {
-
-    try {
-
-      await sendPasswordResetEmail(
-        auth,
-        correoReset
-      )
-
-      alert(
-        'Te enviamos un correo para recuperar tu contraseña 📩'
-      )
-
-      setOpenReset(false)
-
-      setCorreoReset('')
-
-    } catch (error) {
-
-      console.log(error)
-
-      alert('Error al enviar correo')
-
-    }
-
-  }
+function AppRouter() {
 
   return (
 
-    <Box
-      sx={{
+    <BrowserRouter>
 
-        minHeight: '100vh',
+      <Routes>
 
-        backgroundImage:
-          'url(https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?q=80&w=1974&auto=format&fit=crop)',
+        <Route
+          path="/"
+          element={<Navigate to="/login" />}
+        />
 
-        backgroundSize: 'cover',
+        <Route
+          path="/login"
+          element={<Login />}
+        />
 
-        backgroundPosition: 'center',
+        <Route
+          path="/home"
+          element={<Home />}
+        />
 
-        display: 'flex',
+        <Route
+          path="/catalogo"
+          element={<Catalogo />}
+        />
 
-        justifyContent: 'center',
+        <Route
+          path="/carrito"
+          element={<Carrito />}
+        />
 
-        alignItems: 'center',
+        <Route
+          path="/planta/:id"
+          element={<DetallePlanta />}
+        />
 
-        position: 'relative',
+        <Route
+          path="/mis-pedidos"
+          element={<MisPedidos />}
+        />
 
-        px: 2
+        <Route
+          path="/admin"
+          element={
+            <AdminRoute>
 
-      }}
-    >
+              <DashboardAdmin />
 
-      <Box
-        sx={{
+            </AdminRoute>
+          }
+        />
 
-          position: 'absolute',
+        <Route
+          path="/agregar-planta"
+          element={
+            <AdminRoute>
 
-          inset: 0,
+              <AgregarPlanta />
 
-          background:
-            'rgba(0,0,0,0.45)',
+            </AdminRoute>
+          }
+        />
 
-          backdropFilter: 'blur(3px)'
+        <Route
+          path="/admin-plantas"
+          element={
+            <AdminRoute>
 
-        }}
-      />
+              <AdminPlantas />
 
-      <Paper
-        elevation={10}
-        sx={{
+            </AdminRoute>
+          }
+        />
 
-          position: 'relative',
+        <Route
+          path="/editar-planta/:id"
+          element={
+            <AdminRoute>
 
-          zIndex: 2,
+              <EditarPlanta />
 
-          width: '100%',
+            </AdminRoute>
+          }
+        />
 
-          maxWidth: 430,
+      </Routes>
 
-          p: 5,
-
-          borderRadius: 6,
-
-          background:
-            'rgba(255,255,255,0.92)',
-
-          backdropFilter: 'blur(10px)'
-
-        }}
-      >
-
-        <Stack spacing={3}>
-
-          <Box
-            sx={{
-              textAlign: 'center'
-            }}
-          >
-
-            <Typography
-              variant="h3"
-              sx={{
-
-                fontWeight: 800,
-
-                color: '#2e7d32',
-
-                mb: 1
-
-              }}
-            >
-
-              🌿 Viveros
-              Estanislao
-
-            </Typography>
-
-            <Typography
-              sx={{
-                color: '#666'
-              }}
-            >
-
-              Plantas para interior y exterior
-
-            </Typography>
-
-          </Box>
-
-          <Typography
-            variant="h4"
-            sx={{
-
-              textAlign: 'center',
-
-              fontWeight: 700
-
-            }}
-          >
-
-            Iniciar Sesión
-
-          </Typography>
-
-          <TextField
-            label="Correo electrónico"
-            type="email"
-            fullWidth
-            value={correo}
-            onChange={(e) =>
-              setCorreo(e.target.value)
-            }
-          />
-
-          <TextField
-            label="Contraseña"
-            type={
-              mostrarPassword
-                ? 'text'
-                : 'password'
-            }
-            fullWidth
-            value={password}
-            onChange={(e) =>
-              setPassword(e.target.value)
-            }
-            InputProps={{
-
-              endAdornment: (
-
-                <InputAdornment position="end">
-
-                  <IconButton
-                    onClick={() =>
-                      setMostrarPassword(
-                        !mostrarPassword
-                      )
-                    }
-                  >
-
-                    {mostrarPassword
-                      ? <VisibilityOff />
-                      : <Visibility />}
-
-                  </IconButton>
-
-                </InputAdornment>
-
-              )
-
-            }}
-          />
-
-          <Button
-            variant="contained"
-            size="large"
-            onClick={iniciarSesion}
-            disabled={loading}
-            sx={{
-
-              py: 1.5,
-
-              borderRadius: 3,
-
-              fontWeight: 700,
-
-              fontSize: '18px',
-
-              backgroundColor: '#2e7d32',
-
-              '&:hover': {
-
-                backgroundColor: '#1b5e20'
-
-              }
-
-            }}
-          >
-
-            {loading
-              ? 'Ingresando...'
-              : 'Entrar'}
-
-          </Button>
-
-          <Stack
-            spacing={2}
-            sx={{
-              textAlign: 'center'
-            }}
-          >
-
-            <Typography
-              component={Link}
-              to="/register"
-              sx={{
-
-                textDecoration: 'none',
-
-                color: '#2e7d32',
-
-                fontWeight: 700,
-
-                fontSize: '16px'
-
-              }}
-            >
-
-              Crear cuenta nueva
-
-            </Typography>
-
-            <Typography
-              onClick={() =>
-                setOpenReset(true)
-              }
-              sx={{
-
-                color: '#2e7d32',
-
-                fontWeight: 600,
-
-                cursor: 'pointer',
-
-                '&:hover': {
-
-                  textDecoration:
-                    'underline'
-
-                }
-
-              }}
-            >
-
-              ¿Olvidaste tu contraseña?
-
-            </Typography>
-
-          </Stack>
-
-        </Stack>
-
-      </Paper>
-
-      <Dialog
-        open={openReset}
-        onClose={() =>
-          setOpenReset(false)
-        }
-      >
-
-        <DialogTitle>
-
-          Recuperar contraseña 🔑
-
-        </DialogTitle>
-
-        <DialogContent>
-
-          <TextField
-            label="Correo electrónico"
-            type="email"
-            fullWidth
-            sx={{
-              mt: 2
-            }}
-            value={correoReset}
-            onChange={(e) =>
-              setCorreoReset(
-                e.target.value
-              )
-            }
-          />
-
-        </DialogContent>
-
-        <DialogActions>
-
-          <Button
-            onClick={() =>
-              setOpenReset(false)
-            }
-          >
-
-            Cancelar
-
-          </Button>
-
-          <Button
-            variant="contained"
-            onClick={
-              recuperarPassword
-            }
-          >
-
-            Enviar
-
-          </Button>
-
-        </DialogActions>
-
-      </Dialog>
-
-    </Box>
+    </BrowserRouter>
 
   )
-
 }
 
-export default Login
+export default AppRouter
