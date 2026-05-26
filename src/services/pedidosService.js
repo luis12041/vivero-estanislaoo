@@ -10,10 +10,12 @@ import {
 
 export async function crearPedido(
   carrito,
-  total
+  total,
+  datosCliente
 ) {
 
-  const usuario = auth.currentUser
+  const usuario =
+    auth.currentUser
 
   if (!usuario) {
 
@@ -25,13 +27,37 @@ export async function crearPedido(
 
   const pedido = {
 
-    usuario: usuario.email,
+    usuario:
+      usuario.email,
 
-    productos: carrito,
+    nombre:
+      datosCliente.nombre,
+
+    telefono:
+      datosCliente.telefono,
+
+    direccion:
+      datosCliente.direccion,
+
+    referencia:
+      datosCliente.referencia,
+
+    ubicacion:
+      datosCliente.ubicacion,
+
+    notas:
+      datosCliente.notas,
+
+    productos:
+      carrito,
 
     total,
 
-    fecha: new Date()
+    estado:
+      'Pendiente',
+
+    fecha:
+      new Date()
 
   }
 

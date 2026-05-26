@@ -5,7 +5,8 @@ import {
   CardContent,
   Stack,
   Divider,
-  Chip
+  Chip,
+  Button
 } from '@mui/material'
 
 import {
@@ -23,33 +24,43 @@ import {
   db
 } from '../firebase/config'
 
-import ClientLayout from '../layouts/ClientLayout'
+import ClientLayout
+from '../layouts/ClientLayout'
 
 function MisPedidos() {
 
-  const [pedidos, setPedidos] = useState([])
+  const [pedidos,
+    setPedidos] =
+    useState([])
 
   useEffect(() => {
 
     async function cargarPedidos() {
 
-      const usuario = auth.currentUser
+      const usuario =
+        auth.currentUser
 
       if (!usuario) return
 
-      const snapshot = await getDocs(
-        collection(db, 'pedidos')
-      )
-
-      const data = snapshot.docs
-        .map((doc) => ({
-          id: doc.id,
-          ...doc.data()
-        }))
-        .filter(
-          (pedido) =>
-            pedido.usuario === usuario.email
+      const snapshot =
+        await getDocs(
+          collection(
+            db,
+            'pedidos'
+          )
         )
+
+      const data =
+        snapshot.docs
+          .map((doc) => ({
+            id: doc.id,
+            ...doc.data()
+          }))
+          .filter(
+            (pedido) =>
+              pedido.usuario ===
+              usuario.email
+          )
 
       setPedidos(data)
 
@@ -77,7 +88,9 @@ function MisPedidos() {
 
       {pedidos.length === 0 ? (
 
-        <Typography variant="h6">
+        <Typography
+          variant="h6"
+        >
 
           Aún no tienes pedidos.
 
@@ -112,6 +125,16 @@ function MisPedidos() {
                   </Typography>
 
                   <Chip
+                    label={
+                      pedido.estado
+                    }
+                    color="warning"
+                    sx={{
+                      width: 'fit-content'
+                    }}
+                  />
+
+                  <Chip
                     label={`Total: $${pedido.total}`}
                     color="success"
                     sx={{
@@ -119,17 +142,47 @@ function MisPedidos() {
                     }}
                   />
 
-                  <Typography
-                    sx={{
-                      color: 'gray'
-                    }}
-                  >
+                  <Typography>
 
-                    Usuario:
-                    {' '}
-                    {pedido.usuario}
+                    👤 {pedido.nombre}
 
                   </Typography>
+
+                  <Typography>
+
+                    📞 {pedido.telefono}
+
+                  </Typography>
+
+                  <Typography>
+
+                    📍 {pedido.direccion}
+
+                  </Typography>
+
+                  {pedido.referencia && (
+
+                    <Typography>
+
+                      🏠 {pedido.referencia}
+
+                    </Typography>
+
+                  )}
+
+                  {pedido.ubicacion && (
+
+                    <Button
+                      href={pedido.ubicacion}
+                      target="_blank"
+                      variant="outlined"
+                    >
+
+                      Ver ubicación
+
+                    </Button>
+
+                  )}
 
                   <Divider />
 
@@ -139,10 +192,16 @@ function MisPedidos() {
                       <Box
                         key={index}
                         sx={{
+
                           display: 'flex',
-                          justifyContent: 'space-between',
+
+                          justifyContent:
+                            'space-between',
+
                           flexWrap: 'wrap',
+
                           gap: 2
+
                         }}
                       >
 
@@ -186,6 +245,7 @@ function MisPedidos() {
     </ClientLayout>
 
   )
+
 }
 
 export default MisPedidos

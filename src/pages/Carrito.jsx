@@ -6,20 +6,37 @@ import {
   CardContent,
   Button,
   Stack,
-  IconButton
+  IconButton,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  TextField,
+  DialogActions
 } from '@mui/material'
 
-import DeleteIcon from '@mui/icons-material/Delete'
+import DeleteIcon
+from '@mui/icons-material/Delete'
 
-import AddIcon from '@mui/icons-material/Add'
+import AddIcon
+from '@mui/icons-material/Add'
 
-import RemoveIcon from '@mui/icons-material/Remove'
+import RemoveIcon
+from '@mui/icons-material/Remove'
 
-import ClientLayout from '../layouts/ClientLayout'
+import {
+  useState
+} from 'react'
 
-import { useCart } from '../context/CartContext'
+import ClientLayout
+from '../layouts/ClientLayout'
 
-import { crearPedido } from '../services/pedidosService'
+import {
+  useCart
+} from '../context/CartContext'
+
+import {
+  crearPedido
+} from '../services/pedidosService'
 
 function Carrito() {
 
@@ -39,25 +56,69 @@ function Carrito() {
 
   } = useCart()
 
+  const [open,
+    setOpen] =
+    useState(false)
+
+  const [datosCliente,
+    setDatosCliente] =
+    useState({
+
+      nombre: '',
+
+      telefono: '',
+
+      direccion: '',
+
+      referencia: '',
+
+      ubicacion: '',
+
+      notas: ''
+
+    })
+
+  function handleChange(e) {
+
+    setDatosCliente({
+
+      ...datosCliente,
+
+      [e.target.name]:
+        e.target.value
+
+    })
+
+  }
+
   async function finalizarCompra() {
 
     try {
 
       await crearPedido(
+
         carrito,
-        total
+
+        total,
+
+        datosCliente
+
       )
 
-      alert('Compra realizada 😎🌱')
+      alert(
+        'Pedido realizado 😎🌱'
+      )
 
       vaciarCarrito()
+
+      setOpen(false)
 
     } catch (error) {
 
       console.log(error)
 
       alert(
-        'Debes iniciar sesión para comprar'
+        'Debes iniciar sesión'
       )
 
     }
@@ -82,7 +143,9 @@ function Carrito() {
 
       {carrito.length === 0 ? (
 
-        <Typography variant="h6">
+        <Typography
+          variant="h6"
+        >
 
           Tu carrito está vacío.
 
@@ -99,9 +162,18 @@ function Carrito() {
               <Card
                 key={producto.nombre}
                 sx={{
+
                   display: 'flex',
+
+                  flexDirection: {
+                    xs: 'column',
+                    md: 'row'
+                  },
+
                   borderRadius: 5,
+
                   overflow: 'hidden'
+
                 }}
               >
 
@@ -110,93 +182,94 @@ function Carrito() {
                   image={producto.imagen}
                   alt={producto.nombre}
                   sx={{
-                    width: 220
+                    width: {
+                      xs: '100%',
+                      md: 220
+                    }
                   }}
                 />
 
                 <CardContent
                   sx={{
-                    flex: 1,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'space-between'
+                    flex: 1
                   }}
                 >
 
-                  <Box>
+                  <Typography
+                    variant="h5"
+                    sx={{
+                      fontWeight: 700
+                    }}
+                  >
 
-                    <Typography
-                      variant="h5"
-                      sx={{
-                        fontWeight: 700
-                      }}
-                    >
+                    {producto.nombre}
 
-                      {producto.nombre}
+                  </Typography>
 
-                    </Typography>
+                  <Typography
+                    sx={{
+                      mt: 1
+                    }}
+                  >
 
-                    <Typography
-                      sx={{
-                        mt: 1,
-                        color: 'text.secondary'
-                      }}
-                    >
+                    ☀️ {producto.tipoLuz}
 
-                      ☀️ {producto.tipoLuz}
+                  </Typography>
 
-                    </Typography>
+                  <Typography>
 
-                    <Typography
-                      sx={{
-                        color: 'text.secondary'
-                      }}
-                    >
+                    💧 {producto.riego}
 
-                      💧 {producto.riego}
+                  </Typography>
 
-                    </Typography>
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      color: 'primary.main',
+                      mt: 2,
+                      fontWeight: 700
+                    }}
+                  >
 
-                    <Typography
-                      variant="h6"
-                      sx={{
-                        color: 'primary.main',
-                        mt: 2,
-                        fontWeight: 700
-                      }}
-                    >
+                    ${producto.precio}
 
-                      ${producto.precio}
+                  </Typography>
 
-                    </Typography>
+                  <Typography
+                    sx={{
+                      mt: 1
+                    }}
+                  >
 
-                    <Typography
-                      sx={{
-                        mt: 1
-                      }}
-                    >
+                    Subtotal:
+                    {' '}
+                    <strong>
 
-                      Subtotal:
-                      {' '}
-                      <strong>
+                      $
+                      {producto.precio *
+                        producto.cantidad}
 
-                        $
-                        {producto.precio * producto.cantidad}
+                    </strong>
 
-                      </strong>
-
-                    </Typography>
-
-                  </Box>
+                  </Typography>
 
                   <Box
                     sx={{
+
                       display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      mt: 3,
+
+                      justifyContent:
+                        'space-between',
+
+                      alignItems:
+                        'center',
+
                       flexWrap: 'wrap',
-                      gap: 2
+
+                      gap: 2,
+
+                      mt: 3
+
                     }}
                   >
 
@@ -247,7 +320,9 @@ function Carrito() {
                     <Button
                       variant="outlined"
                       color="error"
-                      startIcon={<DeleteIcon />}
+                      startIcon={
+                        <DeleteIcon />
+                      }
                       onClick={() =>
                         eliminarDelCarrito(
                           producto.nombre
@@ -271,12 +346,20 @@ function Carrito() {
 
           <Box
             sx={{
+
               mt: 5,
+
               display: 'flex',
-              justifyContent: 'space-between',
+
+              justifyContent:
+                'space-between',
+
               alignItems: 'center',
+
               flexWrap: 'wrap',
+
               gap: 3
+
             }}
           >
 
@@ -310,8 +393,10 @@ function Carrito() {
 
               <Button
                 variant="contained"
-                color="primary"
-                onClick={finalizarCompra}
+                color="success"
+                onClick={() =>
+                  setOpen(true)
+                }
               >
 
                 Finalizar compra
@@ -322,6 +407,109 @@ function Carrito() {
 
           </Box>
 
+          <Dialog
+            open={open}
+            onClose={() =>
+              setOpen(false)
+            }
+            maxWidth="sm"
+            fullWidth
+          >
+
+            <DialogTitle>
+
+              Finalizar pedido 🌱
+
+            </DialogTitle>
+
+            <DialogContent>
+
+              <Stack
+                spacing={3}
+                sx={{
+                  mt: 2
+                }}
+              >
+
+                <TextField
+                  label="Nombre completo"
+                  name="nombre"
+                  fullWidth
+                  onChange={handleChange}
+                />
+
+                <TextField
+                  label="Teléfono"
+                  name="telefono"
+                  fullWidth
+                  onChange={handleChange}
+                />
+
+                <TextField
+                  label="Dirección"
+                  name="direccion"
+                  fullWidth
+                  multiline
+                  rows={2}
+                  onChange={handleChange}
+                />
+
+                <TextField
+                  label="Referencia"
+                  name="referencia"
+                  fullWidth
+                  onChange={handleChange}
+                />
+
+                <TextField
+                  label="Ubicación Google Maps"
+                  name="ubicacion"
+                  fullWidth
+                  placeholder="https://maps.google.com/..."
+                  onChange={handleChange}
+                />
+
+                <TextField
+                  label="Notas"
+                  name="notas"
+                  fullWidth
+                  multiline
+                  rows={3}
+                  onChange={handleChange}
+                />
+
+              </Stack>
+
+            </DialogContent>
+
+            <DialogActions>
+
+              <Button
+                onClick={() =>
+                  setOpen(false)
+                }
+              >
+
+                Cancelar
+
+              </Button>
+
+              <Button
+                variant="contained"
+                color="success"
+                onClick={
+                  finalizarCompra
+                }
+              >
+
+                Confirmar pedido
+
+              </Button>
+
+            </DialogActions>
+
+          </Dialog>
+
         </>
 
       )}
@@ -329,6 +517,7 @@ function Carrito() {
     </ClientLayout>
 
   )
+
 }
 
 export default Carrito
