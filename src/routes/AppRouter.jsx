@@ -4,6 +4,8 @@ import {
   Route
 } from 'react-router-dom'
 
+import Login from '../pages/Login'
+
 import Home from '../pages/Home'
 
 import Catalogo from '../pages/Catalogo'
@@ -22,8 +24,6 @@ import DetallePlanta from '../pages/DetallePlanta'
 
 import Register from '../pages/Register'
 
-import Login from '../pages/Login'
-
 import AdminRoute from './AdminRoute'
 
 import MisPedidos from '../pages/MisPedidos'
@@ -38,6 +38,16 @@ function AppRouter() {
 
         <Route
           path="/"
+          element={<Login />}
+        />
+
+        <Route
+          path="/login"
+          element={<Login />}
+        />
+
+        <Route
+          path="/home"
           element={<Home />}
         />
 
@@ -59,11 +69,6 @@ function AppRouter() {
         <Route
           path="/register"
           element={<Register />}
-        />
-
-        <Route
-          path="/login"
-          element={<Login />}
         />
 
         <Route
