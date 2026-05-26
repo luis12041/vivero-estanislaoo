@@ -5,23 +5,29 @@ import {
   Navigate
 } from 'react-router-dom'
 
-import Catalogo from '../pages/Catalogo'
+import Catalogo
+from '../pages/Catalogo'
 
-import Carrito from '../pages/Carrito'
+import Carrito
+from '../pages/Carrito'
 
-import DashboardAdmin from '../pages/DashboardAdmin'
+import DashboardAdmin
+from '../pages/DashboardAdmin'
 
-import AdminPlantas from '../pages/AdminPlantas'
+import AdminPlantas
+from '../pages/AdminPlantas'
 
-import EditarPlanta from '../pages/EditarPlanta'
+import EditarPlanta
+from '../pages/EditarPlanta'
 
-import DetallePlanta from '../pages/DetallePlanta'
+import Login
+from '../pages/Login'
 
-import Login from '../pages/Login'
+import AdminRoute
+from './AdminRoute'
 
-import AdminRoute from './AdminRoute'
-
-import MisPedidos from '../pages/MisPedidos'
+import MisPedidos
+from '../pages/MisPedidos'
 
 function AppRouter() {
 
@@ -34,7 +40,9 @@ function AppRouter() {
         <Route
           path="/"
           element={
-            <Navigate to="/login" />
+            <Navigate
+              to="/login"
+            />
           }
         />
 
@@ -45,54 +53,61 @@ function AppRouter() {
 
         <Route
           path="/catalogo"
-          element={<Catalogo />}
+          element={
+            <Catalogo />
+          }
         />
 
         <Route
           path="/carrito"
-          element={<Carrito />}
-        />
-
-        <Route
-          path="/planta/:id"
-          element={<DetallePlanta />}
+          element={
+            <Carrito />
+          }
         />
 
         <Route
           path="/mis-pedidos"
-          element={<MisPedidos />}
+          element={
+            <MisPedidos />
+          }
         />
 
         <Route
           path="/admin"
           element={
+
             <AdminRoute>
 
               <DashboardAdmin />
 
             </AdminRoute>
+
           }
         />
 
         <Route
           path="/admin-plantas"
           element={
+
             <AdminRoute>
 
               <AdminPlantas />
 
             </AdminRoute>
+
           }
         />
 
         <Route
           path="/editar-planta/:id"
           element={
+
             <AdminRoute>
 
               <EditarPlanta />
 
             </AdminRoute>
+
           }
         />
 

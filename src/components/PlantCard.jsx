@@ -6,12 +6,18 @@ import {
   Button,
   Box,
   Chip,
-  Stack
+  Stack,
+  Dialog,
+  DialogContent,
+  IconButton
 } from '@mui/material'
 
+import CloseIcon
+from '@mui/icons-material/Close'
+
 import {
-  useNavigate
-} from 'react-router-dom'
+  useState
+} from 'react'
 
 import { useCart } from '../context/CartContext'
 
@@ -22,169 +28,432 @@ function PlantCard({
   imagen,
   tipoLuz,
   riego,
-  disponible
+  disponible,
+  descripcion
 }) {
 
-  const navigate = useNavigate()
+  const { agregarAlCarrito } =
+    useCart()
 
-  const { agregarAlCarrito } = useCart()
+  const [openModal,
+    setOpenModal] =
+    useState(false)
 
   const producto = {
+
     id,
+
     nombre,
+
     precio,
+
     imagen,
+
     tipoLuz,
+
     riego,
-    disponible
+
+    disponible,
+
+    descripcion
+
   }
 
   return (
 
-    <Card
-      sx={{
-        borderRadius: 5,
-        boxShadow: 3,
-        transition: '0.3s',
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
+    <>
 
-        '&:hover': {
-          transform: 'translateY(-5px)',
-          boxShadow: 6
-        }
-      }}
-    >
-
-      <CardMedia
-        component="img"
-        height="260"
-        image={imagen}
-        alt={nombre}
+      <Card
         sx={{
-          cursor: 'pointer'
-        }}
-        onClick={() =>
-          navigate(`/planta/${id}`)
-        }
-      />
 
-      <CardContent
-        sx={{
-          flexGrow: 1,
+          borderRadius: 5,
+
+          boxShadow:
+            '0 10px 25px rgba(0,0,0,0.08)',
+
+          transition: '0.3s',
+
+          height: '100%',
+
           display: 'flex',
+
           flexDirection: 'column',
-          justifyContent: 'space-between'
+
+          overflow: 'hidden',
+
+          '&:hover': {
+
+            transform:
+              'translateY(-8px)',
+
+            boxShadow:
+              '0 20px 40px rgba(0,0,0,0.12)'
+
+          }
+
         }}
       >
 
-        <Box>
+        <CardMedia
+          component="img"
+          height="260"
+          image={imagen}
+          alt={nombre}
+          sx={{
+            objectFit: 'cover'
+          }}
+        />
 
-          <Typography
-            variant="h5"
-            sx={{
-              fontWeight: 700,
-              mb: 1,
-              cursor: 'pointer'
-            }}
-            onClick={() =>
-              navigate(`/planta/${id}`)
-            }
-          >
+        <CardContent
+          sx={{
 
-            {nombre}
+            flexGrow: 1,
 
-          </Typography>
+            display: 'flex',
 
-          <Typography
-            variant="h6"
-            sx={{
-              color: 'primary.main',
-              mb: 2,
-              fontWeight: 700
-            }}
-          >
+            flexDirection: 'column',
 
-            ${precio}
+            justifyContent:
+              'space-between'
 
-          </Typography>
+          }}
+        >
 
-          <Stack
-            direction="row"
-            spacing={1}
-            flexWrap="wrap"
-            sx={{
-              mb: 2
-            }}
-          >
+          <Box>
 
-            <Chip
-              label={`☀️ ${tipoLuz}`}
-              color="warning"
-            />
+            <Typography
+              variant="h5"
+              sx={{
 
-            <Chip
-              label={`💧 ${riego}`}
-              color="info"
-            />
+                fontWeight: 700,
+
+                mb: 1
+
+              }}
+            >
+
+              {nombre}
+
+            </Typography>
+
+            <Typography
+              variant="h6"
+              sx={{
+
+                color: '#2e7d32',
+
+                mb: 2,
+
+                fontWeight: 700
+
+              }}
+            >
+
+              ${precio}
+
+            </Typography>
+
+            <Stack
+              direction="row"
+              spacing={1}
+              flexWrap="wrap"
+              sx={{
+                mb: 2
+              }}
+            >
+
+              <Chip
+                label={`☀️ ${tipoLuz}`}
+                color="warning"
+              />
+
+              <Chip
+                label={`💧 ${riego}`}
+                color="info"
+              />
+
+            </Stack>
+
+            <Typography
+              sx={{
+
+                mb: 2,
+
+                fontWeight: 600,
+
+                color:
+                  disponible
+                    ? '#2e7d32'
+                    : '#d32f2f'
+
+              }}
+            >
+
+              {disponible
+                ? 'Disponible'
+                : 'Sin stock'}
+
+            </Typography>
+
+          </Box>
+
+          <Stack spacing={2}>
+
+            <Button
+              variant="outlined"
+              fullWidth
+              onClick={() =>
+                setOpenModal(true)
+              }
+              sx={{
+                borderRadius: 3
+              }}
+            >
+
+              Ver detalles
+
+            </Button>
+
+            <Button
+              variant="contained"
+              fullWidth
+              disabled={!disponible}
+              onClick={() =>
+                agregarAlCarrito(
+                  producto
+                )
+              }
+              sx={{
+                borderRadius: 3
+              }}
+            >
+
+              {disponible
+                ? 'Agregar al carrito'
+                : 'Sin stock'}
+
+            </Button>
 
           </Stack>
 
-          <Typography
+        </CardContent>
+
+      </Card>
+
+      <Dialog
+        open={openModal}
+        onClose={() =>
+          setOpenModal(false)
+        }
+        maxWidth="md"
+        fullWidth
+      >
+
+        <DialogContent
+          sx={{
+            p: 0
+          }}
+        >
+
+          <Box
             sx={{
-              mb: 2,
-              fontWeight: 500,
-              color: disponible
-                ? 'green'
-                : 'red'
+
+              position: 'absolute',
+
+              top: 15,
+
+              right: 15,
+
+              zIndex: 10
+
             }}
           >
 
-            {disponible
-              ? 'Disponible'
-              : 'No disponible'}
+            <IconButton
+              onClick={() =>
+                setOpenModal(false)
+              }
+              sx={{
 
-          </Typography>
+                backgroundColor:
+                  'white',
 
-        </Box>
+                '&:hover': {
 
-        <Stack spacing={2}>
+                  backgroundColor:
+                    '#f5f5f5'
 
-          <Button
-            variant="outlined"
-            fullWidth
-            onClick={() =>
-              navigate(`/planta/${id}`)
-            }
+                }
+
+              }}
+            >
+
+              <CloseIcon />
+
+            </IconButton>
+
+          </Box>
+
+          <Box
+            sx={{
+
+              display: 'grid',
+
+              gridTemplateColumns: {
+                xs: '1fr',
+                md: '1fr 1fr'
+              }
+
+            }}
           >
 
-            Ver Detalles
+            <Box
+              component="img"
+              src={imagen}
+              alt={nombre}
+              sx={{
 
-          </Button>
+                width: '100%',
 
-          <Button
-            variant="contained"
-            fullWidth
-            disabled={!disponible}
-            onClick={() =>
-              agregarAlCarrito(producto)
-            }
-          >
+                height: '100%',
 
-            {disponible
-              ? 'Agregar al carrito'
-              : 'Sin stock'}
+                objectFit: 'cover',
 
-          </Button>
+                minHeight: 500
 
-        </Stack>
+              }}
+            />
 
-      </CardContent>
+            <Box
+              sx={{
+                p: 5
+              }}
+            >
 
-    </Card>
+              <Typography
+                variant="h3"
+                sx={{
+                  fontWeight: 800,
+                  mb: 2
+                }}
+              >
+
+                {nombre}
+
+              </Typography>
+
+              <Typography
+                variant="h4"
+                sx={{
+
+                  color: '#2e7d32',
+
+                  fontWeight: 700,
+
+                  mb: 3
+
+                }}
+              >
+
+                ${precio}
+
+              </Typography>
+
+              <Stack
+                direction="row"
+                spacing={2}
+                flexWrap="wrap"
+                sx={{
+                  mb: 3
+                }}
+              >
+
+                <Chip
+                  label={`☀️ ${tipoLuz}`}
+                  color="warning"
+                />
+
+                <Chip
+                  label={`💧 ${riego}`}
+                  color="info"
+                />
+
+                <Chip
+                  label={
+                    disponible
+                      ? 'Disponible'
+                      : 'Sin stock'
+                  }
+                  color={
+                    disponible
+                      ? 'success'
+                      : 'error'
+                  }
+                />
+
+              </Stack>
+
+              <Typography
+                sx={{
+
+                  lineHeight: 1.9,
+
+                  color: '#555',
+
+                  mb: 4
+
+                }}
+              >
+
+                {descripcion ||
+                  'Hermosa planta ideal para decorar espacios interiores y exteriores 🌱'}
+
+              </Typography>
+
+              <Button
+                variant="contained"
+                size="large"
+                fullWidth
+                disabled={!disponible}
+                onClick={() =>
+                  agregarAlCarrito(
+                    producto
+                  )
+                }
+                sx={{
+
+                  borderRadius: 3,
+
+                  py: 1.5,
+
+                  fontWeight: 700,
+
+                  fontSize: '17px',
+
+                  backgroundColor:
+                    '#2e7d32'
+
+                }}
+              >
+
+                {disponible
+                  ? 'Agregar al carrito'
+                  : 'No disponible'}
+
+              </Button>
+
+            </Box>
+
+          </Box>
+
+        </DialogContent>
+
+      </Dialog>
+
+    </>
 
   )
+
 }
 
 export default PlantCard
