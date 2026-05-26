@@ -4,7 +4,9 @@ import {
   Card,
   CardContent,
   Avatar,
-  Stack
+  Stack,
+  Box,
+  Chip
 } from '@mui/material'
 
 import {
@@ -16,6 +18,12 @@ import {
   collection,
   getDocs
 } from 'firebase/firestore'
+
+import EmailIcon
+from '@mui/icons-material/Email'
+
+import PersonIcon
+from '@mui/icons-material/Person'
 
 import { db } from '../firebase/config'
 
@@ -53,17 +61,37 @@ function AdminUsuarios() {
 
     <AdminLayout>
 
-      <Typography
-        variant="h3"
+      <Box
         sx={{
-          fontWeight: 800,
-          mb: 4
+          mb: 5
         }}
       >
 
-        Usuarios 👥
+        <Typography
+          variant="h3"
+          sx={{
+            fontWeight: 900,
+            color: '#1b1b1b'
+          }}
+        >
 
-      </Typography>
+          Usuarios 👥
+
+        </Typography>
+
+        <Typography
+          sx={{
+            color: '#666',
+            mt: 1,
+            fontSize: 18
+          }}
+        >
+
+          Administración de usuarios registrados en el sistema
+
+        </Typography>
+
+      </Box>
 
       <Grid container spacing={4}>
 
@@ -72,32 +100,61 @@ function AdminUsuarios() {
           <Grid
             item
             xs={12}
-            md={4}
+            sm={6}
+            lg={4}
             key={usuario.id}
           >
 
             <Card
               sx={{
-                borderRadius: 5,
+                borderRadius: 6,
+                overflow: 'hidden',
+                background:
+                  'linear-gradient(145deg,#ffffff,#f8f8f8)',
                 boxShadow:
-                  '0 10px 25px rgba(0,0,0,0.08)'
+                  '0 10px 30px rgba(0,0,0,0.08)',
+                transition: '0.3s',
+
+                '&:hover': {
+                  transform:
+                    'translateY(-8px)',
+                  boxShadow:
+                    '0 15px 40px rgba(0,0,0,0.12)'
+                }
               }}
             >
 
-              <CardContent>
+              <Box
+                sx={{
+                  height: 90,
+                  background:
+                    'linear-gradient(135deg,#2e7d32,#43a047)'
+                }}
+              />
+
+              <CardContent
+                sx={{
+                  mt: -6
+                }}
+              >
 
                 <Stack
-                  spacing={2}
+                  spacing={3}
                   alignItems="center"
                 >
 
                   <Avatar
                     sx={{
-                      width: 80,
-                      height: 80,
-                      fontSize: 35,
-                      backgroundColor:
-                        '#2e7d32'
+                      width: 100,
+                      height: 100,
+                      fontSize: 40,
+                      fontWeight: 800,
+                      border:
+                        '5px solid white',
+                      background:
+                        'linear-gradient(135deg,#1b5e20,#43a047)',
+                      boxShadow:
+                        '0 10px 25px rgba(0,0,0,0.2)'
                     }}
                   >
 
@@ -105,22 +162,109 @@ function AdminUsuarios() {
 
                   </Avatar>
 
-                  <Typography
-                    variant="h5"
+                  <Box
                     sx={{
-                      fontWeight: 700
+                      textAlign: 'center'
                     }}
                   >
 
-                    {usuario.nombre}
+                    <Typography
+                      variant="h5"
+                      sx={{
+                        fontWeight: 800,
+                        color: '#1b1b1b'
+                      }}
+                    >
 
-                  </Typography>
+                      {usuario.nombre || 'Usuario'}
 
-                  <Typography>
+                    </Typography>
 
-                    {usuario.email}
+                    <Chip
+                      label="Usuario activo"
+                      sx={{
+                        mt: 1,
+                        backgroundColor:
+                          '#e8f5e9',
+                        color: '#2e7d32',
+                        fontWeight: 700
+                      }}
+                    />
 
-                  </Typography>
+                  </Box>
+
+                  <Stack
+                    spacing={2}
+                    sx={{
+                      width: '100%'
+                    }}
+                  >
+
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 1.5,
+                        p: 2,
+                        borderRadius: 3,
+                        backgroundColor:
+                          '#f5f5f5'
+                      }}
+                    >
+
+                      <PersonIcon
+                        sx={{
+                          color: '#2e7d32'
+                        }}
+                      />
+
+                      <Typography
+                        sx={{
+                          fontWeight: 600,
+                          color: '#444'
+                        }}
+                      >
+
+                        {usuario.nombre}
+
+                      </Typography>
+
+                    </Box>
+
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 1.5,
+                        p: 2,
+                        borderRadius: 3,
+                        backgroundColor:
+                          '#f5f5f5'
+                      }}
+                    >
+
+                      <EmailIcon
+                        sx={{
+                          color: '#2e7d32'
+                        }}
+                      />
+
+                      <Typography
+                        sx={{
+                          fontWeight: 500,
+                          color: '#555',
+                          wordBreak:
+                            'break-word'
+                        }}
+                      >
+
+                        {usuario.email}
+
+                      </Typography>
+
+                    </Box>
+
+                  </Stack>
 
                 </Stack>
 
