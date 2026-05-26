@@ -8,11 +8,33 @@ const admin = require('firebase-admin')
 
 require('dotenv').config()
 
-const serviceAccount =
-  JSON.parse(
-    process.env
-      .FIREBASE_SERVICE_ACCOUNT
+/* =========================
+FIREBASE JSON DEBUG
+========================= */
+
+let serviceAccount
+
+try {
+
+  serviceAccount =
+    JSON.parse(
+      process.env
+        .FIREBASE_SERVICE_ACCOUNT
+    )
+
+  console.log(
+    '🔥 Firebase JSON OK'
   )
+
+} catch (error) {
+
+  console.log(
+    '❌ ERROR FIREBASE JSON'
+  )
+
+  console.log(error)
+
+}
 
 const app = express()
 
@@ -24,140 +46,19 @@ app.use(
 
   cors({
 
-    origin: [
-
-      'https://vivero-estanislaoo.web.app'
-
-    ],
+    origin: '*',
 
     methods: [
 
       'GET',
 
-      'POST'
+      'POST',
+
+      'OPTIONS'
 
     ]
 
   })
-
-)
-
-/* =========================
-WEBHOOK
-========================= */
-
-app.post(
-
-  '/webhook',
-
-  express.raw({
-
-    type:
-      'application/json'
-
-  }),
-
-  async (req, res) => {
-
-    try {
-
-      const sig =
-        req.headers[
-          'stripe-signature'
-        ]
-
-      const event =
-        stripe.webhooks.constructEvent(
-
-          req.body,
-
-          sig,
-
-          process.env
-            .STRIPE_WEBHOOK_SECRET
-
-        )
-
-      if (
-        event.type ===
-        'checkout.session.completed'
-      ) {
-
-        const session =
-          event.data.object
-
-        const productos =
-          JSON.parse(
-            session.metadata
-              .productos
-          )
-
-        await db
-          .collection(
-            'pedidos'
-          )
-          .add({
-
-            nombre:
-              session.metadata
-                .nombre,
-
-            telefono:
-              session.metadata
-                .telefono,
-
-            direccion:
-              session.metadata
-                .direccion,
-
-            referencia:
-              session.metadata
-                .referencia,
-
-            ubicacion:
-              session.metadata
-                .ubicacion,
-
-            notas:
-              session.metadata
-                .notas,
-
-            productos,
-
-            total:
-              Number(
-                session.metadata
-                  .total
-              ),
-
-            estado:
-              'Pagado',
-
-            stripeSessionId:
-              session.id,
-
-            fecha:
-              new Date()
-
-          })
-
-        console.log(
-          '✅ Pedido guardado'
-        )
-
-      }
-
-      res.sendStatus(200)
-
-    } catch (error) {
-
-      console.log(error)
-
-      res.sendStatus(400)
-
-    }
-
-  }
 
 )
 
@@ -322,6 +223,10 @@ app.post(
 
     } catch (error) {
 
+      console.log(
+        '❌ ERROR CREAR PAGO'
+      )
+
       console.log(error)
 
       res.status(500).json({
@@ -330,6 +235,129 @@ app.post(
           'Error al crear pago'
 
       })
+
+    }
+
+  }
+
+)
+
+/* =========================
+WEBHOOK
+========================= */
+
+app.post(
+
+  '/webhook',
+
+  express.raw({
+
+    type:
+      'application/json'
+
+  }),
+
+  async (req, res) => {
+
+    try {
+
+      const sig =
+        req.headers[
+          'stripe-signature'
+        ]
+
+      const event =
+        stripe.webhooks.constructEvent(
+
+          req.body,
+
+          sig,
+
+          process.env
+            .STRIPE_WEBHOOK_SECRET
+
+        )
+
+      if (
+        event.type ===
+        'checkout.session.completed'
+      ) {
+
+        const session =
+          event.data.object
+
+        const productos =
+          JSON.parse(
+            session.metadata
+              .productos
+          )
+
+        await db
+          .collection(
+            'pedidos'
+          )
+          .add({
+
+            nombre:
+              session.metadata
+                .nombre,
+
+            telefono:
+              session.metadata
+                .telefono,
+
+            direccion:
+              session.metadata
+                .direccion,
+
+            referencia:
+              session.metadata
+                .referencia,
+
+            ubicacion:
+              session.metadata
+                .ubicacion,
+
+            notas:
+              session.metadata
+                .notas,
+
+            productos,
+
+            total:
+              Number(
+                session.metadata
+                  .total
+              ),
+
+            estado:
+              'Pagado',
+
+            stripeSessionId:
+              session.id,
+
+            fecha:
+              new Date()
+
+          })
+
+        console.log(
+          '✅ Pedido guardado'
+        )
+
+      }
+
+      res.sendStatus(200)
+
+    } catch (error) {
+
+      console.log(
+        '❌ ERROR WEBHOOK'
+      )
+
+      console.log(error)
+
+      res.sendStatus(400)
 
     }
 
