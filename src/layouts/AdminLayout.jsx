@@ -8,52 +8,36 @@ import {
   Typography,
   Button,
   Divider,
-  IconButton
+  IconButton,
+  ListItemIcon
 } from '@mui/material'
 
-import DashboardIcon
-from '@mui/icons-material/Dashboard'
-
-import GrassIcon
-from '@mui/icons-material/Grass'
-
-import AddIcon
-from '@mui/icons-material/Add'
-
-import LogoutIcon
-from '@mui/icons-material/Logout'
-
-import StorefrontIcon
-from '@mui/icons-material/Storefront'
-
-import MenuIcon
-from '@mui/icons-material/Menu'
+import DashboardIcon from '@mui/icons-material/Dashboard'
+import GrassIcon from '@mui/icons-material/Grass'
+import LogoutIcon from '@mui/icons-material/Logout'
+import StorefrontIcon from '@mui/icons-material/Storefront'
+import MenuIcon from '@mui/icons-material/Menu'
+import ShoppingBagIcon from '@mui/icons-material/ShoppingBag'
+import GroupIcon from '@mui/icons-material/Group'
 
 import {
   Link,
+  useLocation,
   useNavigate
 } from 'react-router-dom'
 
-import {
-  signOut
-} from 'firebase/auth'
+import { signOut } from 'firebase/auth'
+import { auth } from '../firebase/config'
+import { useState } from 'react'
 
-import {
-  auth
-} from '../firebase/config'
-
-import {
-  useState
-} from 'react'
-
-const drawerWidth = 260
+const drawerWidth = 270
 
 function AdminLayout({ children }) {
 
   const navigate = useNavigate()
+  const location = useLocation()
 
-  const [mobileOpen,
-    setMobileOpen] =
+  const [mobileOpen, setMobileOpen] =
     useState(false)
 
   async function cerrarSesion() {
@@ -64,11 +48,47 @@ function AdminLayout({ children }) {
 
   }
 
+  const menuItems = [
+
+    {
+      text: 'Dashboard',
+      icon: <DashboardIcon />,
+      path: '/admin'
+    },
+
+    {
+      text: 'Administrar plantas',
+      icon: <GrassIcon />,
+      path: '/admin-plantas'
+    },
+
+    {
+      text: 'Pedidos',
+      icon: <ShoppingBagIcon />,
+      path: '/admin-pedidos'
+    },
+
+    {
+      text: 'Usuarios',
+      icon: <GroupIcon />,
+      path: '/admin-usuarios'
+    },
+
+    {
+      text: 'Ver catálogo',
+      icon: <StorefrontIcon />,
+      path: '/catalogo'
+    }
+
+  ]
+
   const drawer = (
 
     <Box
       sx={{
         height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
         background:
           'linear-gradient(180deg,#1b5e20,#2e7d32)',
         color: 'white'
@@ -78,9 +98,9 @@ function AdminLayout({ children }) {
       <Toolbar>
 
         <Typography
-          variant="h4"
+          variant="h3"
           sx={{
-            fontWeight: 800
+            fontWeight: 900
           }}
         >
 
@@ -93,93 +113,86 @@ function AdminLayout({ children }) {
       <Divider
         sx={{
           borderColor:
-            'rgba(255,255,255,0.2)'
+            'rgba(255,255,255,0.15)'
         }}
       />
 
-      <List
-        sx={{
-          mt: 2
-        }}
-      >
+      <List sx={{ mt: 2 }}>
 
-        <ListItemButton
-          component={Link}
-          to="/admin"
-          sx={{
-            borderRadius: 3,
-            mx: 2,
-            mb: 1
-          }}
-        >
+        {menuItems.map((item) => (
 
-          <DashboardIcon
-            sx={{ mr: 2 }}
-          />
+          <ListItemButton
 
-          <ListItemText
-            primary="Dashboard"
-          />
+            key={item.text}
 
-        </ListItemButton>
+            component={Link}
 
-        <ListItemButton
-          component={Link}
-          to="/admin-plantas"
-          sx={{
-            borderRadius: 3,
-            mx: 2,
-            mb: 1
-          }}
-        >
+            to={item.path}
 
-          <GrassIcon
-            sx={{ mr: 2 }}
-          />
+            sx={{
 
-          <ListItemText
-            primary="Administrar plantas"
-          />
+              mx: 2,
 
-        </ListItemButton>
+              mb: 1,
 
-        <ListItemButton
-          component={Link}
-          to="/catalogo"
-          sx={{
-            borderRadius: 3,
-            mx: 2,
-            mb: 1
-          }}
-        >
+              borderRadius: 4,
 
-          <StorefrontIcon
-            sx={{ mr: 2 }}
-          />
+              py: 1.5,
 
-          <ListItemText
-            primary="Ver catálogo"
-          />
+              backgroundColor:
 
-        </ListItemButton>
+                location.pathname === item.path
+
+                  ? 'rgba(255,255,255,0.15)'
+
+                  : 'transparent',
+
+              '&:hover': {
+
+                backgroundColor:
+                  'rgba(255,255,255,0.12)'
+
+              }
+
+            }}
+          >
+
+            <ListItemIcon
+              sx={{
+                color: 'white',
+                minWidth: 40
+              }}
+            >
+
+              {item.icon}
+
+            </ListItemIcon>
+
+            <ListItemText
+              primary={item.text}
+            />
+
+          </ListItemButton>
+
+        ))}
 
       </List>
 
       <Box
         sx={{
-          p: 2,
-          mt: 'auto'
+          mt: 'auto',
+          p: 2
         }}
       >
 
         <Button
           fullWidth
-          color="error"
           variant="contained"
+          color="error"
           startIcon={<LogoutIcon />}
           onClick={cerrarSesion}
           sx={{
-            borderRadius: 3,
+            borderRadius: 4,
             py: 1.5,
             fontWeight: 700
           }}
@@ -201,8 +214,7 @@ function AdminLayout({ children }) {
       sx={{
         display: 'flex',
         minHeight: '100vh',
-        backgroundColor:
-          '#f4f6f8'
+        backgroundColor: '#f4f6f8'
       }}
     >
 
@@ -212,9 +224,13 @@ function AdminLayout({ children }) {
             xs: 'block',
             md: 'none'
           },
+
           position: 'fixed',
+
           top: 10,
+
           left: 10,
+
           zIndex: 2000
         }}
       >
@@ -259,6 +275,7 @@ function AdminLayout({ children }) {
       <Drawer
         variant="permanent"
         sx={{
+
           display: {
             xs: 'none',
             md: 'block'
@@ -272,12 +289,12 @@ function AdminLayout({ children }) {
 
             width: drawerWidth,
 
-            boxSizing:
-              'border-box',
+            border: 'none',
 
-            border: 'none'
+            boxSizing: 'border-box'
 
           }
+
         }}
       >
 
