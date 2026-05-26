@@ -38,10 +38,6 @@ import {
   useCart
 } from '../context/CartContext'
 
-import {
-  crearPedido
-} from '../services/pedidosService'
-
 function Carrito() {
 
   const {
@@ -66,6 +62,10 @@ function Carrito() {
 
   const [loadingUbicacion,
     setLoadingUbicacion] =
+    useState(false)
+
+  const [loadingPago,
+    setLoadingPago] =
     useState(false)
 
   const [datosCliente,
@@ -160,31 +160,58 @@ function Carrito() {
 
     try {
 
-      await crearPedido(
+      setLoadingPago(true)
 
-        carrito,
+      const response =
+        await fetch(
 
-        total,
+          'http://localhost:3000/crear-pago',
 
-        datosCliente
+          {
 
-      )
+            method: 'POST',
 
-      alert(
-        'Pedido realizado 😎🌱'
-      )
+            headers: {
 
-      vaciarCarrito()
+              'Content-Type':
+                'application/json'
 
-      setOpen(false)
+            },
+
+            body: JSON.stringify({
+
+              productos:
+                carrito,
+
+              datosCliente
+
+            })
+
+          }
+
+        )
+
+      const data =
+        await response.json()
+
+      if (data.url) {
+
+        window.location.href =
+          data.url
+
+      }
 
     } catch (error) {
 
       console.log(error)
 
       alert(
-        'Debes iniciar sesión'
+        'Error al procesar pago'
       )
+
+    } finally {
+
+      setLoadingPago(false)
 
     }
 
@@ -595,9 +622,14 @@ function Carrito() {
                 onClick={
                   finalizarCompra
                 }
+                disabled={
+                  loadingPago
+                }
               >
 
-                Confirmar pedido
+                {loadingPago
+                  ? 'Redirigiendo...'
+                  : 'Pagar con Stripe'}
 
               </Button>
 
