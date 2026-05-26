@@ -11,7 +11,8 @@ import {
   DialogTitle,
   DialogContent,
   TextField,
-  DialogActions
+  DialogActions,
+  Alert
 } from '@mui/material'
 
 import DeleteIcon
@@ -22,6 +23,9 @@ from '@mui/icons-material/Add'
 
 import RemoveIcon
 from '@mui/icons-material/Remove'
+
+import LocationOnIcon
+from '@mui/icons-material/LocationOn'
 
 import {
   useState
@@ -60,6 +64,10 @@ function Carrito() {
     setOpen] =
     useState(false)
 
+  const [loadingUbicacion,
+    setLoadingUbicacion] =
+    useState(false)
+
   const [datosCliente,
     setDatosCliente] =
     useState({
@@ -88,6 +96,63 @@ function Carrito() {
         e.target.value
 
     })
+
+  }
+
+  async function obtenerUbicacion() {
+
+    if (
+      !navigator.geolocation
+    ) {
+
+      alert(
+        'Tu navegador no soporta ubicación'
+      )
+
+      return
+
+    }
+
+    setLoadingUbicacion(true)
+
+    navigator.geolocation.getCurrentPosition(
+
+      (position) => {
+
+        const lat =
+          position.coords.latitude
+
+        const lng =
+          position.coords.longitude
+
+        const linkMaps =
+
+          `https://www.google.com/maps?q=${lat},${lng}`
+
+        setDatosCliente({
+
+          ...datosCliente,
+
+          ubicacion:
+            linkMaps
+
+        })
+
+        setLoadingUbicacion(false)
+
+      },
+
+      () => {
+
+        alert(
+          'No se pudo obtener la ubicación'
+        )
+
+        setLoadingUbicacion(false)
+
+      }
+
+    )
 
   }
 
@@ -431,6 +496,13 @@ function Carrito() {
                 }}
               >
 
+                <Alert severity="info">
+
+                  Tu ubicación ayudará
+                  a entregar más rápido 😎
+
+                </Alert>
+
                 <TextField
                   label="Nombre completo"
                   name="nombre"
@@ -461,13 +533,36 @@ function Carrito() {
                   onChange={handleChange}
                 />
 
-                <TextField
-                  label="Ubicación Google Maps"
-                  name="ubicacion"
-                  fullWidth
-                  placeholder="https://maps.google.com/..."
-                  onChange={handleChange}
-                />
+                <Button
+                  variant="outlined"
+                  startIcon={
+                    <LocationOnIcon />
+                  }
+                  onClick={
+                    obtenerUbicacion
+                  }
+                  disabled={
+                    loadingUbicacion
+                  }
+                >
+
+                  {loadingUbicacion
+                    ? 'Obteniendo ubicación...'
+                    : 'Usar mi ubicación actual'}
+
+                </Button>
+
+                {datosCliente.ubicacion && (
+
+                  <Alert
+                    severity="success"
+                  >
+
+                    Ubicación obtenida 😎🌱
+
+                  </Alert>
+
+                )}
 
                 <TextField
                   label="Notas"
