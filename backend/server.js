@@ -9,7 +9,10 @@ const admin = require('firebase-admin')
 require('dotenv').config()
 
 const serviceAccount =
-  require('./serviceAccountKey.json')
+  JSON.parse(
+    process.env
+      .FIREBASE_SERVICE_ACCOUNT
+  )
 
 const app = express()
 
