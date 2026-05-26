@@ -83,7 +83,17 @@ function Login() {
 
       alert('Bienvenido 😎🌱')
 
-      navigate('/home')
+      if (
+        correo === 'luis12042003@gmail.com'
+      ) {
+
+        navigate('/admin')
+
+      } else {
+
+        navigate('/home')
+
+      }
 
     } catch (error) {
 
