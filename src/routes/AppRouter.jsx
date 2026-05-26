@@ -1,10 +1,9 @@
 import {
   BrowserRouter,
   Routes,
-  Route
+  Route,
+  Navigate
 } from 'react-router-dom'
-
-import Login from '../pages/Login'
 
 import Home from '../pages/Home'
 
@@ -24,6 +23,8 @@ import DetallePlanta from '../pages/DetallePlanta'
 
 import Register from '../pages/Register'
 
+import Login from '../pages/Login'
+
 import AdminRoute from './AdminRoute'
 
 import MisPedidos from '../pages/MisPedidos'
@@ -38,7 +39,7 @@ function AppRouter() {
 
         <Route
           path="/"
-          element={<Login />}
+          element={<Navigate to="/login" />}
         />
 
         <Route
