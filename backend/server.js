@@ -16,7 +16,150 @@ const serviceAccount =
 
 const app = express()
 
-app.use(cors())
+/* =========================
+CORS
+========================= */
+
+app.use(
+
+  cors({
+
+    origin: [
+
+      'https://vivero-estanislaoo.web.app'
+
+    ],
+
+    methods: [
+
+      'GET',
+
+      'POST'
+
+    ]
+
+  })
+
+)
+
+/* =========================
+WEBHOOK
+========================= */
+
+app.post(
+
+  '/webhook',
+
+  express.raw({
+
+    type:
+      'application/json'
+
+  }),
+
+  async (req, res) => {
+
+    try {
+
+      const sig =
+        req.headers[
+          'stripe-signature'
+        ]
+
+      const event =
+        stripe.webhooks.constructEvent(
+
+          req.body,
+
+          sig,
+
+          process.env
+            .STRIPE_WEBHOOK_SECRET
+
+        )
+
+      if (
+        event.type ===
+        'checkout.session.completed'
+      ) {
+
+        const session =
+          event.data.object
+
+        const productos =
+          JSON.parse(
+            session.metadata
+              .productos
+          )
+
+        await db
+          .collection(
+            'pedidos'
+          )
+          .add({
+
+            nombre:
+              session.metadata
+                .nombre,
+
+            telefono:
+              session.metadata
+                .telefono,
+
+            direccion:
+              session.metadata
+                .direccion,
+
+            referencia:
+              session.metadata
+                .referencia,
+
+            ubicacion:
+              session.metadata
+                .ubicacion,
+
+            notas:
+              session.metadata
+                .notas,
+
+            productos,
+
+            total:
+              Number(
+                session.metadata
+                  .total
+              ),
+
+            estado:
+              'Pagado',
+
+            stripeSessionId:
+              session.id,
+
+            fecha:
+              new Date()
+
+          })
+
+        console.log(
+          '✅ Pedido guardado'
+        )
+
+      }
+
+      res.sendStatus(200)
+
+    } catch (error) {
+
+      console.log(error)
+
+      res.sendStatus(400)
+
+    }
+
+  }
+
+)
 
 app.use(express.json())
 
@@ -61,6 +204,7 @@ CREAR PAGO
 ========================= */
 
 app.post(
+
   '/crear-pago',
 
   async (req, res) => {
@@ -186,122 +330,6 @@ app.post(
           'Error al crear pago'
 
       })
-
-    }
-
-  }
-
-)
-
-/* =========================
-WEBHOOK STRIPE
-========================= */
-
-app.post(
-  '/webhook',
-
-  express.raw({
-    type:
-      'application/json'
-  }),
-
-  async (req, res) => {
-
-    try {
-
-      const sig =
-        req.headers[
-          'stripe-signature'
-        ]
-
-      const event =
-        stripe.webhooks.constructEvent(
-
-          req.body,
-
-          sig,
-
-          process.env
-            .STRIPE_WEBHOOK_SECRET
-
-        )
-
-      if (
-        event.type ===
-        'checkout.session.completed'
-      ) {
-
-        const session =
-          event.data.object
-
-        const productos =
-          JSON.parse(
-            session.metadata
-              .productos
-          )
-
-        await db
-          .collection(
-            'pedidos'
-          )
-          .add({
-
-            nombre:
-              session.metadata
-                .nombre,
-
-            telefono:
-              session.metadata
-                .telefono,
-
-            direccion:
-              session.metadata
-                .direccion,
-
-            referencia:
-              session.metadata
-                .referencia,
-
-            ubicacion:
-              session.metadata
-                .ubicacion,
-
-            notas:
-              session.metadata
-                .notas,
-
-            productos,
-
-            total:
-              Number(
-                session.metadata
-                  .total
-              ),
-
-            estado:
-              'Pagado',
-
-            stripeSessionId:
-              session.id,
-
-            fecha:
-              new Date()
-
-          })
-
-        console.log(
-          '✅ Pedido guardado'
-        )
-
-      }
-
-      res.sendStatus(200)
-
-    } catch (error) {
-
-      console.log(error)
-
-      res.sendStatus(400)
 
     }
 
