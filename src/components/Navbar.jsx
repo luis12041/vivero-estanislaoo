@@ -5,30 +5,25 @@ import {
   Button,
   Box,
   Badge,
-  Drawer,
-  IconButton,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemText
+  IconButton
 } from '@mui/material'
 
-import MenuIcon from '@mui/icons-material/Menu'
+import ShoppingCartIcon
+from '@mui/icons-material/ShoppingCart'
 
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
+import LogoutIcon
+from '@mui/icons-material/Logout'
 
-import LogoutIcon from '@mui/icons-material/Logout'
-
-import ReceiptLongIcon from '@mui/icons-material/ReceiptLong'
-
-import CloseIcon from '@mui/icons-material/Close'
+import ReceiptLongIcon
+from '@mui/icons-material/ReceiptLong'
 
 import {
   Link,
   useNavigate
 } from 'react-router-dom'
 
-import { useCart } from '../context/CartContext'
+import { useCart }
+from '../context/CartContext'
 
 import {
   signOut
@@ -45,25 +40,27 @@ import {
 
 function Navbar() {
 
-  const navigate = useNavigate()
+  const navigate =
+    useNavigate()
 
-  const { carrito } = useCart()
+  const { carrito } =
+    useCart()
 
-  const [usuario, setUsuario] =
+  const [usuario,
+    setUsuario] =
     useState(null)
-
-  const [openMenu, setOpenMenu] =
-    useState(false)
 
   useEffect(() => {
 
-    const user = auth.currentUser
+    const user =
+      auth.currentUser
 
     setUsuario(user)
 
   }, [])
 
-  async function cerrarSesion() {
+  async function
+  cerrarSesion() {
 
     await signOut(auth)
 
@@ -73,383 +70,206 @@ function Navbar() {
 
   return (
 
-    <>
+    <AppBar
+      position="sticky"
+      elevation={0}
+      sx={{
 
-      <AppBar
-        position="sticky"
-        elevation={0}
+        background:
+          'rgba(255,255,255,0.92)',
+
+        backdropFilter:
+          'blur(12px)',
+
+        color: 'black',
+
+        borderBottom:
+          '1px solid #e0e0e0'
+
+      }}
+    >
+
+      <Toolbar
         sx={{
 
-          background:
-            'rgba(255,255,255,0.9)',
+          display: 'flex',
 
-          backdropFilter: 'blur(10px)',
+          justifyContent:
+            'space-between',
 
-          color: 'black',
-
-          borderBottom:
-            '1px solid #e0e0e0'
+          minHeight: '78px'
 
         }}
       >
 
-        <Toolbar
+        <Typography
+          variant="h5"
+          sx={{
+
+            fontWeight: 800,
+
+            color: '#2e7d32',
+
+            letterSpacing: 1,
+
+            fontSize: {
+              xs: '22px',
+              md: '30px'
+            }
+
+          }}
+        >
+
+          🌿 Vivero
+          Estanislaoo
+
+        </Typography>
+
+        <Box
           sx={{
 
             display: 'flex',
 
-            justifyContent:
-              'space-between',
+            gap: {
+              xs: 1,
+              md: 2
+            },
 
-            minHeight: '80px'
+            alignItems: 'center',
+
+            overflowX: 'auto',
+
+            '&::-webkit-scrollbar': {
+              display: 'none'
+            }
 
           }}
         >
 
-          <Typography
-            variant="h5"
+          <Button
+            component={Link}
+            to="/catalogo"
+            color="inherit"
             sx={{
-
-              fontWeight: 800,
-
-              color: '#2e7d32',
-
-              letterSpacing: 1
-
+              fontWeight: 700
             }}
           >
 
-            🌿 Vivero
-            Estanislaoo
+            Catálogo
 
-          </Typography>
+          </Button>
 
-          <Box
-            sx={{
-
-              display: {
-                xs: 'none',
-                md: 'flex'
-              },
-
-              gap: 2,
-
-              alignItems: 'center'
-
-            }}
-          >
+          {usuario && (
 
             <Button
               component={Link}
-              to="/catalogo"
+              to="/mis-pedidos"
               color="inherit"
+              startIcon={
+                <ReceiptLongIcon />
+              }
               sx={{
                 fontWeight: 700
               }}
             >
 
-              Catálogo
+              Mis pedidos
 
             </Button>
 
-            {usuario && (
-
-              <Button
-                component={Link}
-                to="/mis-pedidos"
-                color="inherit"
-                startIcon={
-                  <ReceiptLongIcon />
-                }
-                sx={{
-                  fontWeight: 700
-                }}
-              >
-
-                Mis pedidos
-
-              </Button>
-
-            )}
-
-            <Button
-              component={Link}
-              to="/carrito"
-              color="inherit"
-            >
-
-              <Badge
-                badgeContent={
-                  carrito.length
-                }
-                color="success"
-              >
-
-                <ShoppingCartIcon />
-
-              </Badge>
-
-            </Button>
-
-            {usuario?.email ===
-              'luis12042003@gmail.com' && (
-
-              <Button
-                component={Link}
-                to="/admin"
-                variant="contained"
-                sx={{
-
-                  borderRadius: 3,
-
-                  backgroundColor:
-                    '#2e7d32',
-
-                  fontWeight: 700,
-
-                  px: 3,
-
-                  '&:hover': {
-
-                    backgroundColor:
-                      '#1b5e20'
-
-                  }
-
-                }}
-              >
-
-                Admin
-
-              </Button>
-
-            )}
-
-            {usuario && (
-
-              <>
-
-                <Typography
-                  sx={{
-
-                    fontWeight: 600,
-
-                    color: '#555'
-
-                  }}
-                >
-
-                  {usuario.email}
-
-                </Typography>
-
-                <Button
-                  color="error"
-                  variant="outlined"
-                  startIcon={
-                    <LogoutIcon />
-                  }
-                  onClick={
-                    cerrarSesion
-                  }
-                  sx={{
-                    borderRadius: 3
-                  }}
-                >
-
-                  Salir
-
-                </Button>
-
-              </>
-
-            )}
-
-          </Box>
+          )}
 
           <IconButton
-            sx={{
-              display: {
-                xs: 'flex',
-                md: 'none'
-              }
-            }}
-            onClick={() =>
-              setOpenMenu(true)
-            }
+            component={Link}
+            to="/carrito"
+            color="inherit"
           >
 
-            <MenuIcon />
+            <Badge
+              badgeContent={
+                carrito.length
+              }
+              color="success"
+            >
+
+              <ShoppingCartIcon />
+
+            </Badge>
 
           </IconButton>
 
-        </Toolbar>
+          {usuario?.email ===
+            'luis12042003@gmail.com' && (
 
-      </AppBar>
-
-      <Drawer
-        anchor="right"
-        open={openMenu}
-        onClose={() =>
-          setOpenMenu(false)
-        }
-      >
-
-        <Box
-          sx={{
-            width: 300,
-            p: 3
-          }}
-        >
-
-          <Box
-            sx={{
-
-              display: 'flex',
-
-              justifyContent:
-                'space-between',
-
-              alignItems: 'center',
-
-              mb: 4
-
-            }}
-          >
-
-            <Typography
-              variant="h6"
+            <Button
+              component={Link}
+              to="/admin"
+              variant="contained"
               sx={{
-                fontWeight: 700
+
+                borderRadius: 3,
+
+                backgroundColor:
+                  '#2e7d32',
+
+                fontWeight: 700,
+
+                px: {
+                  xs: 2,
+                  md: 3
+                },
+
+                whiteSpace:
+                  'nowrap',
+
+                '&:hover': {
+
+                  backgroundColor:
+                    '#1b5e20'
+
+                }
+
               }}
             >
 
-              🌱 Menú
+              Admin
 
-            </Typography>
+            </Button>
 
-            <IconButton
-              onClick={() =>
-                setOpenMenu(false)
+          )}
+
+          {usuario && (
+
+            <Button
+              color="error"
+              variant="outlined"
+              startIcon={
+                <LogoutIcon />
               }
+              onClick={
+                cerrarSesion
+              }
+              sx={{
+
+                borderRadius: 3,
+
+                whiteSpace:
+                  'nowrap'
+
+              }}
             >
 
-              <CloseIcon />
+              Salir
 
-            </IconButton>
+            </Button>
 
-          </Box>
-
-          <List>
-
-            <ListItem disablePadding>
-
-              <ListItemButton
-                component={Link}
-                to="/catalogo"
-                onClick={() =>
-                  setOpenMenu(false)
-                }
-              >
-
-                <ListItemText
-                  primary="Catálogo"
-                />
-
-              </ListItemButton>
-
-            </ListItem>
-
-            <ListItem disablePadding>
-
-              <ListItemButton
-                component={Link}
-                to="/carrito"
-                onClick={() =>
-                  setOpenMenu(false)
-                }
-              >
-
-                <ListItemText
-                  primary={`Carrito (${carrito.length})`}
-                />
-
-              </ListItemButton>
-
-            </ListItem>
-
-            {usuario && (
-
-              <ListItem disablePadding>
-
-                <ListItemButton
-                  component={Link}
-                  to="/mis-pedidos"
-                  onClick={() =>
-                    setOpenMenu(false)
-                  }
-                >
-
-                  <ListItemText
-                    primary="Mis pedidos"
-                  />
-
-                </ListItemButton>
-
-              </ListItem>
-
-            )}
-
-            {usuario?.email ===
-              'luis12042003@gmail.com' && (
-
-              <ListItem disablePadding>
-
-                <ListItemButton
-                  component={Link}
-                  to="/admin"
-                  onClick={() =>
-                    setOpenMenu(false)
-                  }
-                >
-
-                  <ListItemText
-                    primary="Admin"
-                  />
-
-                </ListItemButton>
-
-              </ListItem>
-
-            )}
-
-            {usuario && (
-
-              <ListItem disablePadding>
-
-                <ListItemButton
-                  onClick={
-                    cerrarSesion
-                  }
-                >
-
-                  <ListItemText
-                    primary="Cerrar sesión"
-                  />
-
-                </ListItemButton>
-
-              </ListItem>
-
-            )}
-
-          </List>
+          )}
 
         </Box>
 
-      </Drawer>
+      </Toolbar>
 
-    </>
+    </AppBar>
 
   )
 
