@@ -29,7 +29,15 @@ import {
 } from 'firebase/auth'
 
 import {
-  auth
+  doc,
+  setDoc,
+  collection,
+  getDocs
+} from 'firebase/firestore'
+
+import {
+  auth,
+  db
 } from '../firebase/config'
 
 import {
@@ -44,29 +52,35 @@ function Login() {
 
   const [password, setPassword] = useState('')
 
-  const [mostrarPassword, setMostrarPassword] =
+  const [mostrarPassword,
+    setMostrarPassword] =
     useState(false)
 
   const [loading, setLoading] =
     useState(false)
 
-  const [openRegister, setOpenRegister] =
+  const [openRegister,
+    setOpenRegister] =
     useState(false)
 
-  const [openReset, setOpenReset] =
+  const [openReset,
+    setOpenReset] =
     useState(false)
 
-  const [correoRegister, setCorreoRegister] =
+  const [correoRegister,
+    setCorreoRegister] =
     useState('')
 
-  const [passwordRegister, setPasswordRegister] =
+  const [passwordRegister,
+    setPasswordRegister] =
     useState('')
 
   const [mostrarPasswordRegister,
     setMostrarPasswordRegister] =
     useState(false)
 
-  const [correoReset, setCorreoReset] =
+  const [correoReset,
+    setCorreoReset] =
     useState('')
 
   async function iniciarSesion() {
@@ -81,17 +95,33 @@ function Login() {
         password
       )
 
-      alert('Bienvenido 😎🌱')
+      const snapshot = await getDocs(
+        collection(db, 'usuarios')
+      )
+
+      const usuarios =
+        snapshot.docs.map((doc) =>
+          doc.data()
+        )
+
+      const usuarioEncontrado =
+        usuarios.find(
+
+          (item) =>
+            item.correo === correo
+
+        )
 
       if (
-        correo === 'luis12042003@gmail.com'
+        usuarioEncontrado?.role ===
+        'admin'
       ) {
 
         navigate('/admin')
 
       } else {
 
-        navigate('/home')
+        navigate('/catalogo')
 
       }
 
@@ -99,7 +129,9 @@ function Login() {
 
       console.log(error)
 
-      alert('Correo o contraseña incorrectos')
+      alert(
+        'Correo o contraseña incorrectos'
+      )
 
     } finally {
 
@@ -113,10 +145,29 @@ function Login() {
 
     try {
 
-      await createUserWithEmailAndPassword(
-        auth,
-        correoRegister,
-        passwordRegister
+      const userCredential =
+        await createUserWithEmailAndPassword(
+          auth,
+          correoRegister,
+          passwordRegister
+        )
+
+      await setDoc(
+
+        doc(
+          db,
+          'usuarios',
+          userCredential.user.uid
+        ),
+
+        {
+
+          correo: correoRegister,
+
+          role: 'cliente'
+
+        }
+
       )
 
       alert('Cuenta creada 😎🌱')

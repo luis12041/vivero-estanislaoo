@@ -5,8 +5,6 @@ import {
   Navigate
 } from 'react-router-dom'
 
-import Home from '../pages/Home'
-
 import Catalogo from '../pages/Catalogo'
 
 import Carrito from '../pages/Carrito'
@@ -37,17 +35,14 @@ function AppRouter() {
 
         <Route
           path="/"
-          element={<Navigate to="/login" />}
+          element={
+            <Navigate to="/login" />
+          }
         />
 
         <Route
           path="/login"
           element={<Login />}
-        />
-
-        <Route
-          path="/home"
-          element={<Home />}
         />
 
         <Route
@@ -119,6 +114,7 @@ function AppRouter() {
     </BrowserRouter>
 
   )
+
 }
 
 export default AppRouter

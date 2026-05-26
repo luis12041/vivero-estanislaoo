@@ -19,13 +19,14 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 
 import LogoutIcon from '@mui/icons-material/Logout'
 
-import PersonIcon from '@mui/icons-material/Person'
-
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong'
 
 import CloseIcon from '@mui/icons-material/Close'
 
-import { Link } from 'react-router-dom'
+import {
+  Link,
+  useNavigate
+} from 'react-router-dom'
 
 import { useCart } from '../context/CartContext'
 
@@ -44,11 +45,15 @@ import {
 
 function Navbar() {
 
+  const navigate = useNavigate()
+
   const { carrito } = useCart()
 
-  const [usuario, setUsuario] = useState(null)
+  const [usuario, setUsuario] =
+    useState(null)
 
-  const [openMenu, setOpenMenu] = useState(false)
+  const [openMenu, setOpenMenu] =
+    useState(false)
 
   useEffect(() => {
 
@@ -62,7 +67,7 @@ function Navbar() {
 
     await signOut(auth)
 
-    window.location.reload()
+    navigate('/login')
 
   }
 
@@ -71,72 +76,79 @@ function Navbar() {
     <>
 
       <AppBar
-        position="static"
+        position="sticky"
         elevation={0}
         sx={{
-          backgroundColor: 'white',
+
+          background:
+            'rgba(255,255,255,0.9)',
+
+          backdropFilter: 'blur(10px)',
+
           color: 'black',
-          borderBottom: '1px solid #e0e0e0'
+
+          borderBottom:
+            '1px solid #e0e0e0'
+
         }}
       >
 
         <Toolbar
           sx={{
+
             display: 'flex',
-            justifyContent: 'space-between'
+
+            justifyContent:
+              'space-between',
+
+            minHeight: '80px'
+
           }}
         >
 
           <Typography
             variant="h5"
             sx={{
-              fontWeight: 700,
-              color: '#2e7d32'
+
+              fontWeight: 800,
+
+              color: '#2e7d32',
+
+              letterSpacing: 1
+
             }}
           >
 
-            Vivero Estanislaoo 🌱
+            🌿 Vivero
+            Estanislaoo
 
           </Typography>
 
           <Box
             sx={{
+
               display: {
                 xs: 'none',
                 md: 'flex'
               },
+
               gap: 2,
+
               alignItems: 'center'
+
             }}
           >
 
             <Button
               component={Link}
-              to="/"
-              color="inherit"
-            >
-
-              Inicio
-
-            </Button>
-
-            <Button
-              component={Link}
               to="/catalogo"
               color="inherit"
+              sx={{
+                fontWeight: 700
+              }}
             >
 
               Catálogo
-
-            </Button>
-
-            <Button
-              component={Link}
-              to="/admin"
-              variant="contained"
-            >
-
-              Admin
 
             </Button>
 
@@ -146,7 +158,12 @@ function Navbar() {
                 component={Link}
                 to="/mis-pedidos"
                 color="inherit"
-                startIcon={<ReceiptLongIcon />}
+                startIcon={
+                  <ReceiptLongIcon />
+                }
+                sx={{
+                  fontWeight: 700
+                }}
               >
 
                 Mis pedidos
@@ -162,8 +179,10 @@ function Navbar() {
             >
 
               <Badge
-                badgeContent={carrito.length}
-                color="primary"
+                badgeContent={
+                  carrito.length
+                }
+                color="success"
               >
 
                 <ShoppingCartIcon />
@@ -172,13 +191,51 @@ function Navbar() {
 
             </Button>
 
-            {usuario ? (
+            {usuario?.email ===
+              'luis12042003@gmail.com' && (
+
+              <Button
+                component={Link}
+                to="/admin"
+                variant="contained"
+                sx={{
+
+                  borderRadius: 3,
+
+                  backgroundColor:
+                    '#2e7d32',
+
+                  fontWeight: 700,
+
+                  px: 3,
+
+                  '&:hover': {
+
+                    backgroundColor:
+                      '#1b5e20'
+
+                  }
+
+                }}
+              >
+
+                Admin
+
+              </Button>
+
+            )}
+
+            {usuario && (
 
               <>
 
                 <Typography
                   sx={{
-                    fontWeight: 600
+
+                    fontWeight: 600,
+
+                    color: '#555'
+
                   }}
                 >
 
@@ -188,8 +245,16 @@ function Navbar() {
 
                 <Button
                   color="error"
-                  startIcon={<LogoutIcon />}
-                  onClick={cerrarSesion}
+                  variant="outlined"
+                  startIcon={
+                    <LogoutIcon />
+                  }
+                  onClick={
+                    cerrarSesion
+                  }
+                  sx={{
+                    borderRadius: 3
+                  }}
                 >
 
                   Salir
@@ -197,19 +262,6 @@ function Navbar() {
                 </Button>
 
               </>
-
-            ) : (
-
-              <Button
-                component={Link}
-                to="/login"
-                variant="outlined"
-                startIcon={<PersonIcon />}
-              >
-
-                Login
-
-              </Button>
 
             )}
 
@@ -245,17 +297,23 @@ function Navbar() {
 
         <Box
           sx={{
-            width: 280,
-            p: 2
+            width: 300,
+            p: 3
           }}
         >
 
           <Box
             sx={{
+
               display: 'flex',
-              justifyContent: 'space-between',
+
+              justifyContent:
+                'space-between',
+
               alignItems: 'center',
-              mb: 2
+
+              mb: 4
+
             }}
           >
 
@@ -266,7 +324,7 @@ function Navbar() {
               }}
             >
 
-              Menú 🌱
+              🌱 Menú
 
             </Typography>
 
@@ -283,24 +341,6 @@ function Navbar() {
           </Box>
 
           <List>
-
-            <ListItem disablePadding>
-
-              <ListItemButton
-                component={Link}
-                to="/"
-                onClick={() =>
-                  setOpenMenu(false)
-                }
-              >
-
-                <ListItemText
-                  primary="Inicio"
-                />
-
-              </ListItemButton>
-
-            </ListItem>
 
             <ListItem disablePadding>
 
@@ -360,50 +400,37 @@ function Navbar() {
 
             )}
 
-            <ListItem disablePadding>
-
-              <ListItemButton
-                component={Link}
-                to="/admin"
-                onClick={() =>
-                  setOpenMenu(false)
-                }
-              >
-
-                <ListItemText
-                  primary="Admin"
-                />
-
-              </ListItemButton>
-
-            </ListItem>
-
-            {!usuario ? (
+            {usuario?.email ===
+              'luis12042003@gmail.com' && (
 
               <ListItem disablePadding>
 
                 <ListItemButton
                   component={Link}
-                  to="/login"
+                  to="/admin"
                   onClick={() =>
                     setOpenMenu(false)
                   }
                 >
 
                   <ListItemText
-                    primary="Login"
+                    primary="Admin"
                   />
 
                 </ListItemButton>
 
               </ListItem>
 
-            ) : (
+            )}
+
+            {usuario && (
 
               <ListItem disablePadding>
 
                 <ListItemButton
-                  onClick={cerrarSesion}
+                  onClick={
+                    cerrarSesion
+                  }
                 >
 
                   <ListItemText
@@ -425,6 +452,7 @@ function Navbar() {
     </>
 
   )
+
 }
 
 export default Navbar
