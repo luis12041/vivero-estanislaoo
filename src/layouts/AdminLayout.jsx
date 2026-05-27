@@ -15,7 +15,6 @@ import {
 import DashboardIcon from '@mui/icons-material/Dashboard'
 import GrassIcon from '@mui/icons-material/Grass'
 import LogoutIcon from '@mui/icons-material/Logout'
-import StorefrontIcon from '@mui/icons-material/Storefront'
 import MenuIcon from '@mui/icons-material/Menu'
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag'
 import GroupIcon from '@mui/icons-material/Group'
@@ -72,12 +71,6 @@ function AdminLayout({ children }) {
       text: 'Usuarios',
       icon: <GroupIcon />,
       path: '/admin-usuarios'
-    },
-
-    {
-      text: 'Ver catálogo',
-      icon: <StorefrontIcon />,
-      path: '/catalogo'
     }
 
   ]
