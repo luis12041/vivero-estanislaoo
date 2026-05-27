@@ -137,6 +137,54 @@ app.post(
 
       } = req.body
 
+      /* =========================
+      VALIDAR STOCK
+      ========================= */
+
+      for (const producto of productos) {
+
+        const plantaRef =
+          db.collection(
+            'plantas'
+          )
+          .doc(producto.id)
+
+        const plantaDoc =
+          await plantaRef.get()
+
+        if (!plantaDoc.exists) {
+
+          return res.status(400).json({
+
+            error:
+              `La planta ${producto.nombre} no existe`
+
+          })
+
+        }
+
+        const plantaData =
+          plantaDoc.data()
+
+        const stockActual =
+          plantaData.stock || 0
+
+        if (
+          producto.cantidad >
+          stockActual
+        ) {
+
+          return res.status(400).json({
+
+            error:
+              `No hay suficiente stock de ${producto.nombre}`
+
+          })
+
+        }
+
+      }
+
       const total =
         productos.reduce(
 
@@ -345,13 +393,35 @@ app.post(
               ),
 
             estado:
-              'Pagado',
+              'Pendiente',
 
-            stripeSessionId:
-              session.id,
+            folio:
+              `PED-${Math.floor(
+                Math.random() *
+                9000 +
+                1000
+              )}`,
 
             fecha:
-              new Date()
+              new Date(),
+
+            fechaBonita:
+              new Date().toLocaleString(
+                'es-MX',
+                {
+
+                  dateStyle:
+                    'long',
+
+                  timeStyle:
+                    'short'
+
+                }
+
+              ),
+
+            stripeSessionId:
+              session.id
 
           })
 
@@ -397,7 +467,10 @@ app.post(
                   : 0,
 
               disponible:
-                nuevoStock > 0
+                nuevoStock > 0,
+
+              casiAgotado:
+                nuevoStock <= 30
 
             })
 
