@@ -179,7 +179,8 @@ function AdminPedidos() {
               p: 3,
               borderRadius: 5,
               boxShadow:
-                '0 8px 24px rgba(0,0,0,0.06)'
+                '0 8px 24px rgba(0,0,0,0.06)',
+              height: '100%'
             }}
           >
 
@@ -241,7 +242,8 @@ function AdminPedidos() {
               p: 3,
               borderRadius: 5,
               boxShadow:
-                '0 8px 24px rgba(0,0,0,0.06)'
+                '0 8px 24px rgba(0,0,0,0.06)',
+              height: '100%'
             }}
           >
 
@@ -303,7 +305,8 @@ function AdminPedidos() {
               p: 3,
               borderRadius: 5,
               boxShadow:
-                '0 8px 24px rgba(0,0,0,0.06)'
+                '0 8px 24px rgba(0,0,0,0.06)',
+              height: '100%'
             }}
           >
 
@@ -365,7 +368,8 @@ function AdminPedidos() {
               p: 3,
               borderRadius: 5,
               boxShadow:
-                '0 8px 24px rgba(0,0,0,0.06)'
+                '0 8px 24px rgba(0,0,0,0.06)',
+              height: '100%'
             }}
           >
 
@@ -498,11 +502,26 @@ function AdminPedidos() {
               item
               xs={12}
               md={6}
+              lg={6}
+              sx={{
+                display: 'flex'
+              }}
               key={pedido.id}
             >
 
               <Card
                 sx={{
+
+                  width: '100%',
+
+                  minHeight: 360,
+
+                  display: 'flex',
+
+                  flexDirection: 'column',
+
+                  justifyContent:
+                    'space-between',
 
                   borderRadius: 5,
 
@@ -515,6 +534,9 @@ function AdminPedidos() {
                     '0 8px 24px rgba(0,0,0,0.06)',
 
                   transition: '0.3s',
+
+                  background:
+                    'linear-gradient(to bottom,#ffffff,#fcfcfc)',
 
                   '&:hover': {
 
@@ -573,7 +595,7 @@ function AdminPedidos() {
                         <Typography
                           sx={{
                             fontWeight: 800,
-                            fontSize: 24
+                            fontSize: 22
                           }}
                         >
 
@@ -583,7 +605,8 @@ function AdminPedidos() {
 
                         <Typography
                           sx={{
-                            color: '#777'
+                            color: '#777',
+                            fontSize: 14
                           }}
                         >
 
@@ -617,7 +640,12 @@ function AdminPedidos() {
 
                 </Box>
 
-                <Box sx={{ p: 3 }}>
+                <Box
+                  sx={{
+                    p: 3,
+                    flexGrow: 1
+                  }}
+                >
 
                   <Stack spacing={2}>
 
@@ -633,7 +661,11 @@ function AdminPedidos() {
                         }}
                       />
 
-                      <Typography>
+                      <Typography
+                        sx={{
+                          fontSize: 16
+                        }}
+                      >
 
                         {pedido.direccion}
 
@@ -655,7 +687,11 @@ function AdminPedidos() {
                         }}
                       />
 
-                      <Typography>
+                      <Typography
+                        sx={{
+                          fontSize: 16
+                        }}
+                      >
 
                         {pedido.notas ||
                           'Sin notas'}
@@ -686,7 +722,7 @@ function AdminPedidos() {
 
                         <Typography
                           sx={{
-                            fontSize: 42,
+                            fontSize: 38,
                             fontWeight: 900,
                             color: '#1b5e20'
                           }}
@@ -700,31 +736,40 @@ function AdminPedidos() {
 
                     </Stack>
 
-                    <Divider />
+                  </Stack>
 
-                    <Stack
-                      direction="row"
-                      spacing={1}
-                      alignItems="center"
+                </Box>
+
+                <Box
+                  sx={{
+                    px: 3,
+                    py: 2,
+                    borderTop:
+                      '1px solid #f0f0f0'
+                  }}
+                >
+
+                  <Stack
+                    direction="row"
+                    spacing={1}
+                    alignItems="center"
+                  >
+
+                    <CalendarMonthIcon
+                      sx={{
+                        color: '#777'
+                      }}
+                    />
+
+                    <Typography
+                      sx={{
+                        color: '#777'
+                      }}
                     >
 
-                      <CalendarMonthIcon
-                        sx={{
-                          color: '#777'
-                        }}
-                      />
+                      Pedido activo
 
-                      <Typography
-                        sx={{
-                          color: '#777'
-                        }}
-                      >
-
-                        Pedido activo
-
-                      </Typography>
-
-                    </Stack>
+                    </Typography>
 
                   </Stack>
 
