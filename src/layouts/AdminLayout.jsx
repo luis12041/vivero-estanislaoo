@@ -30,7 +30,7 @@ import { auth } from '../firebase/config'
 
 import { useState } from 'react'
 
-const drawerWidth = 240
+const drawerWidth = 210
 
 function AdminLayout({ children }) {
 
@@ -59,7 +59,7 @@ function AdminLayout({ children }) {
     },
 
     {
-      text: 'Administrar plantas',
+      text: 'Plantas',
       icon: <GrassIcon />,
       path: '/admin-plantas'
     },
@@ -99,14 +99,18 @@ function AdminLayout({ children }) {
 
       <Box
         sx={{
-          px: 3,
-          py: 4
+          px: 2.5,
+          py: 3
         }}
       >
 
         <Typography
           sx={{
-            fontSize: 32,
+            fontSize: {
+              xs: 24,
+              md: 30
+            },
+
             fontWeight: 900
           }}
         >
@@ -118,7 +122,7 @@ function AdminLayout({ children }) {
         <Typography
           sx={{
             opacity: 0.7,
-            fontSize: 14
+            fontSize: 13
           }}
         >
 
@@ -137,8 +141,8 @@ function AdminLayout({ children }) {
 
       <List
         sx={{
-          mt: 2,
-          px: 2
+          mt: 1,
+          px: 1.5
         }}
       >
 
@@ -156,9 +160,9 @@ function AdminLayout({ children }) {
 
               mb: 1,
 
-              borderRadius: 4,
+              borderRadius: 3,
 
-              py: 1.4,
+              py: 1.2,
 
               backgroundColor:
 
@@ -181,7 +185,7 @@ function AdminLayout({ children }) {
             <ListItemIcon
               sx={{
                 color: 'white',
-                minWidth: 38
+                minWidth: 36
               }}
             >
 
@@ -202,18 +206,18 @@ function AdminLayout({ children }) {
       <Box
         sx={{
           mt: 'auto',
-          p: 2
+          p: 1.5
         }}
       >
 
         <Box
           sx={{
 
-            p: 2,
+            p: 1.5,
 
-            mb: 2,
+            mb: 1.5,
 
-            borderRadius: 4,
+            borderRadius: 3,
 
             background:
               'rgba(255,255,255,0.08)'
@@ -225,12 +229,14 @@ function AdminLayout({ children }) {
             sx={{
               display: 'flex',
               alignItems: 'center',
-              gap: 2
+              gap: 1.5
             }}
           >
 
             <Avatar
               sx={{
+                width: 42,
+                height: 42,
                 background:
                   '#43a047'
               }}
@@ -244,7 +250,8 @@ function AdminLayout({ children }) {
 
               <Typography
                 sx={{
-                  fontWeight: 700
+                  fontWeight: 700,
+                  fontSize: 15
                 }}
               >
 
@@ -254,7 +261,7 @@ function AdminLayout({ children }) {
 
               <Typography
                 sx={{
-                  fontSize: 13,
+                  fontSize: 12,
                   opacity: 0.7
                 }}
               >
@@ -273,9 +280,9 @@ function AdminLayout({ children }) {
           onClick={cerrarSesion}
           sx={{
 
-            borderRadius: 4,
+            borderRadius: 3,
 
-            py: 1.5,
+            py: 1.2,
 
             background:
               '#e53935',
@@ -292,7 +299,8 @@ function AdminLayout({ children }) {
 
           <ListItemIcon
             sx={{
-              color: 'white'
+              color: 'white',
+              minWidth: 36
             }}
           >
 
@@ -332,9 +340,9 @@ function AdminLayout({ children }) {
 
           position: 'fixed',
 
-          top: 15,
+          top: 10,
 
-          left: 15,
+          left: 10,
 
           zIndex: 3000
         }}
@@ -346,7 +354,10 @@ function AdminLayout({ children }) {
           }
           sx={{
             background:
-              'white'
+              'white',
+
+            boxShadow:
+              '0 4px 12px rgba(0,0,0,0.10)'
           }}
         >
 
@@ -419,9 +430,10 @@ function AdminLayout({ children }) {
         component="main"
         sx={{
           flexGrow: 1,
+
           p: {
-            xs: 2,
-            md: 4
+            xs: 1.5,
+            md: 3
           }
         }}
       >
