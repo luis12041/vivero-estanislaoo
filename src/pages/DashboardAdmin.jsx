@@ -3,9 +3,10 @@ import {
   Box,
   Grid,
   Card,
-  CardContent,
   Stack,
-  Divider
+  Avatar,
+  Divider,
+  Chip
 } from '@mui/material'
 
 import {
@@ -22,57 +23,141 @@ import {
   db
 } from '../firebase/config'
 
-import AdminLayout from '../layouts/AdminLayout'
+import AdminLayout
+from '../layouts/AdminLayout'
+
+import Inventory2Icon
+from '@mui/icons-material/Inventory2'
+
+import ShoppingBagIcon
+from '@mui/icons-material/ShoppingBag'
+
+import PeopleIcon
+from '@mui/icons-material/People'
+
+import PaymentsIcon
+from '@mui/icons-material/Payments'
+
+import WarningAmberIcon
+from '@mui/icons-material/WarningAmber'
+
+import TrendingUpIcon
+from '@mui/icons-material/TrendingUp'
 
 function DashboardAdmin() {
 
-  const [totalPlantas, setTotalPlantas] = useState(0)
+  const [totalPlantas,
+    setTotalPlantas] =
+    useState(0)
 
-  const [totalPedidos, setTotalPedidos] = useState(0)
+  const [totalPedidos,
+    setTotalPedidos] =
+    useState(0)
 
-  const [totalUsuarios, setTotalUsuarios] = useState(0)
+  const [totalUsuarios,
+    setTotalUsuarios] =
+    useState(0)
 
-  const [ventas, setVentas] = useState(0)
+  const [ventas,
+    setVentas] =
+    useState(0)
+
+  const [agotados,
+    setAgotados] =
+    useState([])
+
+  const [ultimosPedidos,
+    setUltimosPedidos] =
+    useState([])
 
   useEffect(() => {
 
     async function cargarDatos() {
 
-      const plantasSnapshot = await getDocs(
-        collection(db, 'plantas')
-      )
+      const plantasSnapshot =
+        await getDocs(
+          collection(
+            db,
+            'plantas'
+          )
+        )
 
-      const pedidosSnapshot = await getDocs(
-        collection(db, 'pedidos')
-      )
+      const pedidosSnapshot =
+        await getDocs(
+          collection(
+            db,
+            'pedidos'
+          )
+        )
 
-      const usuariosSnapshot = await getDocs(
-        collection(db, 'usuarios')
-      )
+      const usuariosSnapshot =
+        await getDocs(
+          collection(
+            db,
+            'usuarios'
+          )
+        )
+
+      const plantas =
+        plantasSnapshot.docs.map(
+          (doc) => ({
+            id: doc.id,
+            ...doc.data()
+          })
+        )
+
+      const pedidos =
+        pedidosSnapshot.docs.map(
+          (doc) => ({
+            id: doc.id,
+            ...doc.data()
+          })
+        )
 
       setTotalPlantas(
-        plantasSnapshot.docs.length
+        plantas.length
       )
 
       setTotalPedidos(
-        pedidosSnapshot.docs.length
+        pedidos.length
       )
 
       setTotalUsuarios(
         usuariosSnapshot.docs.length
       )
 
-      const totalVentas = pedidosSnapshot.docs.reduce(
+      const totalVentas =
 
-        (acc, doc) =>
+        pedidos.reduce(
 
-          acc + doc.data().total,
+          (acc, pedido) =>
 
-        0
+            acc +
+            (pedido.total || 0),
 
-      )
+          0
+
+        )
 
       setVentas(totalVentas)
+
+      const productosAgotados =
+
+        plantas.filter(
+
+          (planta) =>
+
+            planta.stock <= 30
+
+        )
+
+      setAgotados(
+        productosAgotados
+      )
+
+      setUltimosPedidos(
+        pedidos.slice(-5).reverse()
+      )
 
     }
 
@@ -83,31 +168,55 @@ function DashboardAdmin() {
   const cards = [
 
     {
+
       titulo: 'Plantas',
+
       valor: totalPlantas,
-      icono: '🌿',
+
+      icono:
+        <Inventory2Icon />,
+
       color: '#43a047'
+
     },
 
     {
+
       titulo: 'Pedidos',
+
       valor: totalPedidos,
-      icono: '📦',
+
+      icono:
+        <ShoppingBagIcon />,
+
       color: '#fb8c00'
+
     },
 
     {
+
       titulo: 'Usuarios',
+
       valor: totalUsuarios,
-      icono: '👤',
+
+      icono:
+        <PeopleIcon />,
+
       color: '#1e88e5'
+
     },
 
     {
+
       titulo: 'Ventas',
+
       valor: `$${ventas}`,
-      icono: '💰',
+
+      icono:
+        <PaymentsIcon />,
+
       color: '#8e24aa'
+
     }
 
   ]
@@ -118,70 +227,50 @@ function DashboardAdmin() {
 
       <Box
         sx={{
-
-          minHeight: '100vh',
-
-          backgroundColor: '#f4f6f8',
-
-          p: {
-            xs: 2,
-            md: 4
-          }
-
+          mb: 4
         }}
       >
 
-        <Box
+        <Typography
           sx={{
-            mb: 5
+            fontSize: {
+              xs: 28,
+              md: 42
+            },
+
+            fontWeight: 900
           }}
         >
 
-          <Typography
-            variant="h3"
-            sx={{
+          Dashboard ⚡
 
-              fontWeight: 800,
+        </Typography>
 
-              color: '#1b1b1b',
-
-              mb: 1
-
-            }}
-          >
-
-            Dashboard Admin ⚡
-
-          </Typography>
-
-          <Typography
-            sx={{
-
-              color: '#666',
-
-              fontSize: '18px'
-
-            }}
-          >
-
-            Bienvenido al panel administrativo
-            de Vivero Estanislaoo 🌱
-
-          </Typography>
-
-        </Box>
-
-        <Grid
-          container
-          spacing={4}
+        <Typography
+          sx={{
+            color: '#666',
+            mt: 1
+          }}
         >
 
-          {cards.map((card, index) => (
+          Panel administrativo
+          del vivero 🌱
+
+        </Typography>
+
+      </Box>
+
+      <Grid
+        container
+        spacing={2}
+      >
+
+        {cards.map(
+          (card, index) => (
 
             <Grid
               item
-              xs={12}
-              sm={6}
+              xs={6}
               md={3}
               key={index}
             >
@@ -189,258 +278,363 @@ function DashboardAdmin() {
               <Card
                 sx={{
 
-                  borderRadius: 5,
+                  p: {
+                    xs: 1.5,
+                    md: 2
+                  },
 
-                  p: 1,
+                  borderRadius: 4,
+
+                  border:
+                    '1px solid #edf2f7',
 
                   boxShadow:
-                    '0 10px 30px rgba(0,0,0,0.08)',
-
-                  transition: '0.3s',
-
-                  '&:hover': {
-
-                    transform:
-                      'translateY(-6px)'
-
-                  }
+                    '0 6px 18px rgba(0,0,0,0.04)'
 
                 }}
               >
 
-                <CardContent>
+                <Stack
+                  direction="row"
+                  spacing={1.5}
+                  alignItems="center"
+                >
 
-                  <Stack
-                    direction="row"
-                    justifyContent="space-between"
-                    alignItems="center"
+                  <Avatar
                     sx={{
-                      mb: 3
+
+                      width: 48,
+
+                      height: 48,
+
+                      background:
+                        '#f4f6f8',
+
+                      color:
+                        card.color
+
                     }}
                   >
 
-                    <Box>
+                    {card.icono}
 
-                      <Typography
-                        sx={{
+                  </Avatar>
 
-                          color: '#666',
-
-                          fontWeight: 600,
-
-                          mb: 1
-
-                        }}
-                      >
-
-                        {card.titulo}
-
-                      </Typography>
-
-                      <Typography
-                        variant="h3"
-                        sx={{
-
-                          fontWeight: 800,
-
-                          color: card.color
-
-                        }}
-                      >
-
-                        {card.valor}
-
-                      </Typography>
-
-                    </Box>
+                  <Box>
 
                     <Typography
                       sx={{
-                        fontSize: '50px'
+                        color: '#666',
+                        fontSize: 13
                       }}
                     >
 
-                      {card.icono}
+                      {card.titulo}
 
                     </Typography>
 
-                  </Stack>
+                    <Typography
+                      sx={{
 
-                  <Divider />
+                        fontSize: {
+                          xs: 22,
+                          md: 32
+                        },
 
-                  <Typography
-                    sx={{
+                        fontWeight: 900,
 
-                      mt: 2,
+                        color:
+                          card.color
 
-                      color: '#888',
+                      }}
+                    >
 
-                      fontSize: '14px'
+                      {card.valor}
 
-                    }}
-                  >
+                    </Typography>
 
-                    Actualizado en tiempo real 🚀
+                  </Box>
 
-                  </Typography>
-
-                </CardContent>
+                </Stack>
 
               </Card>
 
             </Grid>
 
-          ))}
+          )
+        )}
+
+      </Grid>
+
+      <Grid
+        container
+        spacing={2}
+        sx={{
+          mt: 1
+        }}
+      >
+
+        <Grid
+          item
+          xs={12}
+          md={8}
+        >
+
+          <Card
+            sx={{
+
+              p: 3,
+
+              borderRadius: 4,
+
+              border:
+                '1px solid #edf2f7',
+
+              boxShadow:
+                '0 6px 18px rgba(0,0,0,0.04)'
+
+            }}
+          >
+
+            <Stack
+              direction="row"
+              spacing={1}
+              alignItems="center"
+              sx={{
+                mb: 3
+              }}
+            >
+
+              <TrendingUpIcon
+                sx={{
+                  color: '#2e7d32'
+                }}
+              />
+
+              <Typography
+                sx={{
+                  fontWeight: 800,
+                  fontSize: 22
+                }}
+              >
+
+                Últimos pedidos
+
+              </Typography>
+
+            </Stack>
+
+            <Stack spacing={2}>
+
+              {ultimosPedidos.map(
+                (pedido) => (
+
+                  <Box
+                    key={pedido.id}
+                  >
+
+                    <Stack
+                      direction="row"
+                      justifyContent="space-between"
+                      alignItems="center"
+                      flexWrap="wrap"
+                      gap={1}
+                    >
+
+                      <Box>
+
+                        <Typography
+                          sx={{
+                            fontWeight: 700
+                          }}
+                        >
+
+                          {
+                            pedido.folio
+                          }
+
+                        </Typography>
+
+                        <Typography
+                          sx={{
+                            color: '#777',
+                            fontSize: 14
+                          }}
+                        >
+
+                          {
+                            pedido.nombre
+                          }
+
+                        </Typography>
+
+                      </Box>
+
+                      <Chip
+
+                        label={
+                          pedido.estado
+                        }
+
+                        color={
+
+                          pedido.estado ===
+                          'En camino'
+
+                            ? 'info'
+
+                            :
+
+                          pedido.estado ===
+                          'En proceso'
+
+                            ? 'secondary'
+
+                            :
+
+                          pedido.estado ===
+                          'Entregado'
+
+                            ? 'success'
+
+                            :
+
+                            'warning'
+
+                        }
+
+                      />
+
+                    </Stack>
+
+                    <Divider
+                      sx={{
+                        mt: 2
+                      }}
+                    />
+
+                  </Box>
+
+                )
+              )}
+
+            </Stack>
+
+          </Card>
 
         </Grid>
 
         <Grid
-          container
-          spacing={4}
-          sx={{
-            mt: 2
-          }}
+          item
+          xs={12}
+          md={4}
         >
 
-          <Grid
-            item
-            xs={12}
-            md={8}
+          <Card
+            sx={{
+
+              p: 3,
+
+              borderRadius: 4,
+
+              background:
+                'linear-gradient(135deg,#1b5e20,#43a047)',
+
+              color: 'white',
+
+              boxShadow:
+                '0 10px 24px rgba(0,0,0,0.12)'
+
+            }}
           >
 
-            <Card
+            <Stack
+              direction="row"
+              spacing={1}
+              alignItems="center"
               sx={{
-
-                borderRadius: 5,
-
-                p: 3,
-
-                minHeight: 320,
-
-                boxShadow:
-                  '0 10px 30px rgba(0,0,0,0.08)'
-
+                mb: 3
               }}
             >
 
-              <Typography
-                variant="h5"
-                sx={{
-
-                  fontWeight: 700,
-
-                  mb: 3
-
-                }}
-              >
-
-                📈 Resumen del sistema
-
-              </Typography>
+              <WarningAmberIcon />
 
               <Typography
                 sx={{
-
-                  color: '#666',
-
-                  lineHeight: 2,
-
-                  fontSize: '17px'
-
+                  fontWeight: 800,
+                  fontSize: 22
                 }}
               >
 
-                Desde este panel puedes administrar
-                las plantas, pedidos, usuarios y
-                ventas del sistema 🌱
-
-                <br /><br />
-
-                También podrás monitorear la
-                actividad de tu vivero en tiempo
-                real y mantener el control total
-                de tu tienda.
+                Alertas
 
               </Typography>
 
-            </Card>
+            </Stack>
 
-          </Grid>
+            <Stack spacing={2}>
 
-          <Grid
-            item
-            xs={12}
-            md={4}
-          >
+              {agotados.length === 0 ? (
 
-            <Card
-              sx={{
+                <Typography>
 
-                borderRadius: 5,
+                  Todo el stock
+                  está correcto 😎🔥
 
-                p: 3,
+                </Typography>
 
-                minHeight: 320,
+              ) : (
 
-                background:
-                  'linear-gradient(135deg,#2e7d32,#43a047)',
+                agotados.map(
+                  (planta) => (
 
-                color: 'white',
+                    <Box
+                      key={planta.id}
+                    >
 
-                boxShadow:
-                  '0 10px 30px rgba(0,0,0,0.15)'
+                      <Typography
+                        sx={{
+                          fontWeight: 700
+                        }}
+                      >
 
-              }}
-            >
+                        ⚠️ {
+                          planta.nombre
+                        }
 
-              <Typography
-                variant="h5"
-                sx={{
+                      </Typography>
 
-                  fontWeight: 700,
+                      <Typography
+                        sx={{
+                          opacity: 0.8,
+                          fontSize: 14
+                        }}
+                      >
 
-                  mb: 3
+                        Stock:
+                        {planta.stock}
 
-                }}
-              >
+                      </Typography>
 
-                🌱 Estado del vivero
+                    </Box>
 
-              </Typography>
+                  )
+                )
 
-              <Typography
-                sx={{
+              )}
 
-                  lineHeight: 2,
+            </Stack>
 
-                  fontSize: '17px'
-
-                }}
-              >
-
-                Todo funcionando correctamente ✅
-
-                <br /><br />
-
-                Firebase conectado 🚀
-
-                <br /><br />
-
-                Panel administrativo activo 🔥
-
-              </Typography>
-
-            </Card>
-
-          </Grid>
+          </Card>
 
         </Grid>
 
-      </Box>
+      </Grid>
 
     </AdminLayout>
 
   )
+
 }
 
 export default DashboardAdmin
