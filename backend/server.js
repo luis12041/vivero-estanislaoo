@@ -302,6 +302,10 @@ app.post(
               .productos
           )
 
+        /* =========================
+        GUARDAR PEDIDO
+        ========================= */
+
         await db
           .collection(
             'pedidos'
@@ -354,6 +358,58 @@ app.post(
         console.log(
           '✅ Pedido guardado'
         )
+
+        /* =========================
+        DESCONTAR STOCK
+        ========================= */
+
+        for (const producto of productos) {
+
+          const plantaRef =
+            db.collection(
+              'plantas'
+            )
+            .doc(producto.id)
+
+          const plantaDoc =
+            await plantaRef.get()
+
+          if (
+            plantaDoc.exists
+          ) {
+
+            const plantaData =
+              plantaDoc.data()
+
+            const stockActual =
+              plantaData.stock || 0
+
+            const nuevoStock =
+
+              stockActual -
+              producto.cantidad
+
+            await plantaRef.update({
+
+              stock:
+                nuevoStock > 0
+                  ? nuevoStock
+                  : 0,
+
+              disponible:
+                nuevoStock > 0
+
+            })
+
+            console.log(
+
+              `🌱 Stock actualizado: ${producto.nombre}`
+
+            )
+
+          }
+
+        }
 
       }
 

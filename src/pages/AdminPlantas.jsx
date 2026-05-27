@@ -16,7 +16,8 @@ import {
   FormControlLabel,
   Snackbar,
   Alert,
-  CircularProgress
+  CircularProgress,
+  Chip
 } from '@mui/material'
 
 import DeleteIcon
@@ -24,6 +25,15 @@ from '@mui/icons-material/Delete'
 
 import AddIcon
 from '@mui/icons-material/Add'
+
+import Inventory2Icon
+from '@mui/icons-material/Inventory2'
+
+import WarningAmberIcon
+from '@mui/icons-material/WarningAmber'
+
+import CheckCircleIcon
+from '@mui/icons-material/CheckCircle'
 
 import {
   useEffect,
@@ -64,6 +74,9 @@ function AdminPlantas() {
 
   const [precio, setPrecio] =
     useState('')
+
+  const [stock, setStock] =
+    useState(50)
 
   const [tipoLuz, setTipoLuz] =
     useState('Sol')
@@ -160,6 +173,9 @@ function AdminPlantas() {
           precio:
             Number(precio),
 
+          stock:
+            Number(stock),
+
           imagen:
             imageUrl,
 
@@ -169,7 +185,8 @@ function AdminPlantas() {
 
           descripcion,
 
-          disponible
+          disponible:
+            Number(stock) > 0
 
         }
       )
@@ -187,6 +204,8 @@ function AdminPlantas() {
       setNombre('')
 
       setPrecio('')
+
+      setStock(50)
 
       setDescripcion('')
 
@@ -256,8 +275,7 @@ function AdminPlantas() {
               }}
             >
 
-              Administra todas las
-              plantas del vivero
+              Administra inventario y stock del vivero
 
             </Typography>
 
@@ -271,7 +289,7 @@ function AdminPlantas() {
             }
             sx={{
 
-              borderRadius: 3,
+              borderRadius: 4,
 
               py: 1.5,
 
@@ -280,7 +298,10 @@ function AdminPlantas() {
               backgroundColor:
                 '#2e7d32',
 
-              fontWeight: 700
+              fontWeight: 700,
+
+              boxShadow:
+                '0 10px 20px rgba(46,125,50,0.25)'
 
             }}
           >
@@ -302,26 +323,34 @@ function AdminPlantas() {
               item
               xs={12}
               sm={6}
-              md={4}
+              lg={4}
               key={planta.id}
             >
 
               <Card
                 sx={{
 
-                  borderRadius: 5,
+                  borderRadius: 6,
 
                   overflow: 'hidden',
+
+                  background:
+                    'linear-gradient(145deg,#ffffff,#f8f8f8)',
 
                   boxShadow:
                     '0 10px 25px rgba(0,0,0,0.08)',
 
                   transition: '0.3s',
 
+                  height: '100%',
+
                   '&:hover': {
 
                     transform:
-                      'translateY(-5px)'
+                      'translateY(-8px)',
+
+                    boxShadow:
+                      '0 20px 40px rgba(0,0,0,0.12)'
 
                   }
 
@@ -331,7 +360,7 @@ function AdminPlantas() {
                 <CardMedia
                   component="img"
                   image={planta.imagen}
-                  height="250"
+                  height="260"
                 />
 
                 <CardContent>
@@ -341,7 +370,7 @@ function AdminPlantas() {
                     <Typography
                       variant="h5"
                       sx={{
-                        fontWeight: 700
+                        fontWeight: 800
                       }}
                     >
 
@@ -353,13 +382,79 @@ function AdminPlantas() {
                       variant="h6"
                       sx={{
                         color: '#2e7d32',
-                        fontWeight: 700
+                        fontWeight: 800
                       }}
                     >
 
                       ${planta.precio}
 
                     </Typography>
+
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 1
+                      }}
+                    >
+
+                      <Inventory2Icon
+                        sx={{
+                          color: '#555'
+                        }}
+                      />
+
+                      <Typography
+                        sx={{
+                          fontWeight: 700
+                        }}
+                      >
+
+                        Stock:
+                        {' '}
+                        {planta.stock || 0}
+
+                      </Typography>
+
+                    </Box>
+
+                    {planta.stock <= 0 ? (
+
+                      <Chip
+                        icon={<DeleteIcon />}
+                        label="Agotado"
+                        color="error"
+                        sx={{
+                          width: 'fit-content',
+                          fontWeight: 700
+                        }}
+                      />
+
+                    ) : planta.stock <= 30 ? (
+
+                      <Chip
+                        icon={<WarningAmberIcon />}
+                        label="Casi agotado"
+                        color="warning"
+                        sx={{
+                          width: 'fit-content',
+                          fontWeight: 700
+                        }}
+                      />
+
+                    ) : (
+
+                      <Chip
+                        icon={<CheckCircleIcon />}
+                        label="Disponible"
+                        color="success"
+                        sx={{
+                          width: 'fit-content',
+                          fontWeight: 700
+                        }}
+                      />
+
+                    )}
 
                     <Button
                       variant="contained"
@@ -373,7 +468,8 @@ function AdminPlantas() {
                         )
                       }
                       sx={{
-                        borderRadius: 3
+                        borderRadius: 4,
+                        mt: 2
                       }}
                     >
 
@@ -406,7 +502,7 @@ function AdminPlantas() {
 
         <DialogTitle
           sx={{
-            fontWeight: 700
+            fontWeight: 800
           }}
         >
 
@@ -441,6 +537,18 @@ function AdminPlantas() {
               value={precio}
               onChange={(e) =>
                 setPrecio(
+                  e.target.value
+                )
+              }
+            />
+
+            <TextField
+              label="Stock"
+              type="number"
+              fullWidth
+              value={stock}
+              onChange={(e) =>
+                setStock(
                   e.target.value
                 )
               }
@@ -540,6 +648,9 @@ function AdminPlantas() {
             <Button
               variant="outlined"
               component="label"
+              sx={{
+                borderRadius: 3
+              }}
             >
 
               Seleccionar Imagen
@@ -564,7 +675,11 @@ function AdminPlantas() {
 
             {imagen && (
 
-              <Typography>
+              <Typography
+                sx={{
+                  fontWeight: 600
+                }}
+              >
 
                 {imagen.name}
 
@@ -578,7 +693,9 @@ function AdminPlantas() {
               onClick={guardarPlanta}
               disabled={loading}
               sx={{
-                borderRadius: 3
+                borderRadius: 4,
+                py: 1.5,
+                fontWeight: 700
               }}
             >
 

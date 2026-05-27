@@ -9,8 +9,21 @@ import {
   TextField,
   FormControlLabel,
   Checkbox,
-  Paper
+  Paper,
+  Chip
 } from '@mui/material'
+
+import Inventory2Icon
+from '@mui/icons-material/Inventory2'
+
+import WarningAmberIcon
+from '@mui/icons-material/WarningAmber'
+
+import ErrorIcon
+from '@mui/icons-material/Error'
+
+import CheckCircleIcon
+from '@mui/icons-material/CheckCircle'
 
 import {
   useEffect,
@@ -108,14 +121,23 @@ function Catalogo() {
           variant="h2"
           sx={{
 
-            fontWeight: 800,
+            fontWeight: 900,
 
             mb: 2,
 
             fontSize: {
-              xs: '42px',
+              xs: '38px',
               md: '65px'
-            }
+            },
+
+            background:
+              'linear-gradient(90deg,#1b5e20,#43a047)',
+
+            WebkitBackgroundClip:
+              'text',
+
+            WebkitTextFillColor:
+              'transparent'
 
           }}
         >
@@ -131,7 +153,9 @@ function Catalogo() {
 
             fontSize: '18px',
 
-            maxWidth: 700
+            maxWidth: 700,
+
+            lineHeight: 1.8
 
           }}
         >
@@ -150,12 +174,18 @@ function Catalogo() {
 
           p: 3,
 
-          borderRadius: 5,
+          borderRadius: 6,
 
           mb: 5,
 
+          background:
+            'linear-gradient(145deg,#ffffff,#f7f7f7)',
+
           border:
-            '1px solid #e0e0e0'
+            '1px solid #e0e0e0',
+
+          boxShadow:
+            '0 10px 25px rgba(0,0,0,0.05)'
 
         }}
       >
@@ -171,6 +201,15 @@ function Catalogo() {
                 e.target.value
               )
             }
+            sx={{
+
+              '& .MuiOutlinedInput-root': {
+
+                borderRadius: 4
+
+              }
+
+            }}
           />
 
           <Stack
@@ -307,30 +346,152 @@ function Catalogo() {
                 key={planta.id}
               >
 
-                <PlantCard
-                  id={planta.id}
-                  nombre={
-                    planta.nombre
-                  }
-                  precio={
-                    planta.precio
-                  }
-                  imagen={
-                    planta.imagen
-                  }
-                  tipoLuz={
-                    planta.tipoLuz
-                  }
-                  riego={
-                    planta.riego
-                  }
-                  disponible={
-                    planta.disponible
-                  }
-                  descripcion={
-                    planta.descripcion
-                  }
-                />
+                <Box
+                  sx={{
+
+                    background:
+                      'linear-gradient(145deg,#ffffff,#f8f8f8)',
+
+                    borderRadius: 6,
+
+                    overflow: 'hidden',
+
+                    boxShadow:
+                      '0 10px 30px rgba(0,0,0,0.08)',
+
+                    transition: '0.3s',
+
+                    height: '100%',
+
+                    '&:hover': {
+
+                      transform:
+                        'translateY(-8px)',
+
+                      boxShadow:
+                        '0 20px 40px rgba(0,0,0,0.12)'
+
+                    }
+
+                  }}
+                >
+
+                  <PlantCard
+                    id={planta.id}
+                    nombre={
+                      planta.nombre
+                    }
+                    precio={
+                      planta.precio
+                    }
+                    imagen={
+                      planta.imagen
+                    }
+                    tipoLuz={
+                      planta.tipoLuz
+                    }
+                    riego={
+                      planta.riego
+                    }
+                    disponible={
+                      planta.disponible
+                    }
+                    descripcion={
+                      planta.descripcion
+                    }
+                  />
+
+                  <Box
+                    sx={{
+                      px: 3,
+                      pb: 3
+                    }}
+                  >
+
+                    <Stack
+                      spacing={2}
+                    >
+
+                      <Stack
+                        direction="row"
+                        spacing={1}
+                        alignItems="center"
+                      >
+
+                        <Inventory2Icon
+                          sx={{
+                            color:
+                              '#2e7d32'
+                          }}
+                        />
+
+                        <Typography
+                          sx={{
+                            fontWeight: 700
+                          }}
+                        >
+
+                          Stock:
+                          {' '}
+                          {planta.stock || 0}
+
+                        </Typography>
+
+                      </Stack>
+
+                      {planta.stock <= 0 ? (
+
+                        <Chip
+                          icon={<ErrorIcon />}
+                          label="Agotado"
+                          color="error"
+                          sx={{
+                            width:
+                              'fit-content',
+                            fontWeight: 700,
+                            borderRadius: 3
+                          }}
+                        />
+
+                      ) : planta.stock <= 30 ? (
+
+                        <Chip
+                          icon={
+                            <WarningAmberIcon />
+                          }
+                          label="Casi agotado"
+                          color="warning"
+                          sx={{
+                            width:
+                              'fit-content',
+                            fontWeight: 700,
+                            borderRadius: 3
+                          }}
+                        />
+
+                      ) : (
+
+                        <Chip
+                          icon={
+                            <CheckCircleIcon />
+                          }
+                          label="Disponible"
+                          color="success"
+                          sx={{
+                            width:
+                              'fit-content',
+                            fontWeight: 700,
+                            borderRadius: 3
+                          }}
+                        />
+
+                      )}
+
+                    </Stack>
+
+                  </Box>
+
+                </Box>
 
               </Grid>
 
