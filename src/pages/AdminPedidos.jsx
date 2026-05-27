@@ -22,7 +22,8 @@ import {
   getDocs
 } from 'firebase/firestore'
 
-import SearchIcon from '@mui/icons-material/Search'
+import SearchIcon
+from '@mui/icons-material/Search'
 
 import LocationOnIcon
 from '@mui/icons-material/LocationOn'
@@ -48,16 +49,19 @@ from '@mui/icons-material/CheckCircle'
 import PendingIcon
 from '@mui/icons-material/Pending'
 
-import { db } from '../firebase/config'
+import { db }
+from '../firebase/config'
 
-import AdminLayout from '../layouts/AdminLayout'
+import AdminLayout
+from '../layouts/AdminLayout'
 
 function AdminPedidos() {
 
   const [pedidos, setPedidos] =
     useState([])
 
-  const [busqueda, setBusqueda] =
+  const [busqueda,
+    setBusqueda] =
     useState('')
 
   const [filtroEstado,
@@ -137,14 +141,22 @@ function AdminPedidos() {
 
     <AdminLayout>
 
-      <Box sx={{ mb: 4 }}>
+      <Box
+        sx={{
+          mb: 5
+        }}
+      >
 
         <Typography
-          variant="h3"
           sx={{
+            fontSize: {
+              xs: 38,
+              md: 48
+            },
+
             fontWeight: 900,
-            color: '#111',
-            mb: 1
+
+            color: '#111'
           }}
         >
 
@@ -154,13 +166,14 @@ function AdminPedidos() {
 
         <Typography
           sx={{
-            color: '#777',
-            fontSize: 16
+            color: '#6b7280',
+            fontSize: 16,
+            mt: 1
           }}
         >
 
           Gestión y seguimiento
-          de pedidos del vivero
+          profesional de pedidos
 
         </Typography>
 
@@ -169,18 +182,26 @@ function AdminPedidos() {
       <Grid
         container
         spacing={3}
-        sx={{ mb: 4 }}
+        sx={{
+          mb: 4
+        }}
       >
 
-        <Grid item xs={12} md={3}>
+        <Grid item xs={12} sm={6} md={3}>
 
           <Card
             sx={{
+
               p: 3,
+
               borderRadius: 5,
+
               boxShadow:
-                '0 8px 24px rgba(0,0,0,0.06)',
-              height: '100%'
+                '0 6px 20px rgba(0,0,0,0.05)',
+
+              border:
+                '1px solid #edf2f7'
+
             }}
           >
 
@@ -192,9 +213,9 @@ function AdminPedidos() {
 
               <Avatar
                 sx={{
-                  width: 60,
-                  height: 60,
-                  backgroundColor:
+                  width: 56,
+                  height: 56,
+                  background:
                     '#e8f5e9',
                   color: '#2e7d32'
                 }}
@@ -235,15 +256,21 @@ function AdminPedidos() {
 
         </Grid>
 
-        <Grid item xs={12} md={3}>
+        <Grid item xs={12} sm={6} md={3}>
 
           <Card
             sx={{
+
               p: 3,
+
               borderRadius: 5,
+
               boxShadow:
-                '0 8px 24px rgba(0,0,0,0.06)',
-              height: '100%'
+                '0 6px 20px rgba(0,0,0,0.05)',
+
+              border:
+                '1px solid #edf2f7'
+
             }}
           >
 
@@ -255,9 +282,9 @@ function AdminPedidos() {
 
               <Avatar
                 sx={{
-                  width: 60,
-                  height: 60,
-                  backgroundColor:
+                  width: 56,
+                  height: 56,
+                  background:
                     '#e8f5e9',
                   color: '#2e7d32'
                 }}
@@ -286,7 +313,7 @@ function AdminPedidos() {
                   }}
                 >
 
-                  Total ventas
+                  Ventas
 
                 </Typography>
 
@@ -298,15 +325,21 @@ function AdminPedidos() {
 
         </Grid>
 
-        <Grid item xs={12} md={3}>
+        <Grid item xs={12} sm={6} md={3}>
 
           <Card
             sx={{
+
               p: 3,
+
               borderRadius: 5,
+
               boxShadow:
-                '0 8px 24px rgba(0,0,0,0.06)',
-              height: '100%'
+                '0 6px 20px rgba(0,0,0,0.05)',
+
+              border:
+                '1px solid #edf2f7'
+
             }}
           >
 
@@ -318,9 +351,9 @@ function AdminPedidos() {
 
               <Avatar
                 sx={{
-                  width: 60,
-                  height: 60,
-                  backgroundColor:
+                  width: 56,
+                  height: 56,
+                  background:
                     '#e8f5e9',
                   color: '#2e7d32'
                 }}
@@ -349,7 +382,7 @@ function AdminPedidos() {
                   }}
                 >
 
-                  Pedidos pagados
+                  Pagados
 
                 </Typography>
 
@@ -361,15 +394,21 @@ function AdminPedidos() {
 
         </Grid>
 
-        <Grid item xs={12} md={3}>
+        <Grid item xs={12} sm={6} md={3}>
 
           <Card
             sx={{
+
               p: 3,
+
               borderRadius: 5,
+
               boxShadow:
-                '0 8px 24px rgba(0,0,0,0.06)',
-              height: '100%'
+                '0 6px 20px rgba(0,0,0,0.05)',
+
+              border:
+                '1px solid #edf2f7'
+
             }}
           >
 
@@ -381,9 +420,9 @@ function AdminPedidos() {
 
               <Avatar
                 sx={{
-                  width: 60,
-                  height: 60,
-                  backgroundColor:
+                  width: 56,
+                  height: 56,
+                  background:
                     '#fff3e0',
                   color: '#f57c00'
                 }}
@@ -429,21 +468,32 @@ function AdminPedidos() {
       <Grid
         container
         spacing={2}
-        sx={{ mb: 4 }}
+        sx={{
+          mb: 5
+        }}
       >
 
         <Grid item xs={12} md={8}>
 
           <TextField
             fullWidth
-            placeholder="Buscar por nombre, dirección o notas..."
+            placeholder="Buscar pedidos..."
             value={busqueda}
             onChange={(e) =>
               setBusqueda(e.target.value)
             }
             sx={{
-              backgroundColor: 'white',
-              borderRadius: 4
+              background:
+                'white',
+
+              borderRadius: 4,
+
+              '& .MuiOutlinedInput-root': {
+
+                borderRadius: 4
+
+              }
+
             }}
             InputProps={{
               startAdornment: (
@@ -470,13 +520,22 @@ function AdminPedidos() {
               )
             }
             sx={{
-              backgroundColor: 'white',
-              borderRadius: 4
+              background:
+                'white',
+
+              borderRadius: 4,
+
+              '& .MuiOutlinedInput-root': {
+
+                borderRadius: 4
+
+              }
+
             }}
           >
 
             <MenuItem value="Todos">
-              Todos los estados
+              Todos
             </MenuItem>
 
             <MenuItem value="Pagado">
@@ -502,49 +561,35 @@ function AdminPedidos() {
               item
               xs={12}
               md={6}
-              lg={6}
-              sx={{
-                display: 'flex'
-              }}
+              lg={4}
               key={pedido.id}
             >
 
               <Card
                 sx={{
 
-                  width: '100%',
-
-                  minHeight: 360,
-
-                  display: 'flex',
-
-                  flexDirection: 'column',
-
-                  justifyContent:
-                    'space-between',
+                  height: '100%',
 
                   borderRadius: 5,
 
-                  overflow: 'hidden',
+                  background:
+                    '#ffffff',
 
                   border:
-                    '1px solid #e9ecef',
+                    '1px solid #edf2f7',
 
                   boxShadow:
-                    '0 8px 24px rgba(0,0,0,0.06)',
+                    '0 8px 25px rgba(0,0,0,0.04)',
 
-                  transition: '0.3s',
-
-                  background:
-                    'linear-gradient(to bottom,#ffffff,#fcfcfc)',
+                  transition: '0.25s',
 
                   '&:hover': {
 
                     transform:
-                      'translateY(-5px)',
+                      'translateY(-6px)',
 
                     boxShadow:
-                      '0 12px 30px rgba(0,0,0,0.10)'
+                      '0 14px 35px rgba(0,0,0,0.08)'
 
                   }
 
@@ -553,17 +598,7 @@ function AdminPedidos() {
 
                 <Box
                   sx={{
-
-                    px: 3,
-
-                    py: 2,
-
-                    background:
-                      '#ffffff',
-
-                    borderBottom:
-                      '1px solid #f0f0f0'
-
+                    p: 3
                   }}
                 >
 
@@ -595,7 +630,8 @@ function AdminPedidos() {
                         <Typography
                           sx={{
                             fontWeight: 800,
-                            fontSize: 22
+                            fontSize: 22,
+                            lineHeight: 1.2
                           }}
                         >
 
@@ -619,35 +655,27 @@ function AdminPedidos() {
                     </Stack>
 
                     <Chip
-
                       label={pedido.estado}
-
                       color={
                         pedido.estado ===
                         'Pagado'
                           ? 'success'
                           : 'warning'
                       }
-
                       sx={{
-                        fontWeight: 700,
-                        borderRadius: 3
+                        fontWeight: 700
                       }}
-
                     />
 
                   </Stack>
 
-                </Box>
+                  <Divider
+                    sx={{
+                      my: 3
+                    }}
+                  />
 
-                <Box
-                  sx={{
-                    p: 3,
-                    flexGrow: 1
-                  }}
-                >
-
-                  <Stack spacing={2}>
+                  <Stack spacing={2.5}>
 
                     <Stack
                       direction="row"
@@ -661,19 +689,13 @@ function AdminPedidos() {
                         }}
                       />
 
-                      <Typography
-                        sx={{
-                          fontSize: 16
-                        }}
-                      >
+                      <Typography>
 
                         {pedido.direccion}
 
                       </Typography>
 
                     </Stack>
-
-                    <Divider />
 
                     <Stack
                       direction="row"
@@ -687,11 +709,7 @@ function AdminPedidos() {
                         }}
                       />
 
-                      <Typography
-                        sx={{
-                          fontSize: 16
-                        }}
-                      >
+                      <Typography>
 
                         {pedido.notas ||
                           'Sin notas'}
@@ -700,70 +718,81 @@ function AdminPedidos() {
 
                     </Stack>
 
-                    <Divider />
+                  </Stack>
+
+                  <Divider
+                    sx={{
+                      my: 3
+                    }}
+                  />
+
+                  <Stack
+                    direction="row"
+                    justifyContent="space-between"
+                    alignItems="center"
+                  >
 
                     <Stack
                       direction="row"
-                      justifyContent="space-between"
+                      spacing={1}
                       alignItems="center"
                     >
 
-                      <Stack
-                        direction="row"
-                        spacing={1}
-                        alignItems="center"
+                      <PaymentsIcon
+                        sx={{
+                          color: '#2e7d32'
+                        }}
+                      />
+
+                      <Typography
+                        sx={{
+                          fontSize: 38,
+                          fontWeight: 900,
+                          color: '#1b5e20'
+                        }}
                       >
 
-                        <PaymentsIcon
-                          sx={{
-                            color: '#2e7d32'
-                          }}
-                        />
+                        ${pedido.total}
 
-                        <Typography
-                          sx={{
-                            fontSize: 38,
-                            fontWeight: 900,
-                            color: '#1b5e20'
-                          }}
-                        >
-
-                          ${pedido.total}
-
-                        </Typography>
-
-                      </Stack>
+                      </Typography>
 
                     </Stack>
 
+                    <Chip
+                      label="Activo"
+                      sx={{
+                        background:
+                          '#e8f5e9',
+
+                        color:
+                          '#1b5e20',
+
+                        fontWeight: 700
+                      }}
+                    />
+
                   </Stack>
-
-                </Box>
-
-                <Box
-                  sx={{
-                    px: 3,
-                    py: 2,
-                    borderTop:
-                      '1px solid #f0f0f0'
-                  }}
-                >
 
                   <Stack
                     direction="row"
                     spacing={1}
                     alignItems="center"
+                    sx={{
+                      mt: 3
+                    }}
                   >
 
                     <CalendarMonthIcon
                       sx={{
-                        color: '#777'
+                        color: '#777',
+                        fontSize: 20
                       }}
                     />
 
                     <Typography
                       sx={{
-                        color: '#777'
+                        color: '#777',
+                        fontSize: 14
                       }}
                     >
 

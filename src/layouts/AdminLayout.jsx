@@ -4,20 +4,19 @@ import {
   List,
   ListItemButton,
   ListItemText,
-  Toolbar,
   Typography,
-  Button,
-  Divider,
   IconButton,
-  ListItemIcon
+  ListItemIcon,
+  Avatar,
+  Divider
 } from '@mui/material'
 
 import DashboardIcon from '@mui/icons-material/Dashboard'
 import GrassIcon from '@mui/icons-material/Grass'
-import LogoutIcon from '@mui/icons-material/Logout'
-import MenuIcon from '@mui/icons-material/Menu'
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag'
 import GroupIcon from '@mui/icons-material/Group'
+import MenuIcon from '@mui/icons-material/Menu'
+import LogoutIcon from '@mui/icons-material/Logout'
 
 import {
   Link,
@@ -26,17 +25,21 @@ import {
 } from 'react-router-dom'
 
 import { signOut } from 'firebase/auth'
+
 import { auth } from '../firebase/config'
+
 import { useState } from 'react'
 
-const drawerWidth = 270
+const drawerWidth = 240
 
 function AdminLayout({ children }) {
 
   const navigate = useNavigate()
+
   const location = useLocation()
 
-  const [mobileOpen, setMobileOpen] =
+  const [mobileOpen,
+    setMobileOpen] =
     useState(false)
 
   async function cerrarSesion() {
@@ -79,38 +82,65 @@ function AdminLayout({ children }) {
 
     <Box
       sx={{
+
         height: '100%',
+
         display: 'flex',
+
         flexDirection: 'column',
+
         background:
-          'linear-gradient(180deg,#1b5e20,#2e7d32)',
+          'linear-gradient(180deg,#0f3d1c,#1b5e20)',
+
         color: 'white'
+
       }}
     >
 
-      <Toolbar>
+      <Box
+        sx={{
+          px: 3,
+          py: 4
+        }}
+      >
 
         <Typography
-          variant="h3"
           sx={{
+            fontSize: 32,
             fontWeight: 900
           }}
         >
 
-          🌱 Admin
+          🌱 Vivero
 
         </Typography>
 
-      </Toolbar>
+        <Typography
+          sx={{
+            opacity: 0.7,
+            fontSize: 14
+          }}
+        >
+
+          Panel administrativo
+
+        </Typography>
+
+      </Box>
 
       <Divider
         sx={{
           borderColor:
-            'rgba(255,255,255,0.15)'
+            'rgba(255,255,255,0.08)'
         }}
       />
 
-      <List sx={{ mt: 2 }}>
+      <List
+        sx={{
+          mt: 2,
+          px: 2
+        }}
+      >
 
         {menuItems.map((item) => (
 
@@ -124,26 +154,24 @@ function AdminLayout({ children }) {
 
             sx={{
 
-              mx: 2,
-
               mb: 1,
 
               borderRadius: 4,
 
-              py: 1.5,
+              py: 1.4,
 
               backgroundColor:
 
                 location.pathname === item.path
 
-                  ? 'rgba(255,255,255,0.15)'
+                  ? 'rgba(255,255,255,0.12)'
 
                   : 'transparent',
 
               '&:hover': {
 
                 backgroundColor:
-                  'rgba(255,255,255,0.12)'
+                  'rgba(255,255,255,0.08)'
 
               }
 
@@ -153,7 +181,7 @@ function AdminLayout({ children }) {
             <ListItemIcon
               sx={{
                 color: 'white',
-                minWidth: 40
+                minWidth: 38
               }}
             >
 
@@ -178,22 +206,105 @@ function AdminLayout({ children }) {
         }}
       >
 
-        <Button
-          fullWidth
-          variant="contained"
-          color="error"
-          startIcon={<LogoutIcon />}
-          onClick={cerrarSesion}
+        <Box
           sx={{
+
+            p: 2,
+
+            mb: 2,
+
             borderRadius: 4,
-            py: 1.5,
-            fontWeight: 700
+
+            background:
+              'rgba(255,255,255,0.08)'
+
           }}
         >
 
-          Cerrar sesión
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 2
+            }}
+          >
 
-        </Button>
+            <Avatar
+              sx={{
+                background:
+                  '#43a047'
+              }}
+            >
+
+              A
+
+            </Avatar>
+
+            <Box>
+
+              <Typography
+                sx={{
+                  fontWeight: 700
+                }}
+              >
+
+                Admin
+
+              </Typography>
+
+              <Typography
+                sx={{
+                  fontSize: 13,
+                  opacity: 0.7
+                }}
+              >
+
+                Administrador
+
+              </Typography>
+
+            </Box>
+
+          </Box>
+
+        </Box>
+
+        <ListItemButton
+          onClick={cerrarSesion}
+          sx={{
+
+            borderRadius: 4,
+
+            py: 1.5,
+
+            background:
+              '#e53935',
+
+            '&:hover': {
+
+              background:
+                '#c62828'
+
+            }
+
+          }}
+        >
+
+          <ListItemIcon
+            sx={{
+              color: 'white'
+            }}
+          >
+
+            <LogoutIcon />
+
+          </ListItemIcon>
+
+          <ListItemText
+            primary="Cerrar sesión"
+          />
+
+        </ListItemButton>
 
       </Box>
 
@@ -206,8 +317,9 @@ function AdminLayout({ children }) {
     <Box
       sx={{
         display: 'flex',
-        minHeight: '100vh',
-        backgroundColor: '#f4f6f8'
+        background:
+          '#f4f6f8',
+        minHeight: '100vh'
       }}
     >
 
@@ -220,11 +332,11 @@ function AdminLayout({ children }) {
 
           position: 'fixed',
 
-          top: 10,
+          top: 15,
 
-          left: 10,
+          left: 15,
 
-          zIndex: 2000
+          zIndex: 3000
         }}
       >
 
@@ -233,7 +345,8 @@ function AdminLayout({ children }) {
             setMobileOpen(true)
           }
           sx={{
-            backgroundColor: 'white'
+            background:
+              'white'
           }}
         >
 
@@ -250,14 +363,20 @@ function AdminLayout({ children }) {
           setMobileOpen(false)
         }
         sx={{
+
           display: {
             xs: 'block',
             md: 'none'
           },
 
           '& .MuiDrawer-paper': {
-            width: drawerWidth
+
+            width: drawerWidth,
+
+            border: 'none'
+
           }
+
         }}
       >
 
@@ -284,7 +403,8 @@ function AdminLayout({ children }) {
 
             border: 'none',
 
-            boxSizing: 'border-box'
+            boxSizing:
+              'border-box'
 
           }
 
