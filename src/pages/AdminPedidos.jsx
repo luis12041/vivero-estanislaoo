@@ -9,7 +9,8 @@ import {
   Avatar,
   TextField,
   InputAdornment,
-  MenuItem
+  MenuItem,
+  Button
 } from '@mui/material'
 
 import {
@@ -19,7 +20,10 @@ import {
 
 import {
   collection,
-  getDocs
+  getDocs,
+  doc,
+  updateDoc,
+  deleteDoc
 } from 'firebase/firestore'
 
 import SearchIcon
@@ -49,6 +53,12 @@ from '@mui/icons-material/CheckCircle'
 import PendingIcon
 from '@mui/icons-material/Pending'
 
+import LocalShippingIcon
+from '@mui/icons-material/LocalShipping'
+
+import DoneAllIcon
+from '@mui/icons-material/DoneAll'
+
 import { db }
 from '../firebase/config'
 
@@ -70,26 +80,66 @@ function AdminPedidos() {
 
   useEffect(() => {
 
-    async function cargarPedidos() {
+    cargarPedidos()
 
-      const snapshot =
-        await getDocs(
-          collection(db, 'pedidos')
-        )
+  }, [])
 
-      const data =
-        snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data()
-        }))
+  async function cargarPedidos() {
 
-      setPedidos(data)
+    const snapshot =
+      await getDocs(
+        collection(db, 'pedidos')
+      )
+
+    const data =
+      snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data()
+      }))
+
+    setPedidos(data)
+
+  }
+
+  async function cambiarEstado(
+    pedido
+  ) {
+
+    const pedidoRef =
+      doc(
+        db,
+        'pedidos',
+        pedido.id
+      )
+
+    if (
+      pedido.estado ===
+      'Pendiente'
+    ) {
+
+      await updateDoc(
+        pedidoRef,
+        {
+          estado: 'Enviado'
+        }
+      )
+
+    }
+
+    else if (
+      pedido.estado ===
+      'Enviado'
+    ) {
+
+      await deleteDoc(
+        pedidoRef
+      )
 
     }
 
     cargarPedidos()
 
-  }, [])
+  }
 
   const pedidosFiltrados =
     pedidos.filter((pedido) => {
@@ -134,7 +184,9 @@ function AdminPedidos() {
 
   const pedidosPendientes =
     pedidos.filter(
-      (p) => p.estado === 'Pendiente'
+      (p) =>
+        p.estado ===
+        'Pendiente'
     ).length
 
   return (
@@ -362,12 +414,12 @@ function AdminPedidos() {
               Todos
             </MenuItem>
 
-            <MenuItem value="Pagado">
-              Pagado
-            </MenuItem>
-
             <MenuItem value="Pendiente">
               Pendiente
+            </MenuItem>
+
+            <MenuItem value="Enviado">
+              Enviado
             </MenuItem>
 
           </TextField>
@@ -483,14 +535,21 @@ function AdminPedidos() {
                     </Stack>
 
                     <Chip
-                      label={pedido.estado}
+
+                      label={
+                        pedido.estado ||
+                        'Pendiente'
+                      }
+
                       size="small"
+
                       color={
                         pedido.estado ===
-                        'Pagado'
-                          ? 'success'
+                        'Enviado'
+                          ? 'info'
                           : 'warning'
                       }
+
                     />
 
                   </Stack>
@@ -599,21 +658,66 @@ function AdminPedidos() {
 
                     </Stack>
 
-                    <Chip
-                      label="Activo"
-                      size="small"
-                      sx={{
-                        background:
-                          '#e8f5e9',
-
-                        color:
-                          '#1b5e20',
-
-                        fontWeight: 700
-                      }}
-                    />
-
                   </Stack>
+
+                  <Button
+
+                    fullWidth
+
+                    variant="contained"
+
+                    startIcon={
+
+                      pedido.estado ===
+                      'Enviado'
+
+                        ? <DoneAllIcon />
+
+                        : <LocalShippingIcon />
+
+                    }
+
+                    onClick={() =>
+                      cambiarEstado(
+                        pedido
+                      )
+                    }
+
+                    sx={{
+
+                      mt: 3,
+
+                      borderRadius: 3,
+
+                      py: 1.2,
+
+                      fontWeight: 700,
+
+                      background:
+
+                        pedido.estado ===
+                        'Enviado'
+
+                          ? '#43a047'
+
+                          : '#1b5e20'
+
+                    }}
+
+                  >
+
+                    {
+
+                      pedido.estado ===
+                      'Enviado'
+
+                        ? 'Marcar entregado'
+
+                        : 'Marcar enviado'
+
+                    }
+
+                  </Button>
 
                   <Stack
                     direction="row"
