@@ -6,7 +6,8 @@ import {
   Grid,
   Chip,
   Stack,
-  Divider
+  Divider,
+  Avatar
 } from '@mui/material'
 
 import {
@@ -33,6 +34,9 @@ from '@mui/icons-material/ShoppingBag'
 
 import CalendarMonthIcon
 from '@mui/icons-material/CalendarMonth'
+
+import PersonIcon
+from '@mui/icons-material/Person'
 
 import { db } from '../firebase/config'
 
@@ -96,39 +100,53 @@ function AdminPedidos() {
           }}
         >
 
-          Control y seguimiento de pedidos realizados
+          Gestión profesional de pedidos del vivero
 
         </Typography>
 
       </Box>
 
-      <Grid container spacing={4}>
+      <Grid container spacing={3}>
 
         {pedidos.map((pedido) => (
 
           <Grid
             item
             xs={12}
-            lg={6}
+            md={6}
+            xl={4}
             key={pedido.id}
           >
 
             <Card
               sx={{
+
                 borderRadius: 6,
+
                 overflow: 'hidden',
-                background:
-                  'linear-gradient(145deg,#ffffff,#f8f8f8)',
+
+                backgroundColor: 'white',
+
+                border:
+                  '1px solid #ececec',
+
                 boxShadow:
-                  '0 10px 30px rgba(0,0,0,0.08)',
+                  '0 10px 25px rgba(0,0,0,0.06)',
+
                 transition: '0.3s',
 
+                height: '100%',
+
                 '&:hover': {
+
                   transform:
                     'translateY(-6px)',
+
                   boxShadow:
-                    '0 15px 40px rgba(0,0,0,0.12)'
+                    '0 18px 40px rgba(0,0,0,0.10)'
+
                 }
+
               }}
             >
 
@@ -136,7 +154,9 @@ function AdminPedidos() {
                 sx={{
                   background:
                     'linear-gradient(135deg,#1b5e20,#43a047)',
+
                   p: 3,
+
                   color: 'white'
                 }}
               >
@@ -147,34 +167,58 @@ function AdminPedidos() {
                   alignItems="center"
                 >
 
-                  <Box>
+                  <Stack
+                    direction="row"
+                    spacing={2}
+                    alignItems="center"
+                  >
 
-                    <Typography
-                      variant="h5"
+                    <Avatar
                       sx={{
-                        fontWeight: 800
+                        backgroundColor:
+                          'rgba(255,255,255,0.25)',
+
+                        width: 55,
+
+                        height: 55
                       }}
                     >
 
-                      {pedido.nombre}
+                      <PersonIcon />
 
-                    </Typography>
+                    </Avatar>
 
-                    <Typography
-                      sx={{
-                        opacity: 0.9
-                      }}
-                    >
+                    <Box>
 
-                      Pedido registrado
+                      <Typography
+                        variant="h6"
+                        sx={{
+                          fontWeight: 800
+                        }}
+                      >
 
-                    </Typography>
+                        {pedido.nombre}
 
-                  </Box>
+                      </Typography>
+
+                      <Typography
+                        sx={{
+                          opacity: 0.9,
+                          fontSize: 14
+                        }}
+                      >
+
+                        Pedido registrado
+
+                      </Typography>
+
+                    </Box>
+
+                  </Stack>
 
                   <ShoppingBagIcon
                     sx={{
-                      fontSize: 45
+                      fontSize: 38
                     }}
                   />
 
@@ -184,11 +228,11 @@ function AdminPedidos() {
 
               <CardContent
                 sx={{
-                  p: 4
+                  p: 3
                 }}
               >
 
-                <Stack spacing={3}>
+                <Stack spacing={2.5}>
 
                   <Box
                     sx={{
@@ -250,41 +294,39 @@ function AdminPedidos() {
                   <Box
                     sx={{
                       display: 'flex',
-                      alignItems: 'center',
-                      gap: 2
-                    }}
-                  >
-
-                    <PaymentsIcon
-                      sx={{
-                        color: '#2e7d32'
-                      }}
-                    />
-
-                    <Typography
-                      sx={{
-                        fontSize: 28,
-                        fontWeight: 800,
-                        color: '#1b5e20'
-                      }}
-                    >
-
-                      ${pedido.total}
-
-                    </Typography>
-
-                  </Box>
-
-                  <Divider />
-
-                  <Box
-                    sx={{
-                      display: 'flex',
                       justifyContent:
                         'space-between',
                       alignItems: 'center'
                     }}
                   >
+
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 1
+                      }}
+                    >
+
+                      <PaymentsIcon
+                        sx={{
+                          color: '#2e7d32'
+                        }}
+                      />
+
+                      <Typography
+                        sx={{
+                          fontSize: 30,
+                          fontWeight: 900,
+                          color: '#1b5e20'
+                        }}
+                      >
+
+                        ${pedido.total}
+
+                      </Typography>
+
+                    </Box>
 
                     <Chip
                       label={pedido.estado}
@@ -295,37 +337,38 @@ function AdminPedidos() {
                           : 'warning'
                       }
                       sx={{
-                        fontWeight: 700,
-                        px: 1
+                        fontWeight: 700
                       }}
                     />
 
-                    <Box
+                  </Box>
+
+                  <Divider />
+
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 1
+                    }}
+                  >
+
+                    <CalendarMonthIcon
                       sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 1
+                        color: '#777'
+                      }}
+                    />
+
+                    <Typography
+                      sx={{
+                        color: '#777',
+                        fontSize: 14
                       }}
                     >
 
-                      <CalendarMonthIcon
-                        sx={{
-                          color: '#777'
-                        }}
-                      />
+                      Pedido activo
 
-                      <Typography
-                        sx={{
-                          color: '#777',
-                          fontSize: 14
-                        }}
-                      >
-
-                        Pedido activo
-
-                      </Typography>
-
-                    </Box>
+                    </Typography>
 
                   </Box>
 
