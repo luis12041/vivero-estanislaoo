@@ -16,23 +16,27 @@ import {
 } from '@mui/material'
 
 import DeleteIcon
-from '@mui/icons-material/Delete'
+  from '@mui/icons-material/Delete'
 
 import AddIcon
-from '@mui/icons-material/Add'
+  from '@mui/icons-material/Add'
 
 import RemoveIcon
-from '@mui/icons-material/Remove'
+  from '@mui/icons-material/Remove'
 
 import LocationOnIcon
-from '@mui/icons-material/LocationOn'
+  from '@mui/icons-material/LocationOn'
 
 import {
   useState
 } from 'react'
 
+import {
+  auth
+} from '../firebase/config'
+
 import ClientLayout
-from '../layouts/ClientLayout'
+  from '../layouts/ClientLayout'
 
 import {
   useCart
@@ -183,7 +187,14 @@ function Carrito() {
               productos:
                 carrito,
 
-              datosCliente
+              datosCliente: {
+
+                ...datosCliente,
+
+                usuario:
+                  auth.currentUser?.email || ''
+
+              }
 
             })
 

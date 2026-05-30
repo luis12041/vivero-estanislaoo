@@ -147,7 +147,7 @@ app.post(
           db.collection(
             'plantas'
           )
-          .doc(producto.id)
+            .doc(producto.id)
 
         const plantaDoc =
           await plantaRef.get()
@@ -267,6 +267,9 @@ app.post(
             notas:
               datosCliente.notas,
 
+            usuario:
+              datosCliente.usuario,
+
             productos:
               JSON.stringify(
                 productos
@@ -321,7 +324,7 @@ app.post(
 
       const sig =
         req.headers[
-          'stripe-signature'
+        'stripe-signature'
         ]
 
       const event =
@@ -386,11 +389,18 @@ app.post(
 
             productos,
 
+            usuario:
+              session.metadata
+                .usuario,
+
             total:
               Number(
                 session.metadata
                   .total
               ),
+
+            pagado:
+              true,
 
             estado:
               'Pendiente',
@@ -439,7 +449,7 @@ app.post(
             db.collection(
               'plantas'
             )
-            .doc(producto.id)
+              .doc(producto.id)
 
           const plantaDoc =
             await plantaRef.get()

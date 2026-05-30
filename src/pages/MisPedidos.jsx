@@ -28,22 +28,22 @@ import {
 } from '../firebase/config'
 
 import ClientLayout
-from '../layouts/ClientLayout'
+  from '../layouts/ClientLayout'
 
 import PendingIcon
-from '@mui/icons-material/Pending'
+  from '@mui/icons-material/Pending'
 
 import Inventory2Icon
-from '@mui/icons-material/Inventory2'
+  from '@mui/icons-material/Inventory2'
 
 import LocalShippingIcon
-from '@mui/icons-material/LocalShipping'
+  from '@mui/icons-material/LocalShipping'
 
 import DoneAllIcon
-from '@mui/icons-material/DoneAll'
+  from '@mui/icons-material/DoneAll'
 
 import PaymentsIcon
-from '@mui/icons-material/Payments'
+  from '@mui/icons-material/Payments'
 
 function MisPedidos() {
 
@@ -319,22 +319,37 @@ function MisPedidos() {
 
                   </Stack>
 
-                  <Chip
+                  <Stack
+                    direction="row"
+                    spacing={1}
+                  >
 
-                    label={
-                      pedido.estado ||
-                      'Pendiente'
-                    }
+                    <Chip
+                      label="Pagado ✅"
+                      color="success"
+                      sx={{
+                        fontWeight: 700
+                      }}
+                    />
 
-                    color={obtenerColor(
-                      pedido.estado
-                    )}
+                    <Chip
 
-                    sx={{
-                      fontWeight: 700
-                    }}
+                      label={
+                        pedido.estado ||
+                        'Pendiente'
+                      }
 
-                  />
+                      color={obtenerColor(
+                        pedido.estado
+                      )}
+
+                      sx={{
+                        fontWeight: 700
+                      }}
+
+                    />
+
+                  </Stack>
 
                 </Stack>
 
@@ -541,9 +556,23 @@ function MisPedidos() {
                   <Chip
 
                     label={
-                      obtenerMensaje(
-                        pedido.estado
-                      )
+                      pedido.estado ===
+                        'Pendiente'
+
+                        ? 'Esperando preparación'
+
+                        : pedido.estado ===
+                          'En proceso'
+
+                          ? 'Preparando pedido'
+
+                          : pedido.estado ===
+                            'En camino'
+
+                            ? 'Repartidor en camino'
+
+                            : 'Pedido entregado'
+
                     }
 
                     color={obtenerColor(

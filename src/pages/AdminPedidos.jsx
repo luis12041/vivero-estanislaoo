@@ -27,43 +27,43 @@ import {
 } from 'firebase/firestore'
 
 import SearchIcon
-from '@mui/icons-material/Search'
+  from '@mui/icons-material/Search'
 
 import LocationOnIcon
-from '@mui/icons-material/LocationOn'
+  from '@mui/icons-material/LocationOn'
 
 import NotesIcon
-from '@mui/icons-material/Notes'
+  from '@mui/icons-material/Notes'
 
 import PaymentsIcon
-from '@mui/icons-material/Payments'
+  from '@mui/icons-material/Payments'
 
 import ShoppingBagIcon
-from '@mui/icons-material/ShoppingBag'
+  from '@mui/icons-material/ShoppingBag'
 
 import CalendarMonthIcon
-from '@mui/icons-material/CalendarMonth'
+  from '@mui/icons-material/CalendarMonth'
 
 import PersonIcon
-from '@mui/icons-material/Person'
+  from '@mui/icons-material/Person'
 
 import CheckCircleIcon
-from '@mui/icons-material/CheckCircle'
+  from '@mui/icons-material/CheckCircle'
 
 import PendingIcon
-from '@mui/icons-material/Pending'
+  from '@mui/icons-material/Pending'
 
 import LocalShippingIcon
-from '@mui/icons-material/LocalShipping'
+  from '@mui/icons-material/LocalShipping'
 
 import DoneAllIcon
-from '@mui/icons-material/DoneAll'
+  from '@mui/icons-material/DoneAll'
 
 import { db }
-from '../firebase/config'
+  from '../firebase/config'
 
 import AdminLayout
-from '../layouts/AdminLayout'
+  from '../layouts/AdminLayout'
 
 function AdminPedidos() {
 
@@ -120,7 +120,8 @@ function AdminPedidos() {
       await updateDoc(
         pedidoRef,
         {
-          estado: 'Enviado'
+          estado:
+            'En proceso'
         }
       )
 
@@ -128,11 +129,43 @@ function AdminPedidos() {
 
     else if (
       pedido.estado ===
-      'Enviado'
+      'En proceso'
     ) {
 
-      await deleteDoc(
-        pedidoRef
+      await updateDoc(
+        pedidoRef,
+        {
+          estado:
+            'En camino'
+        }
+      )
+
+    }
+
+    else if (
+      pedido.estado ===
+      'En camino'
+    ) {
+
+      await updateDoc(
+        pedidoRef,
+        {
+          estado:
+            'Entregado'
+        }
+      )
+
+      setTimeout(
+        async () => {
+
+          await deleteDoc(
+            pedidoRef
+          )
+
+          cargarPedidos()
+
+        },
+        5000
       )
 
     }
@@ -161,7 +194,7 @@ function AdminPedidos() {
         filtroEstado === 'Todos'
           ? true
           : pedido.estado ===
-            filtroEstado
+          filtroEstado
 
       return (
         coincideBusqueda &&
@@ -179,7 +212,7 @@ function AdminPedidos() {
 
   const pedidosPagados =
     pedidos.filter(
-      (p) => p.estado === 'Pagado'
+      (p) => p.pagado === true
     ).length
 
   const pedidosPendientes =
@@ -417,9 +450,16 @@ function AdminPedidos() {
             <MenuItem value="Pendiente">
               Pendiente
             </MenuItem>
+            <MenuItem value="En proceso">
+              En proceso
+            </MenuItem>
 
-            <MenuItem value="Enviado">
-              Enviado
+            <MenuItem value="En camino">
+              En camino
+            </MenuItem>
+
+            <MenuItem value="Entregado">
+              Entregado
             </MenuItem>
 
           </TextField>
@@ -545,9 +585,15 @@ function AdminPedidos() {
 
                       color={
                         pedido.estado ===
-                        'Enviado'
-                          ? 'info'
-                          : 'warning'
+                          'Pendiente'
+                          ? 'warning'
+                          : pedido.estado ===
+                            'En proceso'
+                            ? 'secondary'
+                            : pedido.estado ===
+                              'En camino'
+                              ? 'info'
+                              : 'success'
                       }
 
                     />
@@ -660,65 +706,61 @@ function AdminPedidos() {
 
                   </Stack>
 
-                  <Button
+                  {
+                    pedido.estado !== 'Entregado' && (
 
-                    fullWidth
+                      <Button
 
-                    variant="contained"
+                        fullWidth
 
-                    startIcon={
+                        variant="contained"
 
-                      pedido.estado ===
-                      'Enviado'
+                        startIcon={<LocalShippingIcon />}
 
-                        ? <DoneAllIcon />
+                        onClick={() =>
+                          cambiarEstado(
+                            pedido
+                          )
+                        }
 
-                        : <LocalShippingIcon />
+                        sx={{
 
-                    }
+                          mt: 3,
 
-                    onClick={() =>
-                      cambiarEstado(
-                        pedido
-                      )
-                    }
+                          borderRadius: 3,
 
-                    sx={{
+                          py: 1.2,
 
-                      mt: 3,
+                          fontWeight: 700,
 
-                      borderRadius: 3,
+                          background: '#1b5e20'
 
-                      py: 1.2,
+                        }}
 
-                      fontWeight: 700,
+                      >
 
-                      background:
+                        {
+                          pedido.estado ===
+                            'Pendiente'
 
-                        pedido.estado ===
-                        'Enviado'
+                            ? 'Pasar a proceso'
 
-                          ? '#43a047'
+                            : pedido.estado ===
+                              'En proceso'
 
-                          : '#1b5e20'
+                              ? 'Marcar en camino'
 
-                    }}
+                              : pedido.estado ===
+                                'En camino'
 
-                  >
+                                ? 'Marcar entregado'
 
-                    {
+                                : 'Entregado'
+                        }
 
-                      pedido.estado ===
-                      'Enviado'
-
-                        ? 'Marcar entregado'
-
-                        : 'Marcar enviado'
-
-                    }
-
-                  </Button>
-
+                      </Button>
+                    )
+                  }
                   <Stack
                     direction="row"
                     spacing={1}
@@ -741,9 +783,7 @@ function AdminPedidos() {
                         fontSize: 12
                       }}
                     >
-
-                      Pedido activo
-
+                      {pedido.fechaBonita || 'Pedido activo'}
                     </Typography>
 
                   </Stack>
