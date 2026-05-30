@@ -229,6 +229,21 @@ app.post(
           })
         )
 
+      const folio =
+
+        `PED-${Date.now()}`
+
+      await db
+        .collection(
+          'pedidos_temporales'
+        )
+        .doc(folio)
+        .set({
+
+          productos
+
+        })
+
       const session =
 
         await stripe.checkout.sessions.create({
@@ -248,6 +263,9 @@ app.post(
             'https://vivero-estanislaoo.web.app/carrito',
 
           metadata: {
+
+            folio:
+              folio,
 
             nombre:
               datosCliente.nombre,
@@ -271,9 +289,7 @@ app.post(
               datosCliente.usuario,
 
             productos:
-              JSON.stringify(
-                productos
-              ),
+              'pedido_guardado_firestore',
 
             total:
               total.toString()
@@ -347,11 +363,21 @@ app.post(
         const session =
           event.data.object
 
+        const pedidoTemporal =
+          await db
+            .collection(
+              'pedidos_temporales'
+            )
+            .doc(
+              session.metadata
+                .folio
+            )
+            .get()
+
         const productos =
-          JSON.parse(
-            session.metadata
-              .productos
-          )
+          pedidoTemporal
+            .data()
+            .productos
 
         /* =========================
         GUARDAR PEDIDO
@@ -406,11 +432,8 @@ app.post(
               'Pendiente',
 
             folio:
-              `PED-${Math.floor(
-                Math.random() *
-                9000 +
-                1000
-              )}`,
+              session.metadata
+                .folio,
 
             fecha:
               new Date(),
@@ -494,6 +517,20 @@ app.post(
 
         }
 
+        /* =========================
+        ELIMINAR TEMPORAL
+        ========================= */
+
+        await db
+          .collection(
+            'pedidos_temporales'
+          )
+          .doc(
+            session.metadata
+              .folio
+          )
+          .delete()
+
       }
 
       res.sendStatus(200)
@@ -513,20 +550,3 @@ app.post(
   }
 
 )
-
-/* =========================
-PUERTO
-========================= */
-
-const PORT =
-  process.env.PORT || 3000
-
-app.listen(PORT, () => {
-
-  console.log(
-
-    `🔥 Servidor corriendo en puerto ${PORT}`
-
-  )
-
-})
