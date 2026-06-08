@@ -15,6 +15,7 @@ import DashboardIcon from '@mui/icons-material/Dashboard'
 import GrassIcon from '@mui/icons-material/Grass'
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag'
 import GroupIcon from '@mui/icons-material/Group'
+import AnalyticsIcon from '@mui/icons-material/Analytics'
 import MenuIcon from '@mui/icons-material/Menu'
 import LogoutIcon from '@mui/icons-material/Logout'
 
@@ -65,6 +66,12 @@ function AdminLayout({ children }) {
     },
 
     {
+      text: 'Reportes',
+      icon: <AnalyticsIcon />,
+      path: '/admin-reportes'
+    },
+
+    {
       text: 'Pedidos',
       icon: <ShoppingBagIcon />,
       path: '/admin-pedidos'
@@ -74,7 +81,7 @@ function AdminLayout({ children }) {
       text: 'Usuarios',
       icon: <GroupIcon />,
       path: '/admin-usuarios'
-    }
+    },
 
   ]
 

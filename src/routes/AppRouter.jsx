@@ -15,10 +15,16 @@ import AdminRoute from './AdminRoute'
 import MisPedidos from '../pages/MisPedidos'
 
 import AdminPedidos
-from '../pages/AdminPedidos'
+  from '../pages/AdminPedidos'
 
 import AdminUsuarios
-from '../pages/AdminUsuarios'
+  from '../pages/AdminUsuarios'
+
+import AdminReportes
+  from '../pages/AdminReportes'
+
+import AdminReportes
+  from '../pages/AdminReportes'
 
 function AppRouter() {
 
@@ -33,6 +39,16 @@ function AppRouter() {
           element={
             <Navigate to="/login" />
           }
+        />
+
+        <Route
+          path="/admin-reportes"
+          element={
+            <AdminRoute>
+              <AdminReportes />
+            </AdminRoute>
+          }
+        
         />
 
         <Route
