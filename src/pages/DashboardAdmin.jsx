@@ -38,9 +38,6 @@ import PeopleIcon
 import PaymentsIcon
   from '@mui/icons-material/Payments'
 
-import WarningAmberIcon
-  from '@mui/icons-material/WarningAmber'
-
 import TrendingUpIcon
   from '@mui/icons-material/TrendingUp'
 
@@ -61,10 +58,6 @@ function DashboardAdmin() {
   const [ventas,
     setVentas] =
     useState(0)
-
-  const [agotados,
-    setAgotados] =
-    useState([])
 
   const [ultimosPedidos,
     setUltimosPedidos] =
@@ -155,133 +148,7 @@ function DashboardAdmin() {
 
         )
 
-      setPedidosEntregados(
-        historial.length
-      )
-
-      const conteoPlantas = {}
-
-      const conteoLuz = {}
-
-      historial.forEach(
-        (pedido) => {
-
-          pedido.productos?.forEach(
-            (producto) => {
-
-              conteoPlantas[
-                producto.nombre
-              ] =
-
-                (
-                  conteoPlantas[
-                  producto.nombre
-                  ] || 0
-                )
-
-                +
-
-                producto.cantidad
-
-              conteoLuz[
-                producto.tipoLuz
-              ] =
-
-                (
-                  conteoLuz[
-                  producto.tipoLuz
-                  ] || 0
-                )
-
-                +
-
-                producto.cantidad
-
-            }
-          )
-
-        }
-      )
-
-      const plantaTop =
-
-        Object.keys(
-          conteoPlantas
-        ).length > 0
-
-          ?
-
-          Object.keys(
-            conteoPlantas
-          ).reduce(
-
-            (a, b) =>
-
-              conteoPlantas[a] >
-                conteoPlantas[b]
-
-                ? a
-
-                : b
-
-          )
-
-          :
-
-          'Ninguna'
-
-      const luzTop =
-
-        Object.keys(
-          conteoLuz
-        ).length > 0
-
-          ?
-
-          Object.keys(
-            conteoLuz
-          ).reduce(
-
-            (a, b) =>
-
-              conteoLuz[a] >
-                conteoLuz[b]
-
-                ? a
-
-                : b
-
-          )
-
-          :
-
-          'Ninguno'
-
-      setPlantaMasVendida(
-        plantaTop
-      )
-
-      setTipoLuzMasVendido(
-        luzTop
-      )
-
-
-
       setVentas(totalVentas)
-
-      const productosAgotados =
-
-        plantas.filter(
-
-          (planta) =>
-
-            planta.stock <= 30
-
-        )
-
-      setAgotados(
-        productosAgotados
-      )
 
       setUltimosPedidos(
         pedidos.slice(-5).reverse()
@@ -506,7 +373,6 @@ function DashboardAdmin() {
         <Grid
           item
           xs={12}
-          md={8}
         >
 
           <Card
@@ -555,195 +421,128 @@ function DashboardAdmin() {
 
             <Stack spacing={2}>
 
-              {ultimosPedidos.map(
-                (pedido) => (
+              {ultimosPedidos.length === 0 ? (
 
-                  <Box
-                    key={pedido.id}
+                <Box
+                  sx={{
+                    py: 6,
+                    textAlign: 'center'
+                  }}
+                >
+
+                  <ShoppingBagIcon
+                    sx={{
+                      fontSize: 70,
+                      color: '#c8e6c9',
+                      mb: 2
+                    }}
+                  />
+
+                  <Typography
+                    sx={{
+                      fontWeight: 700,
+                      fontSize: 22
+                    }}
                   >
+                    Aún no hay pedidos registrados
+                  </Typography>
 
-                    <Stack
-                      direction="row"
-                      justifyContent="space-between"
-                      alignItems="center"
-                      flexWrap="wrap"
-                      gap={1}
+                  <Typography
+                    sx={{
+                      color: '#777',
+                      mt: 1
+                    }}
+                  >
+                    Los pedidos aparecerán aquí cuando
+                    los clientes realicen compras.
+                  </Typography>
+
+                </Box>
+
+              ) : (
+
+                ultimosPedidos.map(
+                  (pedido) => (
+
+                    <Box
+                      key={pedido.id}
                     >
 
-                      <Box>
+                      <Stack
+                        direction="row"
+                        justifyContent="space-between"
+                        alignItems="center"
+                        flexWrap="wrap"
+                        gap={1}
+                      >
 
-                        <Typography
-                          sx={{
-                            fontWeight: 700
-                          }}
-                        >
+                        <Box>
 
-                          {
-                            pedido.folio
+                          <Typography
+                            sx={{
+                              fontWeight: 700
+                            }}
+                          >
+
+                            {pedido.folio}
+
+                          </Typography>
+
+                          <Typography
+                            sx={{
+                              color: '#777',
+                              fontSize: 14
+                            }}
+                          >
+
+                            {pedido.nombre}
+
+                          </Typography>
+
+                        </Box>
+
+                        <Chip
+
+                          label={
+                            pedido.estado
                           }
 
-                        </Typography>
-
-                        <Typography
-                          sx={{
-                            color: '#777',
-                            fontSize: 14
-                          }}
-                        >
-
-                          {
-                            pedido.nombre
-                          }
-
-                        </Typography>
-
-                      </Box>
-
-                      <Chip
-
-                        label={
-                          pedido.estado
-                        }
-
-                        color={
-
-                          pedido.estado ===
-                            'En camino'
-
-                            ? 'info'
-
-                            :
+                          color={
 
                             pedido.estado ===
-                              'En proceso'
+                              'En camino'
 
-                              ? 'secondary'
+                              ? 'info'
 
                               :
 
                               pedido.estado ===
-                                'Entregado'
+                                'En proceso'
 
-                                ? 'success'
+                                ? 'secondary'
 
                                 :
 
-                                'warning'
+                                pedido.estado ===
+                                  'Entregado'
 
-                        }
+                                  ? 'success'
 
+                                  :
+
+                                  'warning'
+
+                          }
+
+                        />
+
+                      </Stack>
+
+                      <Divider
+                        sx={{
+                          mt: 2
+                        }}
                       />
-
-                    </Stack>
-
-                    <Divider
-                      sx={{
-                        mt: 2
-                      }}
-                    />
-
-                  </Box>
-
-                )
-              )}
-
-            </Stack>
-
-          </Card>
-
-        </Grid>
-
-        <Grid
-          item
-          xs={12}
-          md={4}
-        >
-
-          <Card
-            sx={{
-
-              p: 3,
-
-              borderRadius: 4,
-
-              background:
-                'linear-gradient(135deg,#1b5e20,#43a047)',
-
-              color: 'white',
-
-              boxShadow:
-                '0 10px 24px rgba(0,0,0,0.12)'
-
-            }}
-          >
-
-            <Stack
-              direction="row"
-              spacing={1}
-              alignItems="center"
-              sx={{
-                mb: 3
-              }}
-            >
-
-              <WarningAmberIcon />
-
-              <Typography
-                sx={{
-                  fontWeight: 800,
-                  fontSize: 22
-                }}
-              >
-
-                Alertas
-
-              </Typography>
-
-            </Stack>
-
-            <Stack spacing={2}>
-
-              {agotados.length === 0 ? (
-
-                <Typography>
-
-                  Todo el stock
-                  está correcto 😎🔥
-
-                </Typography>
-
-              ) : (
-
-                agotados.map(
-                  (planta) => (
-
-                    <Box
-                      key={planta.id}
-                    >
-
-                      <Typography
-                        sx={{
-                          fontWeight: 700
-                        }}
-                      >
-
-                        ⚠️ {
-                          planta.nombre
-                        }
-
-                      </Typography>
-
-                      <Typography
-                        sx={{
-                          opacity: 0.8,
-                          fontSize: 14
-                        }}
-                      >
-
-                        Stock:
-                        {planta.stock}
-
-                      </Typography>
 
                     </Box>
 
