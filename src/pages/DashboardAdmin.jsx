@@ -62,18 +62,6 @@ function DashboardAdmin() {
     setVentas] =
     useState(0)
 
-  const [plantaMasVendida,
-    setPlantaMasVendida] =
-    useState('Ninguna')
-
-  const [tipoLuzMasVendido,
-    setTipoLuzMasVendido] =
-    useState('Ninguno')
-
-  const [pedidosEntregados,
-    setPedidosEntregados] =
-    useState(0)
-
   const [agotados,
     setAgotados] =
     useState([])
@@ -359,56 +347,7 @@ function DashboardAdmin() {
 
     }
     ,
-    {
-
-      titulo:
-        'Entregados',
-
-      valor:
-        pedidosEntregados,
-
-      icono:
-        <ShoppingBagIcon />,
-
-      color:
-        '#2e7d32'
-
-    },
-
-    {
-
-      titulo:
-        'Top Planta',
-
-      valor:
-        plantaMasVendida,
-
-      icono:
-        <Inventory2Icon />,
-
-      color:
-        '#00897b'
-
-    },
-
-    {
-
-      titulo:
-        'Tipo Luz',
-
-      valor:
-        tipoLuzMasVendido,
-
-      icono:
-        <WarningAmberIcon />,
-
-      color:
-        '#f9a825'
-
-    }
-
   ]
-
 
 
   return (
