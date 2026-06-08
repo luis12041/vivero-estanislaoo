@@ -251,15 +251,33 @@ function AdminPlantas() {
 
       for (const planta of inventario) {
 
-        await addDoc(
-          collection(db, 'plantas'),
-          {
-            ...planta,
-            disponible: true,
-            casiAgotado:
-              planta.stock <= 30
-          }
-        )
+        try {
+
+          await addDoc(
+            collection(db, 'plantas'),
+            {
+              ...planta,
+              disponible: true,
+              casiAgotado:
+                planta.stock <= 30
+            }
+          )
+
+          console.log(
+            '✅',
+            planta.nombre
+          )
+
+        } catch (error) {
+
+          console.log(
+            '❌ ERROR EN:',
+            planta.nombre
+          )
+
+          console.log(error)
+
+        }
 
       }
 
