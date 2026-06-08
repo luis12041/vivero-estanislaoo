@@ -21,19 +21,23 @@ import {
 } from '@mui/material'
 
 import DeleteIcon
-from '@mui/icons-material/Delete'
+  from '@mui/icons-material/Delete'
 
 import AddIcon
-from '@mui/icons-material/Add'
+  from '@mui/icons-material/Add'
 
 import Inventory2Icon
-from '@mui/icons-material/Inventory2'
+  from '@mui/icons-material/Inventory2'
 
 import WarningAmberIcon
-from '@mui/icons-material/WarningAmber'
+  from '@mui/icons-material/WarningAmber'
 
 import CheckCircleIcon
-from '@mui/icons-material/CheckCircle'
+  from '@mui/icons-material/CheckCircle'
+
+import {
+  inventario
+} from '../data/inventario'
 
 import {
   useEffect,
@@ -233,6 +237,44 @@ function AdminPlantas() {
 
   }
 
+  async function importarInventario() {
+
+    if (
+      !window.confirm(
+        '¿Importar todo el inventario?'
+      )
+    ) return
+
+    try {
+
+      for (const planta of inventario) {
+
+        await addDoc(
+          collection(db, 'plantas'),
+          {
+            ...planta,
+            disponible: true,
+            casiAgotado:
+              planta.stock <= 30
+          }
+        )
+
+      }
+
+      alert(
+        'Inventario cargado 🌱'
+      )
+
+      cargarPlantas()
+
+    } catch (error) {
+
+      console.log(error)
+
+    }
+
+  }
+
   return (
 
     <AdminLayout>
@@ -281,34 +323,50 @@ function AdminPlantas() {
 
           </Box>
 
-          <Button
-            variant="contained"
-            startIcon={<AddIcon />}
-            onClick={() =>
-              setOpenModal(true)
-            }
-            sx={{
-
-              borderRadius: 4,
-
-              py: 1.5,
-
-              px: 3,
-
-              backgroundColor:
-                '#2e7d32',
-
-              fontWeight: 700,
-
-              boxShadow:
-                '0 10px 20px rgba(46,125,50,0.25)'
-
-            }}
+          <Stack
+            direction="row"
+            spacing={2}
           >
 
-            Agregar Planta
+            <Button
+              variant="contained"
+              startIcon={<AddIcon />}
+              onClick={() =>
+                setOpenModal(true)
+              }
+              sx={{
+                borderRadius: 4,
+                py: 1.5,
+                px: 3,
+                backgroundColor:
+                  '#2e7d32',
+                fontWeight: 700,
+                boxShadow:
+                  '0 10px 20px rgba(46,125,50,0.25)'
+              }}
+            >
 
-          </Button>
+              Agregar Planta
+
+            </Button>
+
+            <Button
+              variant="outlined"
+              onClick={
+                importarInventario
+              }
+              sx={{
+                borderRadius: 4,
+                py: 1.5,
+                px: 3
+              }}
+            >
+
+              Importar Inventario
+
+            </Button>
+
+          </Stack>
 
         </Stack>
 
@@ -713,7 +771,6 @@ function AdminPlantas() {
               )}
 
             </Button>
-
           </Stack>
 
         </DialogContent>
