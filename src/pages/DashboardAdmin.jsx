@@ -24,25 +24,25 @@ import {
 } from '../firebase/config'
 
 import AdminLayout
-from '../layouts/AdminLayout'
+  from '../layouts/AdminLayout'
 
 import Inventory2Icon
-from '@mui/icons-material/Inventory2'
+  from '@mui/icons-material/Inventory2'
 
 import ShoppingBagIcon
-from '@mui/icons-material/ShoppingBag'
+  from '@mui/icons-material/ShoppingBag'
 
 import PeopleIcon
-from '@mui/icons-material/People'
+  from '@mui/icons-material/People'
 
 import PaymentsIcon
-from '@mui/icons-material/Payments'
+  from '@mui/icons-material/Payments'
 
 import WarningAmberIcon
-from '@mui/icons-material/WarningAmber'
+  from '@mui/icons-material/WarningAmber'
 
 import TrendingUpIcon
-from '@mui/icons-material/TrendingUp'
+  from '@mui/icons-material/TrendingUp'
 
 function DashboardAdmin() {
 
@@ -60,6 +60,18 @@ function DashboardAdmin() {
 
   const [ventas,
     setVentas] =
+    useState(0)
+
+  const [plantaMasVendida,
+    setPlantaMasVendida] =
+    useState('Ninguna')
+
+  const [tipoLuzMasVendido,
+    setTipoLuzMasVendido] =
+    useState('Ninguno')
+
+  const [pedidosEntregados,
+    setPedidosEntregados] =
     useState(0)
 
   const [agotados,
@@ -90,6 +102,14 @@ function DashboardAdmin() {
           )
         )
 
+      const historialSnapshot =
+        await getDocs(
+          collection(
+            db,
+            'historial_pedidos'
+          )
+        )
+
       const usuariosSnapshot =
         await getDocs(
           collection(
@@ -114,6 +134,14 @@ function DashboardAdmin() {
           })
         )
 
+      const historial =
+        historialSnapshot.docs.map(
+          (doc) => ({
+            id: doc.id,
+            ...doc.data()
+          })
+        )
+
       setTotalPlantas(
         plantas.length
       )
@@ -128,7 +156,7 @@ function DashboardAdmin() {
 
       const totalVentas =
 
-        pedidos.reduce(
+        historial.reduce(
 
           (acc, pedido) =>
 
@@ -138,6 +166,118 @@ function DashboardAdmin() {
           0
 
         )
+
+      setPedidosEntregados(
+        historial.length
+      )
+
+      const conteoPlantas = {}
+
+      const conteoLuz = {}
+
+      historial.forEach(
+        (pedido) => {
+
+          pedido.productos?.forEach(
+            (producto) => {
+
+              conteoPlantas[
+                producto.nombre
+              ] =
+
+                (
+                  conteoPlantas[
+                  producto.nombre
+                  ] || 0
+                )
+
+                +
+
+                producto.cantidad
+
+              conteoLuz[
+                producto.tipoLuz
+              ] =
+
+                (
+                  conteoLuz[
+                  producto.tipoLuz
+                  ] || 0
+                )
+
+                +
+
+                producto.cantidad
+
+            }
+          )
+
+        }
+      )
+
+      const plantaTop =
+
+        Object.keys(
+          conteoPlantas
+        ).length > 0
+
+          ?
+
+          Object.keys(
+            conteoPlantas
+          ).reduce(
+
+            (a, b) =>
+
+              conteoPlantas[a] >
+                conteoPlantas[b]
+
+                ? a
+
+                : b
+
+          )
+
+          :
+
+          'Ninguna'
+
+      const luzTop =
+
+        Object.keys(
+          conteoLuz
+        ).length > 0
+
+          ?
+
+          Object.keys(
+            conteoLuz
+          ).reduce(
+
+            (a, b) =>
+
+              conteoLuz[a] >
+                conteoLuz[b]
+
+                ? a
+
+                : b
+
+          )
+
+          :
+
+          'Ninguno'
+
+      setPlantaMasVendida(
+        plantaTop
+      )
+
+      setTipoLuzMasVendido(
+        luzTop
+      )
+
+
 
       setVentas(totalVentas)
 
@@ -218,8 +358,58 @@ function DashboardAdmin() {
       color: '#8e24aa'
 
     }
+    ,
+    {
+
+      titulo:
+        'Entregados',
+
+      valor:
+        pedidosEntregados,
+
+      icono:
+        <ShoppingBagIcon />,
+
+      color:
+        '#2e7d32'
+
+    },
+
+    {
+
+      titulo:
+        'Top Planta',
+
+      valor:
+        plantaMasVendida,
+
+      icono:
+        <Inventory2Icon />,
+
+      color:
+        '#00897b'
+
+    },
+
+    {
+
+      titulo:
+        'Tipo Luz',
+
+      valor:
+        tipoLuzMasVendido,
+
+      icono:
+        <WarningAmberIcon />,
+
+      color:
+        '#f9a825'
+
+    }
 
   ]
+
+
 
   return (
 
@@ -479,27 +669,27 @@ function DashboardAdmin() {
                         color={
 
                           pedido.estado ===
-                          'En camino'
+                            'En camino'
 
                             ? 'info'
 
                             :
 
-                          pedido.estado ===
-                          'En proceso'
+                            pedido.estado ===
+                              'En proceso'
 
-                            ? 'secondary'
+                              ? 'secondary'
 
-                            :
+                              :
 
-                          pedido.estado ===
-                          'Entregado'
+                              pedido.estado ===
+                                'Entregado'
 
-                            ? 'success'
+                                ? 'success'
 
-                            :
+                                :
 
-                            'warning'
+                                'warning'
 
                         }
 
