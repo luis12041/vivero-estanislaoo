@@ -20,10 +20,11 @@ import {
 
 import {
   collection,
-  getDocs,
+  onSnapshot,
   doc,
   updateDoc,
-  deleteDoc
+  deleteDoc,
+  addDoc
 } from 'firebase/firestore'
 
 import SearchIcon
@@ -56,9 +57,6 @@ import PendingIcon
 import LocalShippingIcon
   from '@mui/icons-material/LocalShipping'
 
-import DoneAllIcon
-  from '@mui/icons-material/DoneAll'
-
 import { db }
   from '../firebase/config'
 
@@ -80,26 +78,31 @@ function AdminPedidos() {
 
   useEffect(() => {
 
-    cargarPedidos()
+    const unsubscribe =
+      onSnapshot(
 
-  }, [])
+        collection(
+          db,
+          'pedidos'
+        ),
 
-  async function cargarPedidos() {
+        (snapshot) => {
 
-    const snapshot =
-      await getDocs(
-        collection(db, 'pedidos')
+          const data =
+            snapshot.docs.map((doc) => ({
+              id: doc.id,
+              ...doc.data()
+            }))
+
+          setPedidos(data)
+
+        }
+
       )
 
-    const data =
-      snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data()
-      }))
+    return () => unsubscribe()
 
-    setPedidos(data)
-
-  }
+  }, [])
 
   async function cambiarEstado(
     pedido
@@ -147,30 +150,34 @@ function AdminPedidos() {
       'En camino'
     ) {
 
-      await updateDoc(
-        pedidoRef,
+      await addDoc(
+
+        collection(
+          db,
+          'historial_pedidos'
+        ),
+
         {
+
+          ...pedido,
+
           estado:
-            'Entregado'
+            'Entregado',
+
+          fechaEntrega:
+            new Date()
+
         }
+
       )
 
-      setTimeout(
-        async () => {
-
-          await deleteDoc(
-            pedidoRef
-          )
-
-          cargarPedidos()
-
-        },
-        5000
+      await deleteDoc(
+        pedidoRef
       )
 
     }
 
-    cargarPedidos()
+
 
   }
 
@@ -660,6 +667,35 @@ function AdminPedidos() {
                     </Stack>
 
                   </Stack>
+
+                  {
+                    pedido.ubicacion && (
+
+                      <Button
+
+                        href={pedido.ubicacion}
+
+                        target="_blank"
+
+                        variant="outlined"
+
+                        startIcon={
+                          <LocationOnIcon />
+                        }
+
+                        sx={{
+                          mt: 1,
+                          borderRadius: 3
+                        }}
+
+                      >
+
+                        Ver ubicación
+
+                      </Button>
+
+                    )
+                  }
 
                   <Divider
                     sx={{
