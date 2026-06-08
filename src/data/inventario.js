@@ -170,7 +170,7 @@ export const inventario = [
         imagen: 'https://i.pinimg.com/736x/10/31/ec/1031eceecd573d95396d97e9da780630.jpg'
     },
 
-    ,
+    
     {
         nombre: 'Cedro Limón',
         precio: 40,
@@ -381,7 +381,7 @@ export const inventario = [
         imagen: 'https://tse1.explicit.bing.net/th/id/OIP.0mn8oSbopvGh2_kpimfEVgHaJ4?rs=1&pid=ImgDetMain&o=7&rm=3'
     },
 
-    ,
+    
     {
         nombre: 'Helecho Boston Colgante',
         precio: 90,
