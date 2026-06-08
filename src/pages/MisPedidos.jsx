@@ -19,7 +19,7 @@ import {
 
 import {
   collection,
-  getDocs
+  onSnapshot
 } from 'firebase/firestore'
 
 import {
@@ -53,38 +53,40 @@ function MisPedidos() {
 
   useEffect(() => {
 
-    async function cargarPedidos() {
+    const usuario =
+      auth.currentUser
 
-      const usuario =
-        auth.currentUser
+    if (!usuario) return
 
-      if (!usuario) return
+    const unsubscribe =
+      onSnapshot(
 
-      const snapshot =
-        await getDocs(
-          collection(
-            db,
-            'pedidos'
-          )
-        )
+        collection(
+          db,
+          'pedidos'
+        ),
 
-      const data =
-        snapshot.docs
-          .map((doc) => ({
-            id: doc.id,
-            ...doc.data()
-          }))
-          .filter(
-            (pedido) =>
-              pedido.usuario ===
-              usuario.email
-          )
+        (snapshot) => {
 
-      setPedidos(data)
+          const data =
+            snapshot.docs
+              .map((doc) => ({
+                id: doc.id,
+                ...doc.data()
+              }))
+              .filter(
+                (pedido) =>
+                  pedido.usuario ===
+                  usuario.email
+              )
 
-    }
+          setPedidos(data)
 
-    cargarPedidos()
+        }
+
+      )
+
+    return () => unsubscribe()
 
   }, [])
 
