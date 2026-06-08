@@ -239,6 +239,8 @@ function AdminPlantas() {
 
   async function importarInventario() {
 
+    console.log(inventario.length)
+
     if (
       !window.confirm(
         '¿Importar todo el inventario?'
