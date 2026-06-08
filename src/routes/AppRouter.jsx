@@ -23,9 +23,6 @@ import AdminUsuarios
 import AdminReportes
   from '../pages/AdminReportes'
 
-import AdminReportes
-  from '../pages/AdminReportes'
-
 function AppRouter() {
 
   return (
