@@ -13,7 +13,7 @@ import {
 } from '@mui/material'
 
 import CloseIcon
-from '@mui/icons-material/Close'
+  from '@mui/icons-material/Close'
 
 import {
   useState
@@ -29,7 +29,8 @@ function PlantCard({
   tipoLuz,
   riego,
   disponible,
-  descripcion
+  descripcion,
+  stock
 }) {
 
   const { agregarAlCarrito } =
@@ -55,7 +56,9 @@ function PlantCard({
 
     disponible,
 
-    descripcion
+    descripcion,
+
+    stock
 
   }
 
@@ -176,25 +179,33 @@ function PlantCard({
 
             <Typography
               sx={{
-
-                mb: 2,
-
-                fontWeight: 600,
-
-                color:
-                  disponible
-                    ? '#2e7d32'
-                    : '#d32f2f'
-
+                mb: 1,
+                fontWeight: 700
               }}
             >
 
-              {disponible
-                ? 'Disponible'
-                : 'Sin stock'}
+              Stock disponible:
+              {' '}
+              {stock || 0}
 
             </Typography>
 
+            <Typography
+              sx={{
+                mb: 2,
+                fontWeight: 600,
+                color:
+                  stock > 0
+                    ? '#2e7d32'
+                    : '#d32f2f'
+              }}
+            >
+
+              {stock > 0
+                ? 'Disponible'
+                : 'Agotado'}
+
+            </Typography>
           </Box>
 
           <Stack spacing={2}>
@@ -217,7 +228,7 @@ function PlantCard({
             <Button
               variant="contained"
               fullWidth
-              disabled={!disponible}
+              disabled={stock <= 0}
               onClick={() =>
                 agregarAlCarrito(
                   producto
@@ -228,9 +239,9 @@ function PlantCard({
               }}
             >
 
-              {disponible
+              {stock > 0
                 ? 'Agregar al carrito'
-                : 'Sin stock'}
+                : 'Agotado'}
 
             </Button>
 
@@ -380,12 +391,12 @@ function PlantCard({
 
                 <Chip
                   label={
-                    disponible
+                    stock > 0
                       ? 'Disponible'
-                      : 'Sin stock'
+                      : 'Agotado'
                   }
                   color={
-                    disponible
+                    stock > 0
                       ? 'success'
                       : 'error'
                   }
@@ -414,7 +425,7 @@ function PlantCard({
                 variant="contained"
                 size="large"
                 fullWidth
-                disabled={!disponible}
+                disabled={stock <= 0}
                 onClick={() =>
                   agregarAlCarrito(
                     producto
@@ -436,9 +447,9 @@ function PlantCard({
                 }}
               >
 
-                {disponible
+                {stock > 0
                   ? 'Agregar al carrito'
-                  : 'No disponible'}
+                  : 'Agotado'}
 
               </Button>
 

@@ -36,13 +36,32 @@ export function CartProvider({ children }) {
 
     if (existe) {
 
+      if (
+        existe.cantidad >=
+        producto.stock
+      ) {
+
+        alert(
+          `Solo hay ${producto.stock} unidades disponibles`
+        )
+
+        return
+
+      }
+
       const nuevoCarrito = carrito.map((item) => {
 
-        if (item.nombre === producto.nombre) {
+        if (
+          item.nombre === producto.nombre
+        ) {
 
           return {
+
             ...item,
-            cantidad: item.cantidad + 1
+
+            cantidad:
+              item.cantidad + 1
+
           }
 
         }
@@ -54,6 +73,18 @@ export function CartProvider({ children }) {
       setCarrito(nuevoCarrito)
 
     } else {
+
+      if (
+        producto.stock <= 0
+      ) {
+
+        alert(
+          'Producto agotado'
+        )
+
+        return
+
+      }
 
       setCarrito((prev) => [
 
@@ -69,76 +100,34 @@ export function CartProvider({ children }) {
     }
 
   }
-
   const aumentarCantidad = (nombre) => {
 
-    const nuevoCarrito = carrito.map((item) => {
-
-      if (item.nombre === nombre) {
-
-        return {
-          ...item,
-          cantidad: item.cantidad + 1
-        }
-
-      }
-
-      return item
-
-    })
-
-    setCarrito(nuevoCarrito)
-
-  }
-
-  const disminuirCantidad = (nombre) => {
-
-    const nuevoCarrito = carrito
-      .map((item) => {
-
-        if (item.nombre === nombre) {
-
-          return {
-            ...item,
-            cantidad: item.cantidad - 1
-          }
-
-        }
-
-        return item
-
-      })
-      .filter((item) => item.cantidad > 0)
-
-    setCarrito(nuevoCarrito)
-
-  }
-
-  const actualizarCantidad = (
-    nombre,
-    cantidad
-  ) => {
-
-    if (
-      cantidad < 1
-    ) {
-
-      return
-
-    }
-
-    const nuevoCarrito =
-      carrito.map((item) => {
+    const nuevoCarrito = carrito.map(
+      (item) => {
 
         if (
           item.nombre === nombre
         ) {
 
+          if (
+            item.cantidad >=
+            item.stock
+          ) {
+
+            alert(
+              `Solo hay ${item.stock} unidades disponibles`
+            )
+
+            return item
+
+          }
+
           return {
 
             ...item,
 
-            cantidad
+            cantidad:
+              item.cantidad + 1
 
           }
 
@@ -146,7 +135,8 @@ export function CartProvider({ children }) {
 
         return item
 
-      })
+      }
+    )
 
     setCarrito(
       nuevoCarrito

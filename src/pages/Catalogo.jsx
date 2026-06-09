@@ -14,16 +14,16 @@ import {
 } from '@mui/material'
 
 import Inventory2Icon
-from '@mui/icons-material/Inventory2'
+  from '@mui/icons-material/Inventory2'
 
 import WarningAmberIcon
-from '@mui/icons-material/WarningAmber'
+  from '@mui/icons-material/WarningAmber'
 
 import ErrorIcon
-from '@mui/icons-material/Error'
+  from '@mui/icons-material/Error'
 
 import CheckCircleIcon
-from '@mui/icons-material/CheckCircle'
+  from '@mui/icons-material/CheckCircle'
 
 import {
   useEffect,
@@ -79,7 +79,7 @@ function Catalogo() {
         filtroLuz === 'Todas'
           ? true
           : planta.tipoLuz ===
-            filtroLuz
+          filtroLuz
 
       const coincideBusqueda =
 
@@ -378,27 +378,14 @@ function Catalogo() {
 
                   <PlantCard
                     id={planta.id}
-                    nombre={
-                      planta.nombre
-                    }
-                    precio={
-                      planta.precio
-                    }
-                    imagen={
-                      planta.imagen
-                    }
-                    tipoLuz={
-                      planta.tipoLuz
-                    }
-                    riego={
-                      planta.riego
-                    }
-                    disponible={
-                      planta.disponible
-                    }
-                    descripcion={
-                      planta.descripcion
-                    }
+                    nombre={planta.nombre}
+                    precio={planta.precio}
+                    imagen={planta.imagen}
+                    tipoLuz={planta.tipoLuz}
+                    riego={planta.riego}
+                    disponible={planta.disponible}
+                    descripcion={planta.descripcion}
+                    stock={planta.stock}
                   />
 
                   <Box
@@ -505,7 +492,7 @@ function Catalogo() {
       {!loading
         &&
         plantasFiltradas.length ===
-          0 && (
+        0 && (
 
           <Typography
             variant="h5"
