@@ -81,6 +81,18 @@ function AdminReportes() {
         setLuzGrafica] =
         useState([])
 
+    const [ventasHoy, setVentasHoy] = useState(0)
+
+    const [pedidosHoy, setPedidosHoy] = useState(0)
+
+    const [ventasSemana, setVentasSemana] = useState(0)
+
+    const [pedidosSemana, setPedidosSemana] = useState(0)
+
+    const [ventasMes, setVentasMes] = useState(0)
+
+    const [pedidosMes, setPedidosMes] = useState(0)
+
     useEffect(() => {
 
         async function cargarReportes() {
@@ -100,6 +112,100 @@ function AdminReportes() {
                         ...doc.data()
                     })
                 )
+
+            const hoy = new Date()
+
+            const inicioHoy = new Date(
+                hoy.getFullYear(),
+                hoy.getMonth(),
+                hoy.getDate()
+            )
+
+            const hace7Dias = new Date()
+
+            hace7Dias.setDate(
+                hoy.getDate() - 7
+            )
+
+            const mesActual =
+                hoy.getMonth()
+
+            const anioActual =
+                hoy.getFullYear()
+
+            const pedidosHoyArray =
+                historial.filter(
+                    pedido =>
+                        pedido.fechaEntrega &&
+                        pedido.fechaEntrega.toDate() >= inicioHoy
+                )
+
+            const pedidosSemanaArray =
+                historial.filter(
+                    pedido =>
+                        pedido.fechaEntrega &&
+                        pedido.fechaEntrega.toDate() >= hace7Dias
+                )
+
+            const pedidosMesArray =
+                historial.filter(
+                    pedido => {
+
+                        if (!pedido.fechaEntrega)
+                            return false
+
+                        const fecha =
+                            pedido.fechaEntrega.toDate()
+
+                        return (
+                            fecha.getMonth() === mesActual &&
+                            fecha.getFullYear() === anioActual
+                        )
+
+                    }
+                )
+
+            setPedidosHoy(
+                pedidosHoyArray.length
+            )
+
+            setPedidosSemana(
+                pedidosSemanaArray.length
+            )
+
+            setPedidosMes(
+                pedidosMesArray.length
+            )
+
+            setVentasHoy(
+
+                pedidosHoyArray.reduce(
+                    (acc, pedido) =>
+                        acc + (pedido.total || 0),
+                    0
+                )
+
+            )
+
+            setVentasSemana(
+
+                pedidosSemanaArray.reduce(
+                    (acc, pedido) =>
+                        acc + (pedido.total || 0),
+                    0
+                )
+
+            )
+
+            setVentasMes(
+
+                pedidosMesArray.reduce(
+                    (acc, pedido) =>
+                        acc + (pedido.total || 0),
+                    0
+                )
+
+            )
 
             const totalVentas =
 
@@ -370,6 +476,47 @@ function AdminReportes() {
             color:
                 '#1565c0'
 
+        },
+        {
+            titulo: 'Ventas Hoy',
+            valor: `$${ventasHoy}`,
+            icono: <PaymentsIcon />,
+            color: '#43a047'
+        },
+
+        {
+            titulo: 'Pedidos Hoy',
+            valor: pedidosHoy,
+            icono: <ShoppingBagIcon />,
+            color: '#1e88e5'
+        },
+
+        {
+            titulo: 'Ventas Semana',
+            valor: `$${ventasSemana}`,
+            icono: <PaymentsIcon />,
+            color: '#ef6c00'
+        },
+
+        {
+            titulo: 'Pedidos Semana',
+            valor: pedidosSemana,
+            icono: <ShoppingBagIcon />,
+            color: '#6a1b9a'
+        },
+
+        {
+            titulo: 'Ventas Mes',
+            valor: `$${ventasMes}`,
+            icono: <PaymentsIcon />,
+            color: '#00897b'
+        },
+
+        {
+            titulo: 'Pedidos Mes',
+            valor: pedidosMes,
+            icono: <ShoppingBagIcon />,
+            color: '#c62828'
         }
 
     ]
