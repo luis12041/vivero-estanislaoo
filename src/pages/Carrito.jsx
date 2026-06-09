@@ -506,16 +506,13 @@ function Carrito() {
                               e.target.value
                             )
 
-                          if (
-                            cantidad >= 1
-                          ) {
+                          actualizarCantidad(
 
-                            actualizarCantidad(
-                              producto.nombre,
-                              cantidad
-                            )
+                            producto.nombre,
 
-                          }
+                            cantidad
+
+                          )
 
                         }}
                       />
