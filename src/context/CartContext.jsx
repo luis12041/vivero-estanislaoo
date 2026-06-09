@@ -158,89 +158,62 @@ export function CartProvider({ children }) {
 
   }
 
-  const nuevoCarrito =
-    carrito.map((item) => {
+  const eliminarDelCarrito = (nombre) => {
 
-      if (
-        item.nombre === nombre
-      ) {
+    const nuevoCarrito = carrito.filter(
+      (item) => item.nombre !== nombre
+    )
 
-        return {
+    setCarrito(nuevoCarrito)
 
-          ...item,
+  }
 
-          cantidad
+  const vaciarCarrito = () => {
 
-        }
+    setCarrito([])
 
-      }
+  }
 
-      return item
+  const total = carrito.reduce(
 
-    })
+    (acc, item) =>
 
-  setCarrito(
-    nuevoCarrito
+      acc + (item.precio * item.cantidad),
+
+    0
+
   )
 
-}
+  return (
 
-const eliminarDelCarrito = (nombre) => {
+    <CartContext.Provider
+      value={{
 
-  const nuevoCarrito = carrito.filter(
-    (item) => item.nombre !== nombre
+        carrito,
+
+        agregarAlCarrito,
+
+        aumentarCantidad,
+
+        disminuirCantidad,
+
+        actualizarCantidad,
+
+        eliminarDelCarrito,
+
+        vaciarCarrito,
+
+        total
+
+      }}
+    >
+
+      {children}
+
+    </CartContext.Provider>
+
   )
-
-  setCarrito(nuevoCarrito)
-
 }
-
-const vaciarCarrito = () => {
-
-  setCarrito([])
-
-}
-
-const total = carrito.reduce(
-
-  (acc, item) =>
-
-    acc + (item.precio * item.cantidad),
-
-  0
-
-)
-
-return (
-
-  <CartContext.Provider
-    value={{
-
-      carrito,
-
-      agregarAlCarrito,
-
-      aumentarCantidad,
-
-      disminuirCantidad,
-
-      actualizarCantidad,
-
-      eliminarDelCarrito,
-
-      vaciarCarrito,
-
-      total
-
-    }}
-  >
-
-    {children}
-
-  </CartContext.Provider>
-
-)
-
 
 export function useCart() {
 
