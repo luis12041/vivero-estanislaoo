@@ -51,7 +51,8 @@ import {
 
 import {
   obtenerPlantas,
-  eliminarPlanta
+  eliminarPlanta,
+  editarPlanta
 } from '../services/plantasService'
 
 import {
@@ -118,6 +119,14 @@ function AdminPlantas() {
     setTipoAlert] =
     useState('success')
 
+  const [modoEditar,
+    setModoEditar] =
+    useState(false)
+
+  const [plantaEditando,
+    setPlantaEditando] =
+    useState(null)
+
   async function cargarPlantas() {
 
     const data =
@@ -135,6 +144,12 @@ function AdminPlantas() {
 
   async function handleEliminar(id) {
 
+    if (
+      !window.confirm(
+        '¿Eliminar esta planta?'
+      )
+    ) return
+
     await eliminarPlanta(id)
 
     cargarPlantas()
@@ -146,8 +161,7 @@ function AdminPlantas() {
     if (
       !nombre ||
       !precio ||
-      !descripcion ||
-      !imagen
+      !descripcion
     ) {
 
       setMensaje(
@@ -168,38 +182,83 @@ function AdminPlantas() {
 
       let imageUrl = ''
 
-      imageUrl =
-        await subirImagen(imagen)
+      if (imagen) {
 
-      await addDoc(
-        collection(db, 'plantas'),
-        {
+        imageUrl =
+          await subirImagen(imagen)
 
-          nombre,
+      }
 
-          precio:
-            Number(precio),
+      if (modoEditar) {
 
-          stock:
-            Number(stock),
+        await editarPlanta(
 
-          imagen:
-            imageUrl,
+          plantaEditando.id,
 
-          tipoLuz,
+          {
 
-          riego,
+            nombre,
 
-          descripcion,
+            precio:
+              Number(precio),
 
-          disponible:
-            Number(stock) > 0
+            stock:
+              Number(stock),
 
-        }
-      )
+            imagen:
+              imageUrl ||
+              plantaEditando.imagen,
+
+            tipoLuz,
+
+            riego,
+
+            descripcion,
+
+            disponible
+
+          }
+
+        )
+
+      } else {
+
+        await addDoc(
+          collection(db, 'plantas'),
+          {
+
+            nombre,
+
+            precio:
+              Number(precio),
+
+            stock:
+              Number(stock),
+
+            imagen:
+              imageUrl,
+
+            tipoLuz,
+
+            riego,
+
+            descripcion,
+
+            disponible
+
+          }
+        )
+
+      }
 
       setMensaje(
-        'Planta agregada 🌱'
+
+        modoEditar
+
+          ? 'Planta actualizada ✏️'
+
+          : 'Planta agregada 🌱'
+
       )
 
       setTipoAlert('success')
@@ -214,9 +273,19 @@ function AdminPlantas() {
 
       setStock(50)
 
+      setTipoLuz('Sol')
+
+      setRiego('Moderado')
+
       setDescripcion('')
 
+      setDisponible(true)
+
       setImagen(null)
+
+      setModoEditar(false)
+
+      setPlantaEditando(null)
 
       cargarPlantas()
 
@@ -354,9 +423,32 @@ function AdminPlantas() {
             <Button
               variant="contained"
               startIcon={<AddIcon />}
-              onClick={() =>
+              onClick={() => {
+
+                setModoEditar(false)
+
+                setPlantaEditando(null)
+
+                setNombre('')
+
+                setPrecio('')
+
+                setStock(50)
+
+                setTipoLuz('Sol')
+
+                setRiego('Moderado')
+
+                setDescripcion('')
+
+                setDisponible(true)
+
+                setImagen(null)
+
                 setOpenModal(true)
-              }
+
+              }}
+              
               sx={{
                 borderRadius: 4,
                 py: 1.5,
@@ -622,6 +714,59 @@ function AdminPlantas() {
 
                       <Button
                         variant="contained"
+                        color="primary"
+                        onClick={() => {
+
+                          setModoEditar(true)
+
+                          setPlantaEditando(
+                            planta
+                          )
+
+                          setImagen(null)
+
+                          setNombre(
+                            planta.nombre || ''
+                          )
+
+                          setPrecio(
+                            planta.precio || ''
+                          )
+
+                          setStock(
+                            planta.stock || 0
+                          )
+
+                          setTipoLuz(
+                            planta.tipoLuz || 'Sol'
+                          )
+
+                          setRiego(
+                            planta.riego || 'Moderado'
+                          )
+
+                          setDescripcion(
+                            planta.descripcion || ''
+                          )
+
+                          setDisponible(
+                            planta.disponible ?? true
+                          )
+
+                          setOpenModal(true)
+
+                        }}
+                        sx={{
+                          borderRadius: 4
+                        }}
+                      >
+
+                        Editar
+
+                      </Button>
+
+                      <Button
+                        variant="contained"
                         color="error"
                         startIcon={
                           <DeleteIcon />
@@ -638,21 +783,6 @@ function AdminPlantas() {
                       >
 
                         Eliminar
-
-                      </Button>
-
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={() => {
-                          console.log('Editar')
-                        }}
-                        sx={{
-                          borderRadius: 4
-                        }}
-                      >
-
-                        Editar
 
                       </Button>
 
@@ -685,7 +815,11 @@ function AdminPlantas() {
           }}
         >
 
-          Agregar Planta 🌱
+          {
+            modoEditar
+              ? 'Editar Planta ✏️'
+              : 'Agregar Planta 🌱'
+          }
 
         </DialogTitle>
 
@@ -823,7 +957,25 @@ function AdminPlantas() {
               }
               label="Disponible"
             />
+            {
+              modoEditar &&
+              plantaEditando?.imagen && (
 
+                <Box
+                  component="img"
+                  src={
+                    plantaEditando.imagen
+                  }
+                  sx={{
+                    width: '100%',
+                    maxHeight: 250,
+                    objectFit: 'cover',
+                    borderRadius: 3
+                  }}
+                />
+
+              )
+            }
             <Button
               variant="outlined"
               component="label"
@@ -887,7 +1039,9 @@ function AdminPlantas() {
 
               ) : (
 
-                'Guardar Planta'
+                modoEditar
+                  ? 'Actualizar Planta'
+                  : 'Guardar Planta'
 
               )}
 
