@@ -69,6 +69,9 @@ function AdminPlantas() {
   const [plantas, setPlantas] =
     useState([])
 
+  const [filtro, setFiltro] =
+    useState('Todas')
+
   const [openModal,
     setOpenModal] =
     useState(false)
@@ -390,180 +393,278 @@ function AdminPlantas() {
 
         </Stack>
 
+        <Stack
+          direction="row"
+          spacing={2}
+          flexWrap="wrap"
+          sx={{ mb: 3 }}
+        >
+
+          <Button
+            variant={
+              filtro === 'Todas'
+                ? 'contained'
+                : 'outlined'
+            }
+            onClick={() =>
+              setFiltro('Todas')
+            }
+          >
+            Todas
+          </Button>
+
+          <Button
+            variant={
+              filtro === 'Sol'
+                ? 'contained'
+                : 'outlined'
+            }
+            onClick={() =>
+              setFiltro('Sol')
+            }
+          >
+            Sol
+          </Button>
+
+          <Button
+            variant={
+              filtro === 'Sombra'
+                ? 'contained'
+                : 'outlined'
+            }
+            onClick={() =>
+              setFiltro('Sombra')
+            }
+          >
+            Sombra
+          </Button>
+
+          <Button
+            variant={
+              filtro === 'Resolana'
+                ? 'contained'
+                : 'outlined'
+            }
+            onClick={() =>
+              setFiltro('Resolana')
+            }
+          >
+            Resolana
+          </Button>
+
+        </Stack>
+
         <Grid
           container
           spacing={4}
         >
 
-          {plantas.map((planta) => (
+          {plantas
+            .filter(
+              planta =>
+                filtro === 'Todas'
+                  ? true
+                  : planta.tipoLuz === filtro
+            )
+            .map((planta) => (
 
-            <Grid
-              item
-              xs={12}
-              sm={6}
-              lg={4}
-              key={planta.id}
-            >
-
-              <Card
-                sx={{
-
-                  borderRadius: 6,
-
-                  overflow: 'hidden',
-
-                  background:
-                    'linear-gradient(145deg,#ffffff,#f8f8f8)',
-
-                  boxShadow:
-                    '0 10px 25px rgba(0,0,0,0.08)',
-
-                  transition: '0.3s',
-
-                  height: '100%',
-
-                  '&:hover': {
-
-                    transform:
-                      'translateY(-8px)',
-
-                    boxShadow:
-                      '0 20px 40px rgba(0,0,0,0.12)'
-
-                  }
-
-                }}
+              <Grid
+                item
+                xs={12}
+                sm={6}
+                lg={4}
+                key={planta.id}
               >
 
-                <CardMedia
-                  component="img"
-                  image={planta.imagen}
-                  height="260"
-                />
+                <Card
+                  sx={{
 
-                <CardContent>
+                    borderRadius: 6,
 
-                  <Stack spacing={2}>
+                    overflow: 'hidden',
 
-                    <Typography
-                      variant="h5"
-                      sx={{
-                        fontWeight: 800
-                      }}
-                    >
+                    background:
+                      'linear-gradient(145deg,#ffffff,#f8f8f8)',
 
-                      {planta.nombre}
+                    boxShadow:
+                      '0 10px 25px rgba(0,0,0,0.08)',
 
-                    </Typography>
+                    transition: '0.3s',
 
-                    <Typography
-                      variant="h6"
-                      sx={{
-                        color: '#2e7d32',
-                        fontWeight: 800
-                      }}
-                    >
+                    height: '100%',
 
-                      ${planta.precio}
+                    '&:hover': {
 
-                    </Typography>
+                      transform:
+                        'translateY(-8px)',
 
-                    <Box
-                      sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 1
-                      }}
-                    >
+                      boxShadow:
+                        '0 20px 40px rgba(0,0,0,0.12)'
 
-                      <Inventory2Icon
+                    }
+
+                  }}
+                >
+
+                  <CardMedia
+                    component="img"
+                    image={planta.imagen}
+                    height="260"
+                  />
+
+                  <CardContent>
+
+                    <Stack spacing={2}>
+
+                      <Typography
+                        variant="h5"
                         sx={{
-                          color: '#555'
+                          fontWeight: 800
+                        }}
+                      >
+
+                        {planta.nombre}
+
+                      </Typography>
+
+                      <Chip
+                        label={planta.tipoLuz}
+                        color={
+                          planta.tipoLuz === 'Sol'
+                            ? 'warning'
+                            : planta.tipoLuz === 'Sombra'
+                              ? 'info'
+                              : 'success'
+                        }
+                        sx={{
+                          width: 'fit-content',
+                          fontWeight: 700
                         }}
                       />
 
                       <Typography
+                        variant="h6"
                         sx={{
-                          fontWeight: 700
+                          color: '#2e7d32',
+                          fontWeight: 800
                         }}
                       >
 
-                        Stock:
-                        {' '}
-                        {planta.stock || 0}
+                        ${planta.precio}
 
                       </Typography>
 
-                    </Box>
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 1
+                        }}
+                      >
 
-                    {planta.stock <= 0 ? (
+                        <Inventory2Icon
+                          sx={{
+                            color: '#555'
+                          }}
+                        />
 
-                      <Chip
-                        icon={<DeleteIcon />}
-                        label="Agotado"
+                        <Typography
+                          sx={{
+                            fontWeight: 700
+                          }}
+                        >
+
+                          Stock:
+                          {' '}
+                          {planta.stock || 0}
+
+                        </Typography>
+
+                      </Box>
+
+                      {planta.stock <= 0 ? (
+
+                        <Chip
+                          icon={<DeleteIcon />}
+                          label="Agotado"
+                          color="error"
+                          sx={{
+                            width: 'fit-content',
+                            fontWeight: 700
+                          }}
+                        />
+
+                      ) : planta.stock <= 30 ? (
+
+                        <Chip
+                          icon={<WarningAmberIcon />}
+                          label="Casi agotado"
+                          color="warning"
+                          sx={{
+                            width: 'fit-content',
+                            fontWeight: 700
+                          }}
+                        />
+
+                      ) : (
+
+                        <Chip
+                          icon={<CheckCircleIcon />}
+                          label="Disponible"
+                          color="success"
+                          sx={{
+                            width: 'fit-content',
+                            fontWeight: 700
+                          }}
+                        />
+
+                      )}
+
+                      <Button
+                        variant="contained"
                         color="error"
+                        startIcon={
+                          <DeleteIcon />
+                        }
+                        onClick={() =>
+                          handleEliminar(
+                            planta.id
+                          )
+                        }
                         sx={{
-                          width: 'fit-content',
-                          fontWeight: 700
+                          borderRadius: 4,
+                          mt: 2
                         }}
-                      />
+                      >
 
-                    ) : planta.stock <= 30 ? (
+                        Eliminar
 
-                      <Chip
-                        icon={<WarningAmberIcon />}
-                        label="Casi agotado"
-                        color="warning"
+                      </Button>
+
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => {
+                          console.log('Editar')
+                        }}
                         sx={{
-                          width: 'fit-content',
-                          fontWeight: 700
+                          borderRadius: 4
                         }}
-                      />
+                      >
 
-                    ) : (
+                        Editar
 
-                      <Chip
-                        icon={<CheckCircleIcon />}
-                        label="Disponible"
-                        color="success"
-                        sx={{
-                          width: 'fit-content',
-                          fontWeight: 700
-                        }}
-                      />
+                      </Button>
 
-                    )}
+                    </Stack>
 
-                    <Button
-                      variant="contained"
-                      color="error"
-                      startIcon={
-                        <DeleteIcon />
-                      }
-                      onClick={() =>
-                        handleEliminar(
-                          planta.id
-                        )
-                      }
-                      sx={{
-                        borderRadius: 4,
-                        mt: 2
-                      }}
-                    >
+                  </CardContent>
 
-                      Eliminar
+                </Card>
 
-                    </Button>
+              </Grid>
 
-                  </Stack>
-
-                </CardContent>
-
-              </Card>
-
-            </Grid>
-
-          ))}
+            ))}
 
         </Grid>
 
