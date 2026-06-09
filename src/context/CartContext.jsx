@@ -114,6 +114,38 @@ export function CartProvider({ children }) {
 
   }
 
+  const actualizarCantidad = (
+    nombre,
+    cantidad
+  ) => {
+
+    const nuevoCarrito =
+      carrito.map((item) => {
+
+        if (
+          item.nombre === nombre
+        ) {
+
+          return {
+
+            ...item,
+
+            cantidad
+
+          }
+
+        }
+
+        return item
+
+      })
+
+    setCarrito(
+      nuevoCarrito
+    )
+
+  }
+
   const eliminarDelCarrito = (nombre) => {
 
     const nuevoCarrito = carrito.filter(
@@ -152,6 +184,8 @@ export function CartProvider({ children }) {
         aumentarCantidad,
 
         disminuirCantidad,
+
+        actualizarCantidad,
 
         eliminarDelCarrito,
 

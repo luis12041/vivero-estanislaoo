@@ -63,6 +63,8 @@ function Carrito() {
 
     disminuirCantidad,
 
+    actualizarCantidad,
+
     total
 
   } = useCart()
@@ -490,13 +492,33 @@ function Carrito() {
 
                       </IconButton>
 
-                      <Typography
-                        variant="h6"
-                      >
+                      <TextField
+                        size="small"
+                        type="number"
+                        value={producto.cantidad}
+                        sx={{
+                          width: 80
+                        }}
+                        onChange={(e) => {
 
-                        {producto.cantidad}
+                          const cantidad =
+                            Number(
+                              e.target.value
+                            )
 
-                      </Typography>
+                          if (
+                            cantidad >= 1
+                          ) {
+
+                            actualizarCantidad(
+                              producto.nombre,
+                              cantidad
+                            )
+
+                          }
+
+                        }}
+                      />
 
                       <IconButton
                         color="primary"
