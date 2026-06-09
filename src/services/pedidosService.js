@@ -1,6 +1,9 @@
 import {
   collection,
-  addDoc
+  addDoc,
+  doc,
+  getDoc,
+  updateDoc
 } from 'firebase/firestore'
 
 import {
@@ -22,6 +25,46 @@ export async function crearPedido(
     throw new Error(
       'Usuario no autenticado'
     )
+
+  }
+
+  for (const producto of carrito) {
+
+    const plantaRef =
+      doc(
+        db,
+        'plantas',
+        producto.id
+      )
+
+    const plantaSnap =
+      await getDoc(
+        plantaRef
+      )
+
+    if (
+      !plantaSnap.exists()
+    ) {
+
+      throw new Error(
+        `La planta ${producto.nombre} no existe`
+      )
+
+    }
+
+    const stockActual =
+      plantaSnap.data().stock || 0
+
+    if (
+      producto.cantidad >
+      stockActual
+    ) {
+
+      throw new Error(
+        `Solo hay ${stockActual} unidades disponibles de ${producto.nombre}`
+      )
+
+    }
 
   }
 
@@ -76,5 +119,32 @@ export async function crearPedido(
     collection(db, 'pedidos'),
     pedido
   )
+  for (const producto of carrito) {
+
+    const plantaRef =
+      doc(
+        db,
+        'plantas',
+        producto.id
+      )
+
+    const plantaSnap =
+      await getDoc(
+        plantaRef
+      )
+
+    const stockActual =
+      plantaSnap.data().stock || 0
+
+    await updateDoc(
+      plantaRef,
+      {
+        stock:
+          stockActual -
+          producto.cantidad
+      }
+    )
+
+  }
 
 }

@@ -496,6 +496,10 @@ function Carrito() {
                         size="small"
                         type="number"
                         defaultValue={producto.cantidad}
+                        inputProps={{
+                          min: 1,
+                          max: producto.stock
+                        }}
                         sx={{
                           width: 80
                         }}

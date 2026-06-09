@@ -172,22 +172,45 @@ export function CartProvider({ children }) {
     cantidad
   ) => {
 
+    const item = carrito.find(
+      (producto) =>
+        producto.nombre === nombre
+    )
+
+    if (!item) {
+
+      return
+
+    }
+
     if (cantidad < 1) {
 
       return
 
     }
 
+    if (
+      cantidad > item.stock
+    ) {
+
+      alert(
+        `Solo hay ${item.stock} unidades disponibles`
+      )
+
+      cantidad = item.stock
+
+    }
+
     const nuevoCarrito =
-      carrito.map((item) => {
+      carrito.map((producto) => {
 
         if (
-          item.nombre === nombre
+          producto.nombre === nombre
         ) {
 
           return {
 
-            ...item,
+            ...producto,
 
             cantidad
 
@@ -195,7 +218,7 @@ export function CartProvider({ children }) {
 
         }
 
-        return item
+        return producto
 
       })
 
