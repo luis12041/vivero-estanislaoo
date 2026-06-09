@@ -120,12 +120,8 @@ export function CartProvider({ children }) {
   ) => {
 
     if (
-      cantidad <= 0
+      cantidad < 1
     ) {
-
-      eliminarDelCarrito(
-        nombre
-      )
 
       return
 
