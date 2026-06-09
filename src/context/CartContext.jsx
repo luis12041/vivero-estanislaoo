@@ -144,6 +144,67 @@ export function CartProvider({ children }) {
 
   }
 
+  const disminuirCantidad = (nombre) => {
+
+    const nuevoCarrito = carrito
+      .map((item) => {
+
+        if (item.nombre === nombre) {
+
+          return {
+            ...item,
+            cantidad: item.cantidad - 1
+          }
+
+        }
+
+        return item
+
+      })
+      .filter((item) => item.cantidad > 0)
+
+    setCarrito(nuevoCarrito)
+
+  }
+
+  const actualizarCantidad = (
+    nombre,
+    cantidad
+  ) => {
+
+    if (cantidad < 1) {
+
+      return
+
+    }
+
+    const nuevoCarrito =
+      carrito.map((item) => {
+
+        if (
+          item.nombre === nombre
+        ) {
+
+          return {
+
+            ...item,
+
+            cantidad
+
+          }
+
+        }
+
+        return item
+
+      })
+
+    setCarrito(
+      nuevoCarrito
+    )
+
+  }
+
   const eliminarDelCarrito = (nombre) => {
 
     const nuevoCarrito = carrito.filter(
