@@ -447,76 +447,10 @@ function AdminReportes() {
         },
 
         {
-
-            titulo:
-                'Tipo de Luz Top',
-
-            valor:
-                luzTop,
-
-            icono:
-                <WbSunnyIcon />,
-
-            color:
-                '#f9a825'
-
-        },
-
-        {
-
-            titulo:
-                'Clientes Únicos',
-
-            valor:
-                clientes,
-
-            icono:
-                <PeopleIcon />,
-
-            color:
-                '#1565c0'
-
-        },
-        {
-            titulo: 'Ventas Hoy',
-            valor: `$${ventasHoy}`,
-            icono: <PaymentsIcon />,
-            color: '#43a047'
-        },
-
-        {
-            titulo: 'Pedidos Hoy',
-            valor: pedidosHoy,
-            icono: <ShoppingBagIcon />,
-            color: '#1e88e5'
-        },
-
-        {
-            titulo: 'Ventas Semana',
-            valor: `$${ventasSemana}`,
-            icono: <PaymentsIcon />,
-            color: '#ef6c00'
-        },
-
-        {
-            titulo: 'Pedidos Semana',
-            valor: pedidosSemana,
-            icono: <ShoppingBagIcon />,
-            color: '#6a1b9a'
-        },
-
-        {
-            titulo: 'Ventas Mes',
-            valor: `$${ventasMes}`,
-            icono: <PaymentsIcon />,
-            color: '#00897b'
-        },
-
-        {
-            titulo: 'Pedidos Mes',
-            valor: pedidosMes,
-            icono: <ShoppingBagIcon />,
-            color: '#c62828'
+            titulo: 'Clientes Únicos',
+            valor: clientes,
+            icono: <PeopleIcon />,
+            color: '#1565c0'
         }
 
     ]
@@ -676,183 +610,310 @@ function AdminReportes() {
                 <Grid
                     item
                     xs={12}
-                    md={7}
                 >
+                    
 
                     <Card
                         sx={{
-                            p: 3,
-
+                            mt: 3,
+                            p: 4,
                             borderRadius: 4,
-
-                            border:
-                                '1px solid #edf2f7',
-
-                            boxShadow:
-                                '0 6px 18px rgba(0,0,0,0.04)',
-
-                            transition: '0.2s',
-
-                            '&:hover': {
-
-                                transform:
-                                    'translateY(-3px)',
-
-                                boxShadow:
-                                    '0 12px 24px rgba(0,0,0,0.08)'
-
-                            }
-
+                            border: '1px solid #edf2f7',
+                            boxShadow: '0 6px 18px rgba(0,0,0,0.04)'
                         }}
                     >
 
                         <Typography
                             sx={{
+                                fontSize: 22,
                                 fontWeight: 800,
-                                mb: 1
+                                mb: 3
                             }}
                         >
-                            🌱 Plantas más vendidas
+                            📈 Rendimiento de Ventas
                         </Typography>
 
-                        <Typography
-                            sx={{
-                                color: '#777',
-                                mb: 2
-                            }}
-                        >
-                            Top 5 plantas más vendidas
-                        </Typography>
-
-
-                        <ResponsiveContainer
-                            width="100%"
-                            height={300}
+                        <Grid
+                            container
+                            spacing={3}
                         >
 
-                            <BarChart
-                                data={plantasGrafica}
+                            <Grid
+                                item
+                                xs={12}
+                                md={4}
                             >
 
-                                <XAxis
-                                    dataKey="nombre"
-                                />
-
-                                <YAxis />
-
-                                <Tooltip />
-
-                                <Bar
-                                    dataKey="cantidad"
-                                />
-
-                            </BarChart>
-
-                        </ResponsiveContainer>
-
-                    </Card>
-
-                </Grid>
-
-                <Grid
-                    item
-                    xs={12}
-                    md={5}
-                >
-
-                    <Card
-                        sx={{
-                            p: 3,
-
-                            borderRadius: 4,
-
-                            border:
-                                '1px solid #edf2f7',
-
-                            boxShadow:
-                                '0 6px 18px rgba(0,0,0,0.04)',
-
-                            transition: '0.2s',
-
-                            '&:hover': {
-
-                                transform:
-                                    'translateY(-3px)',
-
-                                boxShadow:
-                                    '0 12px 24px rgba(0,0,0,0.08)'
-
-                            }
-
-                        }}
-                    >
-
-                        <Typography
-                            sx={{
-                                fontWeight: 800,
-                                mb: 1
-                            }}
-                        >
-                            ☀️ Tipo de luz
-                        </Typography>
-
-                        <Typography
-                            sx={{
-                                color: '#777',
-                                mb: 2
-                            }}
-                        >
-                            Distribución por tipo de luz
-                        </Typography>
-
-
-                        <ResponsiveContainer
-                            width="100%"
-                            height={300}
-                        >
-
-                            <PieChart>
-
-                                <Pie
-                                    data={luzGrafica}
-                                    dataKey="value"
-                                    nameKey="name"
-                                    outerRadius={100}
-                                    label
+                                <Typography
+                                    sx={{
+                                        color: '#666'
+                                    }}
                                 >
+                                    Hoy
+                                </Typography>
 
-                                    {luzGrafica.map(
-                                        (entry, index) => (
+                                <Typography
+                                    sx={{
+                                        fontSize: 30,
+                                        fontWeight: 900,
+                                        color: '#2e7d32'
+                                    }}
+                                >
+                                    ${ventasHoy}
+                                </Typography>
 
-                                            <Cell
-                                                key={index}
-                                                fill={
-                                                    index === 0
-                                                        ? '#f9a825'
-                                                        : index === 1
-                                                            ? '#43a047'
-                                                            : '#1e88e5'
-                                                }
-                                            />
+                                <Typography>
+                                    {pedidosHoy} pedidos
+                                </Typography>
 
-                                        )
-                                    )}
+                            </Grid>
 
-                                </Pie>
+                            <Grid
+                                item
+                                xs={12}
+                                md={4}
+                            >
 
-                                <Tooltip />
+                                <Typography
+                                    sx={{
+                                        color: '#666'
+                                    }}
+                                >
+                                    Semana
+                                </Typography>
 
-                            </PieChart>
+                                <Typography
+                                    sx={{
+                                        fontSize: 30,
+                                        fontWeight: 900,
+                                        color: '#ef6c00'
+                                    }}
+                                >
+                                    ${ventasSemana}
+                                </Typography>
 
-                        </ResponsiveContainer>
+                                <Typography>
+                                    {pedidosSemana} pedidos
+                                </Typography>
+
+                            </Grid>
+
+                            <Grid
+                                item
+                                xs={12}
+                                md={4}
+                            >
+
+                                <Typography
+                                    sx={{
+                                        color: '#666'
+                                    }}
+                                >
+                                    Mes
+                                </Typography>
+
+                                <Typography
+                                    sx={{
+                                        fontSize: 30,
+                                        fontWeight: 900,
+                                        color: '#00897b'
+                                    }}
+                                >
+                                    ${ventasMes}
+                                </Typography>
+
+                                <Typography>
+                                    {pedidosMes} pedidos
+                                </Typography>
+
+                            </Grid>
+
+                        </Grid>
 
                     </Card>
-
-                </Grid>
 
             </Grid>
 
-        </AdminLayout>
+            <Grid
+                item
+                xs={12}
+                md={7}
+            >
+
+                <Card
+                    sx={{
+                        p: 3,
+
+                        borderRadius: 4,
+
+                        border:
+                            '1px solid #edf2f7',
+
+                        boxShadow:
+                            '0 6px 18px rgba(0,0,0,0.04)',
+
+                        transition: '0.2s',
+
+                        '&:hover': {
+
+                            transform:
+                                'translateY(-3px)',
+
+                            boxShadow:
+                                '0 12px 24px rgba(0,0,0,0.08)'
+
+                        }
+
+                    }}
+                >
+
+                    <Typography
+                        sx={{
+                            fontWeight: 800,
+                            mb: 1
+                        }}
+                    >
+                        🌱 Plantas más vendidas
+                    </Typography>
+
+                    <Typography
+                        sx={{
+                            color: '#777',
+                            mb: 2
+                        }}
+                    >
+                        Top 5 plantas más vendidas
+                    </Typography>
+
+
+                    <ResponsiveContainer
+                        width="100%"
+                        height={300}
+                    >
+
+                        <BarChart
+                            data={plantasGrafica}
+                        >
+
+                            <XAxis
+                                dataKey="nombre"
+                            />
+
+                            <YAxis />
+
+                            <Tooltip />
+
+                            <Bar
+                                dataKey="cantidad"
+                            />
+
+                        </BarChart>
+
+                    </ResponsiveContainer>
+
+                </Card>
+
+            </Grid>
+
+            <Grid
+                item
+                xs={12}
+                md={5}
+            >
+
+                <Card
+                    sx={{
+                        p: 3,
+
+                        borderRadius: 4,
+
+                        border:
+                            '1px solid #edf2f7',
+
+                        boxShadow:
+                            '0 6px 18px rgba(0,0,0,0.04)',
+
+                        transition: '0.2s',
+
+                        '&:hover': {
+
+                            transform:
+                                'translateY(-3px)',
+
+                            boxShadow:
+                                '0 12px 24px rgba(0,0,0,0.08)'
+
+                        }
+
+                    }}
+                >
+
+                    <Typography
+                        sx={{
+                            fontWeight: 800,
+                            mb: 1
+                        }}
+                    >
+                        ☀️ Tipo de luz
+                    </Typography>
+
+                    <Typography
+                        sx={{
+                            color: '#777',
+                            mb: 2
+                        }}
+                    >
+                        Distribución por tipo de luz
+                    </Typography>
+
+
+                    <ResponsiveContainer
+                        width="100%"
+                        height={300}
+                    >
+
+                        <PieChart>
+
+                            <Pie
+                                data={luzGrafica}
+                                dataKey="value"
+                                nameKey="name"
+                                outerRadius={100}
+                                label
+                            >
+
+                                {luzGrafica.map(
+                                    (entry, index) => (
+
+                                        <Cell
+                                            key={index}
+                                            fill={
+                                                index === 0
+                                                    ? '#f9a825'
+                                                    : index === 1
+                                                        ? '#43a047'
+                                                        : '#1e88e5'
+                                            }
+                                        />
+
+                                    )
+                                )}
+
+                            </Pie>
+
+                            <Tooltip />
+
+                        </PieChart>
+
+                    </ResponsiveContainer>
+
+                </Card>
+
+            </Grid>
+
+        </Grid>
+
+        </AdminLayout >
 
     )
 
