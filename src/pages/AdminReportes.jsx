@@ -454,6 +454,7 @@ function AdminReportes() {
             <Grid
                 container
                 spacing={2}
+                alignItems="stretch"
             >
 
                 {cards.map(
