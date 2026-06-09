@@ -12,6 +12,9 @@ import {
   Avatar
 } from '@mui/material'
 
+import jsPDF
+  from 'jspdf'
+
 import {
   useEffect,
   useState
@@ -176,6 +179,77 @@ function MisPedidos() {
     'Entregado'
 
   ]
+
+  function descargarTicket(
+    pedido
+  ) {
+
+    const pdf =
+      new jsPDF()
+
+    pdf.setFontSize(18)
+
+    pdf.text(
+      'Vivero Estanislaoo',
+      20,
+      20
+    )
+
+    pdf.setFontSize(12)
+
+    pdf.text(
+      `Cliente: ${pedido.nombre}`,
+      20,
+      35
+    )
+
+    pdf.text(
+      `Telefono: ${pedido.telefono}`,
+      20,
+      45
+    )
+
+    pdf.text(
+      `Estado: ${pedido.estado}`,
+      20,
+      55
+    )
+
+    pdf.text(
+      `Total: $${pedido.total}`,
+      20,
+      65
+    )
+
+    let y = 85
+
+    pdf.text(
+      'Productos:',
+      20,
+      y
+    )
+
+    y += 10
+
+    pedido.productos.forEach(
+      (producto) => {
+
+        pdf.text(
+          `${producto.nombre} x${producto.cantidad}`,
+          25,
+          y
+        )
+
+        y += 10
+
+      }
+    )
+
+    pdf.save(
+      `Ticket-${pedido.folio || pedido.id}.pdf`
+    )
+
+  }
 
   return (
 
@@ -582,6 +656,23 @@ function MisPedidos() {
                     )}
 
                   />
+
+                  <Button
+                    variant="contained"
+                    color="success"
+                    sx={{
+                      borderRadius: 3
+                    }}
+                    onClick={() =>
+                      descargarTicket(
+                        pedido
+                      )
+                    }
+                  >
+
+                    🧾 Descargar Ticket
+
+                  </Button>
 
                 </Stack>
 
