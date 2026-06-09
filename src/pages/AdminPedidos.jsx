@@ -83,7 +83,7 @@ function AdminPedidos() {
 
         collection(
           db,
-          'pedidos_temporales'
+          'pedidos'
         ),
 
         (snapshot) => {
@@ -869,10 +869,7 @@ function AdminPedidos() {
 
                           ${pedido.total}
 
-
-
                         </Typography>
-
                       </Stack>
 
                     </Stack>
