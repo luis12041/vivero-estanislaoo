@@ -60,7 +60,12 @@ export async function crearPedido(
     total,
 
     estado:
-      'Pendiente',
+
+      datosCliente.tipoEntrega === 'Tienda'
+
+        ? 'Listo para recoger'
+
+        : 'Pendiente',
 
     fecha:
       new Date()

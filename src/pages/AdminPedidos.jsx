@@ -116,6 +116,47 @@ function AdminPedidos() {
       )
 
     if (
+      pedido.tipoEntrega ===
+      'Tienda'
+    ) {
+
+      if (
+        pedido.estado ===
+        'Listo para recoger'
+      ) {
+
+        await addDoc(
+
+          collection(
+            db,
+            'historial_pedidos'
+          ),
+
+          {
+
+            ...pedido,
+
+            estado:
+              'Recogido',
+
+            fechaEntrega:
+              new Date()
+
+          }
+
+        )
+
+        await deleteDoc(
+          pedidoRef
+        )
+
+      }
+
+      return
+
+    }
+
+    if (
       pedido.estado ===
       'Pendiente'
     ) {
@@ -176,8 +217,6 @@ function AdminPedidos() {
       )
 
     }
-
-
 
   }
 
@@ -380,6 +419,7 @@ function AdminPedidos() {
                     {item.label}
 
                   </Typography>
+
 
                 </Box>
 
@@ -615,229 +655,274 @@ function AdminPedidos() {
 
                   <Stack spacing={1.8}>
 
-                    <Stack
-                      direction="row"
-                      spacing={1.5}
-                      alignItems="center"
-                    >
+                    {
+                      pedido.tipoEntrega !== 'Tienda' && (
 
-                      <LocationOnIcon
+                        <Stack
+                          direction="row"
+                          spacing={1.5}
+                          alignItems="center"
+                        >
+
+                          <LocationOnIcon
+                            sx={{
+                              color: '#2e7d32',
+                              fontSize: 20
+                            }}
+                          />
+
+                          <Typography
+                            sx={{
+                              fontSize: 14
+                            }}
+                          >
+
+                            {pedido.direccion}
+
+                          </Typography>
+
+                        </Stack>
+
+                      )
+                    }
+
+                    <Stack spacing={1}>
+
+                    
+
+                        <Stack
+                          direction="row"
+                          spacing={1.5}
+                          alignItems="center"
+                        >
+
+                          <NotesIcon
+                            sx={{
+                              color: '#2e7d32',
+                              fontSize: 20
+                            }}
+                          />
+
+                          <Typography
+                            sx={{
+                              fontSize: 14
+                            }}
+                          >
+
+                            {pedido.notas || 'Sin notas'}
+
+                          </Typography>
+
+                        </Stack>
+
+                        <Typography
+                          sx={{
+                            fontSize: 14,
+                            fontWeight: 600
+                          }}
+                        >
+
+                          {
+                            pedido.tipoEntrega === 'Tienda'
+                              ? '🏪 Recoger en tienda'
+                              : '🚚 Envío a domicilio'
+                          }
+
+                        </Typography>
+
+                        <Typography
+                          sx={{
+                            fontSize: 14,
+                            fontWeight: 600
+                          }}
+                        >
+
+                          {
+                            pedido.metodoPago === 'Efectivo'
+                              ? '💵 Pago en efectivo'
+                              : '💳 Pago con Stripe'
+                          }
+
+                        </Typography>
+
+                      </Stack>
+
+                      {
+                        pedido.ubicacion && (
+
+                          <Button
+
+                            href={pedido.ubicacion}
+
+                            target="_blank"
+
+                            variant="outlined"
+
+                            startIcon={
+                              <LocationOnIcon />
+                            }
+
+                            sx={{
+                              mt: 1,
+                              borderRadius: 3
+                            }}
+
+                          >
+
+                            Ver ubicación
+
+                          </Button>
+
+                        )
+                      }
+
+                      <Divider
                         sx={{
-                          color: '#2e7d32',
-                          fontSize: 20
+                          my: 2
                         }}
                       />
 
-                      <Typography
+                      <Stack
+                        direction="row"
+                        justifyContent="space-between"
+                        alignItems="center"
+                      >
+
+                        <Stack
+                          direction="row"
+                          spacing={1}
+                          alignItems="center"
+                        >
+
+                          <PaymentsIcon
+                            sx={{
+                              color: '#2e7d32'
+                            }}
+                          />
+
+                          <Typography
+                            sx={{
+                              fontSize: {
+                                xs: 28,
+                                md: 34
+                              },
+
+                              fontWeight: 900,
+
+                              color: '#1b5e20'
+                            }}
+                          >
+
+                            ${pedido.total}
+
+                          </Typography>
+
+                        </Stack>
+
+                      </Stack>
+
+                      {
+                        pedido.estado !== 'Entregado' && (
+
+                          <Button
+
+                            fullWidth
+
+                            variant="contained"
+
+                            startIcon={<LocalShippingIcon />}
+
+                            onClick={() =>
+                              cambiarEstado(
+                                pedido
+                              )
+                            }
+
+                            sx={{
+
+                              mt: 3,
+
+                              borderRadius: 3,
+
+                              py: 1.2,
+
+                              fontWeight: 700,
+
+                              background: '#1b5e20'
+
+                            }}
+
+                          >
+
+                            {
+                              pedido.tipoEntrega ===
+                                'Tienda'
+
+                                ? 'Marcar recogido'
+
+                                : pedido.estado ===
+                                  'Pendiente'
+
+                                  ? 'Pasar a proceso'
+
+                                  : pedido.estado ===
+                                    'En proceso'
+
+                                    ? 'Marcar en camino'
+
+                                    : pedido.estado ===
+                                      'En camino'
+
+                                      ? 'Marcar entregado'
+
+                                      : 'Entregado'
+                            }
+
+                          </Button>
+                        )
+                      }
+                      <Stack
+                        direction="row"
+                        spacing={1}
+                        alignItems="center"
                         sx={{
-                          fontSize: 14
+                          mt: 2
                         }}
                       >
 
-                        {pedido.direccion}
+                        <CalendarMonthIcon
+                          sx={{
+                            color: '#777',
+                            fontSize: 18
+                          }}
+                        />
 
-                      </Typography>
+                        <Typography
+                          sx={{
+                            color: '#777',
+                            fontSize: 12
+                          }}
+                        >
+                          {pedido.fechaBonita || 'Pedido activo'}
+                        </Typography>
 
+                      </Stack>
                     </Stack>
+              </Box>
 
-                    <Stack
-                      direction="row"
-                      spacing={1.5}
-                      alignItems="center"
-                    >
+            </Card>
 
-                      <NotesIcon
-                        sx={{
-                          color: '#2e7d32',
-                          fontSize: 20
-                        }}
-                      />
+          </Grid>
 
-                      <Typography
-                        sx={{
-                          fontSize: 14
-                        }}
-                      >
+      )
 
-                        {pedido.notas ||
-                          'Sin notas'}
+      )}
 
-                      </Typography>
+    </Grid>
 
-                    </Stack>
+  </AdminLayout >
 
-                  </Stack>
-
-                  {
-                    pedido.ubicacion && (
-
-                      <Button
-
-                        href={pedido.ubicacion}
-
-                        target="_blank"
-
-                        variant="outlined"
-
-                        startIcon={
-                          <LocationOnIcon />
-                        }
-
-                        sx={{
-                          mt: 1,
-                          borderRadius: 3
-                        }}
-
-                      >
-
-                        Ver ubicación
-
-                      </Button>
-
-                    )
-                  }
-
-                  <Divider
-                    sx={{
-                      my: 2
-                    }}
-                  />
-
-                  <Stack
-                    direction="row"
-                    justifyContent="space-between"
-                    alignItems="center"
-                  >
-
-                    <Stack
-                      direction="row"
-                      spacing={1}
-                      alignItems="center"
-                    >
-
-                      <PaymentsIcon
-                        sx={{
-                          color: '#2e7d32'
-                        }}
-                      />
-
-                      <Typography
-                        sx={{
-                          fontSize: {
-                            xs: 28,
-                            md: 34
-                          },
-
-                          fontWeight: 900,
-
-                          color: '#1b5e20'
-                        }}
-                      >
-
-                        ${pedido.total}
-
-                      </Typography>
-
-                    </Stack>
-
-                  </Stack>
-
-                  {
-                    pedido.estado !== 'Entregado' && (
-
-                      <Button
-
-                        fullWidth
-
-                        variant="contained"
-
-                        startIcon={<LocalShippingIcon />}
-
-                        onClick={() =>
-                          cambiarEstado(
-                            pedido
-                          )
-                        }
-
-                        sx={{
-
-                          mt: 3,
-
-                          borderRadius: 3,
-
-                          py: 1.2,
-
-                          fontWeight: 700,
-
-                          background: '#1b5e20'
-
-                        }}
-
-                      >
-
-                        {
-                          pedido.estado ===
-                            'Pendiente'
-
-                            ? 'Pasar a proceso'
-
-                            : pedido.estado ===
-                              'En proceso'
-
-                              ? 'Marcar en camino'
-
-                              : pedido.estado ===
-                                'En camino'
-
-                                ? 'Marcar entregado'
-
-                                : 'Entregado'
-                        }
-
-                      </Button>
-                    )
-                  }
-                  <Stack
-                    direction="row"
-                    spacing={1}
-                    alignItems="center"
-                    sx={{
-                      mt: 2
-                    }}
-                  >
-
-                    <CalendarMonthIcon
-                      sx={{
-                        color: '#777',
-                        fontSize: 18
-                      }}
-                    />
-
-                    <Typography
-                      sx={{
-                        color: '#777',
-                        fontSize: 12
-                      }}
-                    >
-                      {pedido.fechaBonita || 'Pedido activo'}
-                    </Typography>
-
-                  </Stack>
-
-                </Box>
-
-              </Card>
-
-            </Grid>
-
-          )
-        )}
-
-      </Grid>
-
-    </AdminLayout>
-
-  )
+)
 
 }
 
