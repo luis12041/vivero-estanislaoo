@@ -48,6 +48,12 @@ export async function crearPedido(
     notas:
       datosCliente.notas,
 
+    metodoPago:
+      datosCliente.metodoPago || 'Stripe',
+
+    tipoEntrega:
+      datosCliente.tipoEntrega || 'Envio',
+
     productos:
       carrito,
 

@@ -1,4 +1,7 @@
 import {
+  Radio,
+  RadioGroup,
+  FormControlLabel,
   Box,
   Typography,
   Card,
@@ -20,6 +23,10 @@ import DeleteIcon
 
 import AddIcon
   from '@mui/icons-material/Add'
+
+import {
+  crearPedido
+} from '../services/crearPedido'
 
 import RemoveIcon
   from '@mui/icons-material/Remove'
@@ -71,6 +78,10 @@ function Carrito() {
   const [loadingPago,
     setLoadingPago] =
     useState(false)
+
+  const [tipoEntrega,
+    setTipoEntrega] =
+    useState('Envio')
 
   const [datosCliente,
     setDatosCliente] =
@@ -161,6 +172,30 @@ function Carrito() {
   }
 
   async function finalizarCompra() {
+    if (
+      tipoEntrega === 'Envio' &&
+      !datosCliente.direccion
+    ) {
+
+      alert(
+        'Ingresa la dirección de entrega'
+      )
+
+      return
+
+    }
+    if (
+      !datosCliente.nombre ||
+      !datosCliente.telefono
+    ) {
+
+      alert(
+        'Completa nombre y teléfono'
+      )
+
+      return
+
+    }
 
     try {
 
@@ -190,6 +225,8 @@ function Carrito() {
               datosCliente: {
 
                 ...datosCliente,
+
+                tipoEntrega,
 
                 usuario:
                   auth.currentUser?.email || ''
@@ -223,6 +260,62 @@ function Carrito() {
     } finally {
 
       setLoadingPago(false)
+
+    }
+
+  }
+
+  async function pagarEfectivo() {
+
+    if (
+      !datosCliente.nombre ||
+      !datosCliente.telefono
+    ) {
+
+      alert(
+        'Ingresa nombre y teléfono'
+      )
+
+      return
+
+    }
+
+    try {
+
+      await crearPedido(
+
+        carrito,
+
+        total,
+
+        {
+
+          ...datosCliente,
+
+          metodoPago:
+            'Efectivo',
+
+          tipoEntrega
+
+        }
+
+      )
+
+      alert(
+        'Pedido registrado 🌱\nPuedes pasar a recogerlo y pagar en efectivo.'
+      )
+
+      setOpen(false)
+
+      vaciarCarrito()
+
+    } catch (error) {
+
+      console.log(error)
+
+      alert(
+        'Error al registrar pedido'
+      )
 
     }
 
@@ -541,6 +634,29 @@ function Carrito() {
 
                 </Alert>
 
+                <RadioGroup
+                  value={tipoEntrega}
+                  onChange={(e) =>
+                    setTipoEntrega(
+                      e.target.value
+                    )
+                  }
+                >
+
+                  <FormControlLabel
+                    value="Envio"
+                    control={<Radio />}
+                    label="🚚 Envío a domicilio"
+                  />
+
+                  <FormControlLabel
+                    value="Tienda"
+                    control={<Radio />}
+                    label="🏪 Recoger en tienda"
+                  />
+
+                </RadioGroup>
+
                 <TextField
                   label="Nombre completo"
                   name="nombre"
@@ -555,52 +671,62 @@ function Carrito() {
                   onChange={handleChange}
                 />
 
-                <TextField
-                  label="Dirección"
-                  name="direccion"
-                  fullWidth
-                  multiline
-                  rows={2}
-                  onChange={handleChange}
-                />
+                {
+                  tipoEntrega === 'Envio' && (
 
-                <TextField
-                  label="Referencia"
-                  name="referencia"
-                  fullWidth
-                  onChange={handleChange}
-                />
+                    <>
 
-                <Button
-                  variant="outlined"
-                  startIcon={
-                    <LocationOnIcon />
-                  }
-                  onClick={
-                    obtenerUbicacion
-                  }
-                  disabled={
-                    loadingUbicacion
-                  }
-                >
+                      <TextField
+                        label="Dirección"
+                        name="direccion"
+                        fullWidth
+                        multiline
+                        rows={2}
+                        onChange={handleChange}
+                      />
 
-                  {loadingUbicacion
-                    ? 'Obteniendo ubicación...'
-                    : 'Usar mi ubicación actual'}
+                      <TextField
+                        label="Referencia"
+                        name="referencia"
+                        fullWidth
+                        onChange={handleChange}
+                      />
 
-                </Button>
+                      <Button
+                        variant="outlined"
+                        startIcon={
+                          <LocationOnIcon />
+                        }
+                        onClick={
+                          obtenerUbicacion
+                        }
+                        disabled={
+                          loadingUbicacion
+                        }
+                      >
 
-                {datosCliente.ubicacion && (
+                        {loadingUbicacion
+                          ? 'Obteniendo ubicación...'
+                          : 'Usar mi ubicación actual'}
 
-                  <Alert
-                    severity="success"
-                  >
+                      </Button>
 
-                    Ubicación obtenida 😎🌱
+                      {datosCliente.ubicacion && (
 
-                  </Alert>
+                        <Alert
+                          severity="success"
+                        >
 
-                )}
+                          Ubicación obtenida 😎🌱
+
+                        </Alert>
+
+                      )}
+
+                    </>
+
+                  )
+                }
 
                 <TextField
                   label="Notas"
@@ -626,6 +752,21 @@ function Carrito() {
                 Cancelar
 
               </Button>
+              {
+                tipoEntrega === 'Tienda' && (
+
+                  <Button
+                    variant="contained"
+                    color="warning"
+                    onClick={pagarEfectivo}
+                  >
+
+                    Pagar en efectivo
+
+                  </Button>
+
+                )
+              }
 
               <Button
                 variant="contained"
@@ -643,13 +784,11 @@ function Carrito() {
                   : 'Pagar con Stripe'}
 
               </Button>
-
             </DialogActions>
 
           </Dialog>
 
         </>
-
       )}
 
     </ClientLayout>
