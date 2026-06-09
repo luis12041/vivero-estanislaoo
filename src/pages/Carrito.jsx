@@ -495,7 +495,7 @@ function Carrito() {
                       <TextField
                         size="small"
                         type="number"
-                        defaultValue={producto.cantidad}
+                        value={producto.cantidad}
                         inputProps={{
                           min: 1,
                           max: producto.stock
@@ -503,26 +503,38 @@ function Carrito() {
                         sx={{
                           width: 80
                         }}
-                        onBlur={(e) => {
+                        onChange={(e) => {
 
                           const cantidad =
-                            Number(
-                              e.target.value
-                            )
+                            Number(e.target.value)
 
                           if (
-                            cantidad >= 1
+                            cantidad < 1
                           ) {
 
-                            actualizarCantidad(
-                              producto.nombre,
-                              cantidad
-                            )
+                            return
 
                           }
 
-                        }}
-                      />
+                          if (
+                            cantidad >
+                            producto.stock
+                          ) {
+
+                            alert(
+                              `Solo hay ${producto.stock} unidades disponibles`
+                            )
+
+                            return
+
+                          }
+
+                          actualizarCantidad(
+                            producto.nombre,
+                            cantidad
+                          )
+
+                        }} />
 
                       <IconButton
                         color="primary"
