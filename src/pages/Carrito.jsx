@@ -495,33 +495,27 @@ function Carrito() {
                       <TextField
                         size="small"
                         type="number"
-                        value={producto.cantidad}
+                        defaultValue={producto.cantidad}
                         sx={{
                           width: 80
                         }}
-                        onChange={(e) => {
-
-                          const valor =
-                            e.target.value
-
-                          if (
-                            valor === ''
-                          ) {
-
-                            return
-
-                          }
+                        onBlur={(e) => {
 
                           const cantidad =
-                            Number(valor)
+                            Number(
+                              e.target.value
+                            )
 
-                          actualizarCantidad(
+                          if (
+                            cantidad >= 1
+                          ) {
 
-                            producto.nombre,
+                            actualizarCantidad(
+                              producto.nombre,
+                              cantidad
+                            )
 
-                            cantidad
-
-                          )
+                          }
 
                         }}
                       />
