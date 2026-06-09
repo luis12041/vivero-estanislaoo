@@ -26,7 +26,7 @@ import AddIcon
 
 import {
   crearPedido
-} from '../services/crearPedido'
+} from '../services/pedidosService'
 
 import RemoveIcon
   from '@mui/icons-material/Remove'
