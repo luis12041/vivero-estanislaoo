@@ -287,22 +287,20 @@ function AdminReportes() {
                     Object.keys(
                         conteoPlantas
                     ).reduce(
-
                         (a, b) =>
-
                             conteoPlantas[a] >
                                 conteoPlantas[b]
-
                                 ? a
-
                                 : b
-
                     )
 
                     :
 
                     'Ninguna'
 
+            setPlantaTop(
+                mejorPlanta
+            )
             const datosPlantas =
 
                 Object.entries(
