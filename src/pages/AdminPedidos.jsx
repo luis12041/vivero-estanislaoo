@@ -83,7 +83,7 @@ function AdminPedidos() {
 
         collection(
           db,
-          'pedidos'
+          'pedidos_temporales'
         ),
 
         (snapshot) => {
