@@ -508,8 +508,19 @@ function Carrito() {
                         }}
                         onChange={(e) => {
 
+                          const valor =
+                            e.target.value
+
+                          if (
+                            valor === ''
+                          ) {
+
+                            return
+
+                          }
+
                           const cantidad =
-                            Number(e.target.value)
+                            Number(valor)
 
                           if (
                             cantidad < 1
