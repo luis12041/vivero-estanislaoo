@@ -496,9 +496,24 @@ function Carrito() {
                         size="small"
                         type="number"
                         value={producto.cantidad}
-                        onFocus={(e) =>
-                          e.target.select()
-                        }
+                        onBlur={(e) => {
+
+                          const cantidad =
+                            Number(e.target.value)
+
+                          if (
+                            !cantidad ||
+                            cantidad < 1
+                          ) {
+
+                            actualizarCantidad(
+                              producto.nombre,
+                              1
+                            )
+
+                          }
+
+                        }}
                         inputProps={{
                           min: 1,
                           max: producto.stock
@@ -521,14 +536,6 @@ function Carrito() {
 
                           const cantidad =
                             Number(valor)
-
-                          if (
-                            cantidad < 1
-                          ) {
-
-                            return
-
-                          }
 
                           if (
                             cantidad >
