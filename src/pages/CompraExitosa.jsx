@@ -1,61 +1,59 @@
 import {
-    useEffect
+  useEffect
 } from 'react'
 
 import {
-    useNavigate
+  useNavigate
 } from 'react-router-dom'
-
-import {
-    useCart
-} from '../context/CartContext'
 
 function CompraExitosa() {
 
-    const navigate =
-        useNavigate()
+  const navigate =
+    useNavigate()
 
-    const {
-        vaciarCarrito
-    } = useCart()
+  useEffect(() => {
 
-    useEffect(() => {
-
-        vaciarCarrito()
-
-        localStorage.removeItem(
-            'carrito'
-        )
-
-        const timer = setTimeout(() => {
-
-            navigate(
-                '/mis-pedidos'
-            )
-
-        }, 2000)
-
-        return () =>
-            clearTimeout(timer)
-
-    }, [navigate, vaciarCarrito])
-
-    return (
-        <div
-            style={{
-                textAlign: 'center',
-                marginTop: '100px'
-            }}
-        >
-            <h1>
-                ✅ Pago realizado con éxito
-            </h1>
-
-            <p>
-                Redirigiendo...
-            </p>
-        </div>
+    console.log(
+      'ENTRO A COMPRA EXITOSA'
     )
+
+    const timer = setTimeout(() => {
+
+      console.log(
+        'VOY A MIS PEDIDOS'
+      )
+
+      navigate(
+        '/mis-pedidos'
+      )
+
+    }, 2000)
+
+    return () =>
+      clearTimeout(timer)
+
+  }, [navigate])
+
+  return (
+
+    <div
+      style={{
+        textAlign: 'center',
+        marginTop: '100px'
+      }}
+    >
+
+      <h1>
+        ✅ Pago realizado con éxito
+      </h1>
+
+      <p>
+        Redirigiendo...
+      </p>
+
+    </div>
+
+  )
 
 }
 
