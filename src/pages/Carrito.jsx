@@ -585,7 +585,7 @@ function Carrito() {
                             ...cantidades,
 
                             [producto.nombre]:
-                              ''
+                              cantidad
 
                           })
 
@@ -599,7 +599,7 @@ function Carrito() {
                         sx={{
                           width: 80
                         }}
-                      
+
                       />
                       <IconButton
                         color="primary"
