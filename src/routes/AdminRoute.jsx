@@ -23,73 +23,92 @@ import {
 
 function AdminRoute({ children }) {
 
-  const [loading, setLoading] = useState(true)
+  const [loading,
+    setLoading] =
+    useState(true)
 
-  const [isAdmin, setIsAdmin] = useState(false)
+  const [isPermitido,
+    setIsPermitido] =
+    useState(false)
 
   useEffect(() => {
 
-    const unsubscribe = onAuthStateChanged(
+    const unsubscribe =
+      onAuthStateChanged(
 
-      auth,
+        auth,
 
-      async (usuario) => {
+        async (usuario) => {
 
-        if (!usuario) {
+          if (!usuario) {
 
-          setIsAdmin(false)
+            setIsPermitido(false)
 
-          setLoading(false)
+            setLoading(false)
 
-          return
-
-        }
-
-        try {
-
-          const docRef = doc(
-            db,
-            'usuarios',
-            usuario.uid
-          )
-
-          const docSnap = await getDoc(docRef)
-
-          if (docSnap.exists()) {
-
-            const data = docSnap.data()
-
-            if (data.role === 'admin') {
-
-              setIsAdmin(true)
-
-            } else {
-
-              setIsAdmin(false)
-
-            }
-
-          } else {
-
-            setIsAdmin(false)
+            return
 
           }
 
-        } catch (error) {
+          try {
 
-          console.log(error)
+            const docRef =
+              doc(
+                db,
+                'usuarios',
+                usuario.uid
+              )
 
-          setIsAdmin(false)
+            const docSnap =
+              await getDoc(docRef)
+
+            if (docSnap.exists()) {
+
+              const data =
+                docSnap.data()
+
+              if (
+
+                data.role ===
+                'admin'
+
+                ||
+
+                data.role ===
+                'empleado'
+
+              ) {
+
+                setIsPermitido(true)
+
+              } else {
+
+                setIsPermitido(false)
+
+              }
+
+            } else {
+
+              setIsPermitido(false)
+
+            }
+
+          } catch (error) {
+
+            console.log(error)
+
+            setIsPermitido(false)
+
+          }
+
+          setLoading(false)
 
         }
 
-        setLoading(false)
+      )
 
-      }
-
-    )
-
-    return () => unsubscribe()
+    return () =>
+      unsubscribe()
 
   }, [])
 
@@ -99,7 +118,7 @@ function AdminRoute({ children }) {
 
   }
 
-  if (!isAdmin) {
+  if (!isPermitido) {
 
     return <Navigate to="/" />
 
