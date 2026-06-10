@@ -496,6 +496,9 @@ function Carrito() {
                         size="small"
                         type="number"
                         value={producto.cantidad}
+                        onFocus={(e) =>
+                          e.target.select()
+                        }
                         inputProps={{
                           min: 1,
                           max: producto.stock
@@ -534,8 +537,8 @@ function Carrito() {
                             cantidad
                           )
 
-                        }} />
-
+                        }}
+                      />
                       <IconButton
                         color="primary"
                         onClick={() =>
