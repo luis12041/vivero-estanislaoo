@@ -28,6 +28,37 @@ export function CartProvider({ children }) {
 
   }, [carrito])
 
+  useEffect(() => {
+
+    const sincronizarCarrito = () => {
+
+      const carritoGuardado =
+        localStorage.getItem(
+          'carrito'
+        )
+
+      setCarrito(
+        carritoGuardado
+          ? JSON.parse(carritoGuardado)
+          : []
+      )
+
+    }
+
+    window.addEventListener(
+      'storage',
+      sincronizarCarrito
+    )
+
+    return () =>
+
+      window.removeEventListener(
+        'storage',
+        sincronizarCarrito
+      )
+
+  }, [])
+
   const agregarAlCarrito = (producto) => {
 
     const existe = carrito.find(

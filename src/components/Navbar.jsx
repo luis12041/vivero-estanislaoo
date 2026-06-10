@@ -341,9 +341,55 @@ function Navbar() {
         onClose={() =>
           setOpenMenu(false)
         }
+        PaperProps={{
+          sx: {
+            borderTopLeftRadius: 25,
+            borderBottomLeftRadius: 25,
+            overflow: 'hidden',
+            boxShadow:
+              '0 0 30px rgba(0,0,0,0.15)'
+          }
+        }}
       >
 
-        <List sx={{ width: 250 }}>
+        <Box
+          sx={{
+            p: 4,
+            textAlign: 'center',
+            background:
+              'linear-gradient(135deg,#1b5e20,#43a047)',
+            color: 'white',
+            boxShadow:
+              '0 4px 20px rgba(0,0,0,.15)'
+          }}
+        >
+
+          <Typography
+            variant="h5"
+            fontWeight={800}
+          >
+            🌱 Vivero
+          </Typography>
+
+          <Typography
+            sx={{
+              opacity: 0.9
+            }}
+          >
+            Estanislaoo
+          </Typography>
+
+        </Box>
+
+        <List
+          sx={{
+            width: 280,
+            pt: 2,
+            background:
+              'linear-gradient(180deg,#f8fff8,#ffffff)',
+            height: '100%'
+          }}
+        >
 
           <ListItemButton
             component={Link}
@@ -351,15 +397,31 @@ function Navbar() {
             onClick={() =>
               setOpenMenu(false)
             }
+            sx={{
+              mx: 1,
+              mb: 1,
+              borderRadius: 3,
+              transition: '.25s',
+
+              '&:hover': {
+                backgroundColor:
+                  '#e8f5e9',
+                transform:
+                  'translateX(8px)',
+                boxShadow:
+                  '0 4px 12px rgba(46,125,50,.15)'
+              }
+            }}
           >
 
             <ListItemText
-              primary="Catálogo"
+              primary="📚 Catálogo"
+              primaryTypographyProps={{
+                fontWeight: 700
+              }}
             />
 
           </ListItemButton>
-
-
 
           {usuario && (
 
@@ -369,25 +431,62 @@ function Navbar() {
               onClick={() =>
                 setOpenMenu(false)
               }
+              sx={{
+                mx: 1,
+                mb: 1,
+                borderRadius: 3,
+                transition: '.25s',
+
+                '&:hover': {
+                  backgroundColor:
+                    '#e8f5e9',
+                  transform:
+                    'translateX(8px)',
+                  boxShadow:
+                    '0 4px 12px rgba(46,125,50,.15)'
+                }
+              }}
             >
 
               <ListItemText
-                primary="Mis pedidos"
+                primary="📦 Mis pedidos"
+                primaryTypographyProps={{
+                  fontWeight: 700
+                }}
               />
 
             </ListItemButton>
 
           )}
+
           <ListItemButton
             component={Link}
             to="/carrito"
             onClick={() =>
               setOpenMenu(false)
             }
+            sx={{
+              mx: 1,
+              mb: 1,
+              borderRadius: 3,
+              transition: '.25s',
+
+              '&:hover': {
+                backgroundColor:
+                  '#e8f5e9',
+                transform:
+                  'translateX(8px)',
+                boxShadow:
+                  '0 4px 12px rgba(46,125,50,.15)'
+              }
+            }}
           >
 
             <ListItemText
-              primary="Carrito"
+              primary="🛒 Carrito"
+              primaryTypographyProps={{
+                fontWeight: 700
+              }}
             />
 
           </ListItemButton>
@@ -401,10 +500,28 @@ function Navbar() {
                 onClick={() =>
                   setOpenMenu(false)
                 }
+                sx={{
+                  mx: 1,
+                  mb: 1,
+                  borderRadius: 3,
+                  transition: '.25s',
+
+                  '&:hover': {
+                    backgroundColor:
+                      '#e8f5e9',
+                    transform:
+                      'translateX(8px)',
+                    boxShadow:
+                      '0 4px 12px rgba(46,125,50,.15)'
+                  }
+                }}
               >
 
                 <ListItemText
-                  primary="Admin"
+                  primary="⚙️ Admin"
+                  primaryTypographyProps={{
+                    fontWeight: 700
+                  }}
                 />
 
               </ListItemButton>
@@ -414,7 +531,6 @@ function Navbar() {
         </List>
 
       </Drawer>
-
     </AppBar>
 
   )

@@ -13,15 +13,15 @@ function CompraExitosa() {
 
   useEffect(() => {
 
-    console.log(
-      'ENTRO A COMPRA EXITOSA'
+    localStorage.removeItem(
+      'carrito'
+    )
+
+    window.dispatchEvent(
+      new Event('storage')
     )
 
     const timer = setTimeout(() => {
-
-      console.log(
-        'VOY A MIS PEDIDOS'
-      )
 
       navigate(
         '/mis-pedidos'
