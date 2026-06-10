@@ -9,13 +9,13 @@ import {
 } from '@mui/material'
 
 import ShoppingCartIcon
-from '@mui/icons-material/ShoppingCart'
+  from '@mui/icons-material/ShoppingCart'
 
 import LogoutIcon
-from '@mui/icons-material/Logout'
+  from '@mui/icons-material/Logout'
 
 import ReceiptLongIcon
-from '@mui/icons-material/ReceiptLong'
+  from '@mui/icons-material/ReceiptLong'
 
 import {
   Link,
@@ -23,7 +23,7 @@ import {
 } from 'react-router-dom'
 
 import { useCart }
-from '../context/CartContext'
+  from '../context/CartContext'
 
 import {
   signOut
@@ -32,6 +32,16 @@ import {
 import {
   auth
 } from '../firebase/config'
+
+import MenuIcon
+  from '@mui/icons-material/Menu'
+
+import {
+  Drawer,
+  List,
+  ListItemButton,
+  ListItemText
+} from '@mui/material'
 
 import {
   useEffect,
@@ -50,6 +60,10 @@ function Navbar() {
     setUsuario] =
     useState(null)
 
+  const [openMenu,
+    setOpenMenu] =
+    useState(false)
+
   useEffect(() => {
 
     const user =
@@ -60,7 +74,7 @@ function Navbar() {
   }, [])
 
   async function
-  cerrarSesion() {
+    cerrarSesion() {
 
     await signOut(auth)
 
@@ -112,11 +126,12 @@ function Navbar() {
 
             letterSpacing: 1,
 
+            whiteSpace: 'nowrap',
+
             fontSize: {
-              xs: '22px',
+              xs: '18px',
               md: '30px'
             }
-
           }}
         >
 
@@ -125,15 +140,31 @@ function Navbar() {
 
         </Typography>
 
+        <IconButton
+          onClick={() =>
+            setOpenMenu(true)
+          }
+          sx={{
+            display: {
+              xs: 'flex',
+              md: 'none'
+            }
+          }}
+        >
+
+          <MenuIcon />
+
+        </IconButton>
+
         <Box
           sx={{
 
-            display: 'flex',
-
-            gap: {
-              xs: 1,
-              md: 2
+            display: {
+              xs: 'none',
+              md: 'flex'
             },
+
+            gap: 2,
 
             alignItems: 'center',
 
@@ -201,42 +232,42 @@ function Navbar() {
           {usuario?.email ===
             'luis12042003@gmail.com' && (
 
-            <Button
-              component={Link}
-              to="/admin"
-              variant="contained"
-              sx={{
+              <Button
+                component={Link}
+                to="/admin"
+                variant="contained"
+                sx={{
 
-                borderRadius: 3,
-
-                backgroundColor:
-                  '#2e7d32',
-
-                fontWeight: 700,
-
-                px: {
-                  xs: 2,
-                  md: 3
-                },
-
-                whiteSpace:
-                  'nowrap',
-
-                '&:hover': {
+                  borderRadius: 3,
 
                   backgroundColor:
-                    '#1b5e20'
+                    '#2e7d32',
 
-                }
+                  fontWeight: 700,
 
-              }}
-            >
+                  px: {
+                    xs: 2,
+                    md: 3
+                  },
 
-              Admin
+                  whiteSpace:
+                    'nowrap',
 
-            </Button>
+                  '&:hover': {
 
-          )}
+                    backgroundColor:
+                      '#1b5e20'
+
+                  }
+
+                }}
+              >
+
+                Admin
+
+              </Button>
+
+            )}
 
           {usuario && (
 
@@ -268,6 +299,106 @@ function Navbar() {
         </Box>
 
       </Toolbar>
+
+      <Drawer
+        anchor="right"
+        open={openMenu}
+        onClose={() =>
+          setOpenMenu(false)
+        }
+      >
+
+        <List sx={{ width: 250 }}>
+
+          <ListItemButton
+            component={Link}
+            to="/catalogo"
+            onClick={() =>
+              setOpenMenu(false)
+            }
+          >
+
+            <ListItemText
+              primary="Catálogo"
+            />
+
+          </ListItemButton>
+
+
+
+          {usuario && (
+
+            <ListItemButton
+              component={Link}
+              to="/mis-pedidos"
+              onClick={() =>
+                setOpenMenu(false)
+              }
+            >
+
+              <ListItemText
+                primary="Mis pedidos"
+              />
+
+            </ListItemButton>
+
+          )}
+          <ListItemButton
+            component={Link}
+            to="/carrito"
+            onClick={() =>
+              setOpenMenu(false)
+            }
+          >
+
+            <ListItemText
+              primary="Carrito"
+            />
+
+          </ListItemButton>
+
+          {usuario?.email ===
+            'luis12042003@gmail.com' && (
+
+              <ListItemButton
+                component={Link}
+                to="/admin"
+                onClick={() =>
+                  setOpenMenu(false)
+                }
+              >
+
+                <ListItemText
+                  primary="Admin"
+                />
+
+              </ListItemButton>
+
+            )}
+
+          {usuario && (
+
+            <ListItemButton
+              onClick={() => {
+
+                setOpenMenu(false)
+
+                cerrarSesion()
+
+              }}
+            >
+
+              <ListItemText
+                primary="Salir"
+              />
+
+            </ListItemButton>
+
+          )}
+
+        </List>
+
+      </Drawer>
 
     </AppBar>
 
