@@ -328,7 +328,7 @@ export const inventario = [
         tipoLuz: 'Sol',
         descripcion: 'Planta para sol',
         riego: 'Bajo',
-        imagen: 'https://thumbs.dreamstime.com/z/una-variedad-de-cactus-en-un-soleado-invernadero-muestra-la-belleza-y-estas-plantas-resistentes-tono-suave-luz-con-maceta-para-308921031.jpg?w=992'
+        imagen: 'https://i.pinimg.com/736x/29/c9/13/29c9134aea66952531e05f3c353a55f5.jpg'
     },
 
     {

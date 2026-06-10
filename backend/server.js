@@ -257,8 +257,7 @@ app.post(
           mode: 'payment',
 
           success_url:
-            'https://vivero-estanislaoo.web.app/catalogo',
-
+            'https://vivero-estanislaoo.web.app/compra-exitosa',
           cancel_url:
             'https://vivero-estanislaoo.web.app/carrito',
 

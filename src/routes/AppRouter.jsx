@@ -14,6 +14,9 @@ import Login from '../pages/Login'
 import AdminRoute from './AdminRoute'
 import MisPedidos from '../pages/MisPedidos'
 
+import CompraExitosa
+  from '../pages/CompraExitosa'
+
 import AdminPedidos
   from '../pages/AdminPedidos'
 
@@ -56,6 +59,11 @@ function AppRouter() {
         <Route
           path="/catalogo"
           element={<Catalogo />}
+        />
+
+        <Route
+          path="/compra-exitosa"
+          element={<CompraExitosa />}
         />
 
         <Route

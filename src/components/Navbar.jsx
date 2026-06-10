@@ -37,6 +37,10 @@ import MenuIcon
   from '@mui/icons-material/Menu'
 
 import {
+  onAuthStateChanged
+} from 'firebase/auth'
+
+import {
   Drawer,
   List,
   ListItemButton,
@@ -66,13 +70,25 @@ function Navbar() {
 
   useEffect(() => {
 
-    const user =
-      auth.currentUser
+    const unsubscribe =
 
-    setUsuario(user)
+      onAuthStateChanged(
+
+        auth,
+
+        (user) => {
+
+          setUsuario(user)
+
+        }
+
+      )
+
+    return () =>
+
+      unsubscribe()
 
   }, [])
-
   async function
     cerrarSesion() {
 
@@ -155,6 +171,25 @@ function Navbar() {
           <MenuIcon />
 
         </IconButton>
+
+        {usuario && (
+
+          <IconButton
+            onClick={cerrarSesion}
+            color="error"
+            sx={{
+              display: {
+                xs: 'flex',
+                md: 'none'
+              }
+            }}
+          >
+
+            <LogoutIcon />
+
+          </IconButton>
+
+        )}
 
         <Box
           sx={{
@@ -375,26 +410,6 @@ function Navbar() {
               </ListItemButton>
 
             )}
-
-          {usuario && (
-
-            <ListItemButton
-              onClick={() => {
-
-                setOpenMenu(false)
-
-                cerrarSesion()
-
-              }}
-            >
-
-              <ListItemText
-                primary="Salir"
-              />
-
-            </ListItemButton>
-
-          )}
 
         </List>
 
