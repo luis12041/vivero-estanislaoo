@@ -59,6 +59,10 @@ function AdminLayout({ children }) {
     setRole] =
     useState('')
 
+  const [nombre,
+    setNombre] =
+    useState('')
+
   useEffect(() => {
 
     async function cargarRol() {
@@ -80,8 +84,15 @@ function AdminLayout({ children }) {
 
       if (docSnap.exists()) {
 
+        const data =
+          docSnap.data()
+
         setRole(
-          docSnap.data().role
+          data.role
+        )
+
+        setNombre(
+          data.nombre
         )
 
       }
@@ -306,7 +317,7 @@ function AdminLayout({ children }) {
               }}
             >
 
-              A
+              {nombre?.charAt(0)}
 
             </Avatar>
 
@@ -319,7 +330,7 @@ function AdminLayout({ children }) {
                 }}
               >
 
-                Admin
+                {nombre}
 
               </Typography>
 
@@ -330,7 +341,9 @@ function AdminLayout({ children }) {
                 }}
               >
 
-                Administrador
+                {role === 'admin'
+                  ? 'Administrador'
+                  : 'Empleado'}
 
               </Typography>
 
