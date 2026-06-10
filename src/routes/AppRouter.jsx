@@ -23,9 +23,6 @@ import AdminUsuarios
 import AdminReportes
   from '../pages/AdminReportes'
 
-import EmpleadoDashboard
-  from '../pages/EmpleadoDashboard'
-
 function AppRouter() {
 
   return (
@@ -110,7 +107,7 @@ function AppRouter() {
         <Route
           path="/empleado"
           element={
-            <EmpleadoDashboard />
+            <DashboardAdmin />
           }
         />
 
