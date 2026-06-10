@@ -69,6 +69,10 @@ function Carrito() {
 
   } = useCart()
 
+  const [cantidades,
+    setCantidades] =
+    useState({})
+
   const [open,
     setOpen] =
     useState(false)
@@ -495,33 +499,29 @@ function Carrito() {
                       <TextField
                         size="small"
                         type="number"
-                        value={producto.cantidad}
-                        onBlur={(e) => {
+                        value={
+                          cantidades[
+                          producto.nombre
+                          ] ?? producto.cantidad
+                        }
 
-                          const cantidad =
-                            Number(e.target.value)
-
-                          if (
-                            !cantidad ||
-                            cantidad < 1
-                          ) {
-
-                            actualizarCantidad(
-                              producto.nombre,
-                              1
-                            )
-
-                          }
-
-                        }}
-                        inputProps={{
-                          min: 1,
-                          max: producto.stock
-                        }}
-                        sx={{
-                          width: 80
-                        }}
                         onChange={(e) => {
+
+                          const valor =
+                            e.target.value
+
+                          setCantidades({
+
+                            ...cantidades,
+
+                            [producto.nombre]:
+                              valor
+
+                          })
+
+                        }}
+
+                        onBlur={(e) => {
 
                           const valor =
                             e.target.value
@@ -529,6 +529,15 @@ function Carrito() {
                           if (
                             valor === ''
                           ) {
+
+                            setCantidades({
+
+                              ...cantidades,
+
+                              [producto.nombre]:
+                                producto.cantidad
+
+                            })
 
                             return
 
@@ -538,24 +547,59 @@ function Carrito() {
                             Number(valor)
 
                           if (
+                            cantidad < 1
+                          ) {
+
+                            actualizarCantidad(
+                              producto.nombre,
+                              1
+                            )
+
+                          } else if (
+
                             cantidad >
                             producto.stock
+
                           ) {
 
                             alert(
                               `Solo hay ${producto.stock} unidades disponibles`
                             )
 
-                            return
+                            actualizarCantidad(
+                              producto.nombre,
+                              producto.stock
+                            )
+
+                          } else {
+
+                            actualizarCantidad(
+                              producto.nombre,
+                              cantidad
+                            )
 
                           }
 
-                          actualizarCantidad(
-                            producto.nombre,
-                            cantidad
-                          )
+                          setCantidades({
+
+                            ...cantidades,
+
+                            [producto.nombre]:
+                              ''
+
+                          })
 
                         }}
+
+                        inputProps={{
+                          min: 1,
+                          max: producto.stock
+                        }}
+
+                        sx={{
+                          width: 80
+                        }}
+                      
                       />
                       <IconButton
                         color="primary"
