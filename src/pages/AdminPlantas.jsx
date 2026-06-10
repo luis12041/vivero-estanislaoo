@@ -521,7 +521,7 @@ function AdminPlantas() {
               setFiltro('Todas')
             }
           >
-            Todas
+           🌿 Todas
           </Button>
 
           <Button
@@ -534,7 +534,7 @@ function AdminPlantas() {
               setFiltro('Sol')
             }
           >
-            Sol
+            ☀️ Sol
           </Button>
 
           <Button
@@ -547,7 +547,7 @@ function AdminPlantas() {
               setFiltro('Sombra')
             }
           >
-            Sombra
+            🌑 Sombra
           </Button>
 
           <Button
@@ -560,14 +560,14 @@ function AdminPlantas() {
               setFiltro('Resolana')
             }
           >
-            Resolana
+            🌤️ Resolana
           </Button>
 
         </Stack>
 
         <Grid
           container
-          spacing={4}
+          spacing={3}
         >
 
           {plantas
@@ -591,34 +591,42 @@ function AdminPlantas() {
                 item
                 xs={12}
                 sm={6}
-                lg={4}
+                md={4}
+                lg={3}
                 key={planta.id}
               >
 
                 <Card
                   sx={{
 
-                    borderRadius: 6,
+                    height: '100%',
+
+                    borderRadius: 5,
 
                     overflow: 'hidden',
 
-                    background:
-                      'linear-gradient(145deg,#ffffff,#f8f8f8)',
+                    background: '#fff',
+
+                    border:
+                      '1px solid #e8ecef',
 
                     boxShadow:
-                      '0 10px 25px rgba(0,0,0,0.08)',
+                      '0 8px 24px rgba(0,0,0,0.08)',
 
-                    transition: '0.3s',
+                    transition:
+                      'all .25s ease',
 
-                    height: '100%',
+                    display: 'flex',
+
+                    flexDirection: 'column',
 
                     '&:hover': {
 
                       transform:
-                        'translateY(-8px)',
+                        'translateY(-6px)',
 
                       boxShadow:
-                        '0 20px 40px rgba(0,0,0,0.12)'
+                        '0 14px 35px rgba(0,0,0,0.12)'
 
                     }
 
@@ -628,7 +636,19 @@ function AdminPlantas() {
                   <CardMedia
                     component="img"
                     image={planta.imagen}
-                    height="260"
+                    alt={planta.nombre}
+                    sx={{
+
+                      height: 220,
+
+                      width: '100%',
+
+                      objectFit: 'cover',
+
+                      background:
+                        '#f5f5f5'
+
+                    }}
                   />
 
                   <CardContent>
@@ -636,9 +656,10 @@ function AdminPlantas() {
                     <Stack spacing={2}>
 
                       <Typography
-                        variant="h5"
                         sx={{
-                          fontWeight: 800
+                          fontSize: 22,
+                          fontWeight: 800,
+                          color: '#1f2937'
                         }}
                       >
 
@@ -646,6 +667,21 @@ function AdminPlantas() {
 
                       </Typography>
 
+                      <Typography
+                        sx={{
+                          color: '#6b7280',
+                          fontSize: 14,
+                          minHeight: 50
+                        }}
+                      >
+
+                        {
+                          planta.descripcion
+                            ? `${planta.descripcion.slice(0, 60)}...`
+                            : 'Sin descripción'
+                        }
+
+                      </Typography>
                       <Chip
                         label={planta.tipoLuz}
                         color={
@@ -657,15 +693,20 @@ function AdminPlantas() {
                         }
                         sx={{
                           width: 'fit-content',
+                          alignSelf: 'flex-start',
                           fontWeight: 700
                         }}
                       />
 
                       <Typography
-                        variant="h6"
                         sx={{
-                          color: '#2e7d32',
-                          fontWeight: 800
+
+                          fontSize: 28,
+
+                          fontWeight: 900,
+
+                          color: '#2e7d32'
+
                         }}
                       >
 
@@ -677,7 +718,10 @@ function AdminPlantas() {
                         sx={{
                           display: 'flex',
                           alignItems: 'center',
-                          gap: 1
+                          gap: 1,
+                          background: '#f3f4f6',
+                          p: 1.5,
+                          borderRadius: 3
                         }}
                       >
 
@@ -709,6 +753,7 @@ function AdminPlantas() {
                           color="error"
                           sx={{
                             width: 'fit-content',
+                            alignSelf: 'flex-start',
                             fontWeight: 700
                           }}
                         />
@@ -721,6 +766,7 @@ function AdminPlantas() {
                           color="warning"
                           sx={{
                             width: 'fit-content',
+                            alignSelf: 'flex-start',
                             fontWeight: 700
                           }}
                         />
@@ -733,86 +779,114 @@ function AdminPlantas() {
                           color="success"
                           sx={{
                             width: 'fit-content',
+                            alignSelf: 'flex-start',
                             fontWeight: 700
                           }}
                         />
 
                       )}
-
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={() => {
-
-                          setModoEditar(true)
-
-                          setPlantaEditando(
-                            planta
-                          )
-
-                          setImagen(null)
-
-                          setNombre(
-                            planta.nombre || ''
-                          )
-
-                          setPrecio(
-                            planta.precio || ''
-                          )
-
-                          setStock(
-                            planta.stock || 0
-                          )
-
-                          setTipoLuz(
-                            planta.tipoLuz || 'Sol'
-                          )
-
-                          setRiego(
-                            planta.riego || 'Moderado'
-                          )
-
-                          setDescripcion(
-                            planta.descripcion || ''
-                          )
-
-                          setDisponible(
-                            planta.disponible ?? true
-                          )
-
-                          setOpenModal(true)
-
-                        }}
-                        sx={{
-                          borderRadius: 4
-                        }}
+                      <Stack
+                        direction="row"
+                        spacing={1}
                       >
 
-                        Editar
+                        <Button
+                          variant="contained"
+                          fullWidth
+                          onClick={() => {
 
-                      </Button>
+                            setModoEditar(true)
 
-                      <Button
-                        variant="contained"
-                        color="error"
-                        startIcon={
-                          <DeleteIcon />
-                        }
-                        onClick={() =>
-                          handleEliminar(
-                            planta.id
-                          )
-                        }
-                        sx={{
-                          borderRadius: 4,
-                          mt: 2
-                        }}
-                      >
+                            setPlantaEditando(
+                              planta
+                            )
 
-                        Eliminar
+                            setImagen(null)
 
-                      </Button>
+                            setNombre(
+                              planta.nombre || ''
+                            )
 
+                            setPrecio(
+                              planta.precio || ''
+                            )
+
+                            setStock(
+                              planta.stock || 0
+                            )
+
+                            setTipoLuz(
+                              planta.tipoLuz || 'Sol'
+                            )
+
+                            setRiego(
+                              planta.riego || 'Moderado'
+                            )
+
+                            setDescripcion(
+                              planta.descripcion || ''
+                            )
+
+                            setDisponible(
+                              planta.disponible ?? true
+                            )
+
+                            setOpenModal(true)
+
+                          }}
+                          sx={{
+
+                            borderRadius: 3,
+
+                            py: 1,
+
+                            fontWeight: 700,
+
+                            background:
+                              '#2e7d32',
+
+                            '&:hover': {
+
+                              background:
+                                '#1b5e20'
+
+                            }
+
+                          }}
+                        >
+
+                          Editar
+
+                        </Button>
+
+                        <Button
+                          variant="contained"
+                          color="error"
+                          fullWidth
+                          startIcon={
+                            <DeleteIcon />
+                          }
+                          onClick={() =>
+                            handleEliminar(
+                              planta.id
+                            )
+                          }
+                          sx={{
+
+                            borderRadius: 3,
+
+                            py: 1,
+
+                            fontWeight: 700
+
+                          }}
+                        >
+
+                          Eliminar
+
+                        </Button>
+
+                      </Stack>
                     </Stack>
 
                   </CardContent>
