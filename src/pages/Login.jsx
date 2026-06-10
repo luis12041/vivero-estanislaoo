@@ -119,12 +119,20 @@ function Login() {
 
         navigate('/admin')
 
+      } else if (
+
+        usuarioEncontrado?.role ===
+        'empleado'
+
+      ) {
+
+        navigate('/empleado')
+
       } else {
 
         navigate('/catalogo')
 
       }
-
     } catch (error) {
 
       console.log(error)

@@ -29,7 +29,19 @@ import { signOut } from 'firebase/auth'
 
 import { auth } from '../firebase/config'
 
-import { useState } from 'react'
+import {
+  doc,
+  getDoc
+} from 'firebase/firestore'
+
+import {
+  db
+} from '../firebase/config'
+
+import {
+  useState,
+  useEffect
+} from 'react'
 
 const drawerWidth = 210
 
@@ -42,6 +54,43 @@ function AdminLayout({ children }) {
   const [mobileOpen,
     setMobileOpen] =
     useState(false)
+
+  const [role,
+    setRole] =
+    useState('')
+
+  useEffect(() => {
+
+    async function cargarRol() {
+
+      const usuario =
+        auth.currentUser
+
+      if (!usuario) return
+
+      const docRef =
+        doc(
+          db,
+          'usuarios',
+          usuario.uid
+        )
+
+      const docSnap =
+        await getDoc(docRef)
+
+      if (docSnap.exists()) {
+
+        setRole(
+          docSnap.data().role
+        )
+
+      }
+
+    }
+
+    cargarRol()
+
+  }, [])
 
   async function cerrarSesion() {
 
@@ -65,11 +114,15 @@ function AdminLayout({ children }) {
       path: '/admin-plantas'
     },
 
-    {
-      text: 'Reportes',
-      icon: <AnalyticsIcon />,
-      path: '/admin-reportes'
-    },
+    ...(role === 'admin'
+      ? [
+        {
+          text: 'Reportes',
+          icon: <AnalyticsIcon />,
+          path: '/admin-reportes'
+        }
+      ]
+      : []),
 
     {
       text: 'Pedidos',
@@ -77,11 +130,15 @@ function AdminLayout({ children }) {
       path: '/admin-pedidos'
     },
 
-    {
-      text: 'Usuarios',
-      icon: <GroupIcon />,
-      path: '/admin-usuarios'
-    },
+    ...(role === 'admin'
+      ? [
+        {
+          text: 'Usuarios',
+          icon: <GroupIcon />,
+          path: '/admin-usuarios'
+        }
+      ]
+      : [])
 
   ]
 
