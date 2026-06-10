@@ -73,6 +73,10 @@ function AdminPlantas() {
   const [filtro, setFiltro] =
     useState('Todas')
 
+  const [busqueda,
+    setBusqueda] =
+    useState('')
+
   const [openModal,
     setOpenModal] =
     useState(false)
@@ -448,7 +452,7 @@ function AdminPlantas() {
                 setOpenModal(true)
 
               }}
-              
+
               sx={{
                 borderRadius: 4,
                 py: 1.5,
@@ -484,8 +488,23 @@ function AdminPlantas() {
           </Stack>
 
         </Stack>
-
+        <TextField
+          fullWidth
+          label="Buscar planta por nombre"
+          placeholder="Ej. Laurel"
+          value={busqueda}
+          onChange={(e) =>
+            setBusqueda(
+              e.target.value
+            )
+          }
+          sx={{
+            mb: 3
+          }}
+        />
         <Stack
+
+
           direction="row"
           spacing={2}
           flexWrap="wrap"
@@ -557,6 +576,14 @@ function AdminPlantas() {
                 filtro === 'Todas'
                   ? true
                   : planta.tipoLuz === filtro
+            )
+            .filter(
+              planta =>
+                planta.nombre
+                  ?.toLowerCase()
+                  .includes(
+                    busqueda.toLowerCase()
+                  )
             )
             .map((planta) => (
 
