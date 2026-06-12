@@ -203,6 +203,47 @@ function Carrito() {
 
     }
 
+    if (
+      tipoEntrega === 'Envio'
+    ) {
+
+      if (
+        !datosCliente.direccion
+      ) {
+
+        alert(
+          'Ingresa la dirección'
+        )
+
+        return
+
+      }
+
+      if (
+        !datosCliente.referencia
+      ) {
+
+        alert(
+          'Ingresa una referencia'
+        )
+
+        return
+
+      }
+
+      if (
+        !datosCliente.ubicacion
+      ) {
+
+        alert(
+          'Comparte tu ubicación'
+        )
+
+        return
+
+      }
+
+    }
     try {
 
       setLoadingPago(true)
@@ -273,19 +314,61 @@ function Carrito() {
 
   async function pagarEfectivo() {
 
+
     if (
       !datosCliente.nombre ||
       !datosCliente.telefono
     ) {
 
       alert(
-        'Ingresa nombre y teléfono'
+        'Completa nombre y teléfono'
       )
 
       return
 
     }
 
+    if (
+      tipoEntrega === 'Envio'
+    ) {
+
+      if (
+        !datosCliente.direccion
+      ) {
+
+        alert(
+          'Ingresa la dirección'
+        )
+
+        return
+
+      }
+
+      if (
+        !datosCliente.referencia
+      ) {
+
+        alert(
+          'Ingresa una referencia'
+        )
+
+        return
+
+      }
+
+      if (
+        !datosCliente.ubicacion
+      ) {
+
+        alert(
+          'Comparte tu ubicación'
+        )
+
+        return
+
+      }
+
+    }
     try {
 
       await crearPedido(
